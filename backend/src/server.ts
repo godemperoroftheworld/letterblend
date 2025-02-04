@@ -49,7 +49,7 @@ app.use(
     let stack: string | undefined = undefined;
     if (err instanceof RouteError) {
       status = err.statusCode;
-      stack = err.stack;
+      stack = err.stack ? JSON.parse(err.stack) : undefined;
     } else if (err instanceof AxiosError) {
       status = err.status as number;
       stack = err.response?.data;

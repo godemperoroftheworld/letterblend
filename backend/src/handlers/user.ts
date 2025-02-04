@@ -13,8 +13,8 @@ const getUserHandler: RequestHandler = async (req, res) => {
 
 const checkUserHandler: RequestHandler = async (req, res) => {
   const { name } = getData<UserParams>(req);
-  const result = await Scraper.getInstance().exists(name);
-  res.status(200).send({ exists: result });
+  const { data } = await Scraper.getInstance().exists(name);
+  res.status(200).send(data);
 };
 
 export default { getUserHandler, checkUserHandler };
