@@ -243,7 +243,7 @@ enum HttpStatusCodes {
   PAYLOAD_TOO_LARGE = 413,
 
   /**
-   * The URI provided was too long for the server to process. Often the result of too much data being encoded as a query-string of a GET request,
+   * The URI provided was too long for the server to process. Often the result of too much data being encoded as a queries-string of a GET request,
    * in which case it should be converted to a POST request.
    * Called "Request-URI Too Long" previously.
    */

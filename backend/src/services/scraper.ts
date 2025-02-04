@@ -22,7 +22,7 @@ export default class Scraper {
   }
 
   async avatar(user: string) {
-    return this.service.get(`/users/${user}/avatar`);
+    return this.service.get(`/users/${user}/avatar`).then((r) => r.data);
   }
 
   async watchlist(user: string) {
