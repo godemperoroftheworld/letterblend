@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #00B021;
+  --color-secondary: #F27405;
+  --color-info: #40bcf4;
+  --color-dark: #14181c;
+  --color-background: #2c3440;
+  --color-paper: #556678;
+  --color-logo: #202830;
+}
+
+@utility text-outline-* {
+  text-shadow: --value(--color-*) -1px -1px 0, --value(--color-*) -1px 1px 0, --value(--color-*)  1px -1px 0, --value(--color-*)  1px 1px 0;
+}
+
+#__nuxt {
+  background-image: linear-gradient(to top,var(--color-dark),var(--color-background));
+  color: white;
+  width: 100dvw;
+  height: 100dvh;
+}

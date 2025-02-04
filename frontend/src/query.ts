@@ -1,23 +1,15 @@
-import type { VueQueryPluginOptions } from '@tanstack/vue-query';
-import { persistQueryClient } from '@tanstack/query-persist-client-core';
-import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+import { QueryClient } from '@tanstack/vue-query';
 
-const queryOptions: VueQueryPluginOptions = {
-  queryClientConfig: {
-    defaultOptions: {
-      queries: {
-        gcTime: 1000 * 60 * 60 * 24,
-        staleTime: 1000 * 60 * 60,
-        refetchOnMount: false,
-      },
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 60,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      retry: 2,
     },
   },
-  clientPersister(queryClient) {
-    return persistQueryClient({
-      queryClient,
-      persister: createSyncStoragePersister({ storage: localStorage }),
-    });
-  },
-};
+});
 
-export default queryOptions;
+export default queryClient;
