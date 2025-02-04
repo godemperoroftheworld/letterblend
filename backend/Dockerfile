@@ -16,8 +16,8 @@ ENV JET_LOGGER_TIMESTAMP TRUE
 ENV JET_LOGGER_FORMAT LINE
 # Install
 COPY . .
-RUN npm install -g yarn
-RUN yarn install
+RUN npm install -g yarn --force
+RUN yarn install --production=false
 RUN yarn build
 # Run
 EXPOSE $PORT

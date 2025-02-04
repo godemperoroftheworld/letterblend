@@ -3,8 +3,8 @@ ARG PORT
 ENV NODE_ENV production
 ENV PORT ${PORT}
 COPY . .
-RUN npm install -g yarn
-RUN yarn install
+RUN npm install -g yarn --force
+RUN yarn install --production=false
 RUN yarn build
 EXPOSE $PORT
 CMD ["yarn","start"]
