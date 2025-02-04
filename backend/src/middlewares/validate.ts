@@ -9,7 +9,7 @@ const validate = (req: Request, res: Response, next: NextFunction) => {
     throw new RouteError(
       HttpStatusCodes.BAD_REQUEST,
       'Failed parameter validation',
-      result.array(),
+      result.array().at(0),
     );
   }
   next();

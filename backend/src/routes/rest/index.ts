@@ -7,9 +7,10 @@ import { header, param } from "express-validator";
 
 const router = express.Router();
 
-router.use(header("X-Letterboxd-User").isString().notEmpty(), validate);
-router.use("/room", roomRoutes);
-router.use("/blend", blendRoutes);
+const needHeader = header('X-Letterboxd-User').isString().notEmpty();
+
+router.use("/room", needHeader, validate, roomRoutes);
+router.use("/blend", needHeader, validate, blendRoutes);
 router.use("/user", userRoutes);
 
 export default router;

@@ -11,10 +11,13 @@ import { NodeEnvs } from "@/constants/misc";
 import { RouteError } from "@/types/errors";
 import routes from "./routes";
 import { AxiosError } from "axios";
+import cors from "cors";
 
 // **** Variables **** //
 
 const app = express();
+
+app.use(cors())
 
 // **** Setup **** //
 
