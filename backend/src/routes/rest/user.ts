@@ -11,6 +11,11 @@ router.get(
   validate,
   userHandlers.getUserHandler,
 );
+router.get("/:name/avatar",
+    param("name").exists(),
+    validate,
+    userHandlers.getAvatarHandler
+);
 router.get(
   "/:name/exists",
   param("name").exists(),

@@ -1,20 +1,35 @@
 import { RequestHandler } from "express";
 import getData from "@/utils/data";
 import Scraper from "@/services/scraper";
+import { HttpStatusCodes } from "@/constants/http";
 
 type UserParams = { name: string };
 const getUserHandler: RequestHandler = async (req, res) => {
   const { name } = getData<UserParams>(req);
+  const { data: { exists } } = await Scraper.getInstance().exists(name);
+  if (!exists) {
+    return res.sendStatus(HttpStatusCodes.NOT_FOUND);
+  }
   const followers = await Scraper.getInstance().followers(name);
   const following = await Scraper.getInstance().following(name);
   const { url } = await Scraper.getInstance().avatar(name);
-  res.status(200).send({ followers, following, avatar: url, name });
+  res.status(HttpStatusCodes.OK).send({ followers, following, avatar: url, name });
 };
+
+const getAvatarHandler: RequestHandler = async (req, res) => {
+  const { name } = getData<UserParams>(req);
+  const { data: { exists }} = await Scraper.getInstance().exists(name);
+  if (!exists) {
+    return res.sendStatus(HttpStatusCodes.NOT_FOUND);
+  }
+  const data  = await Scraper.getInstance().avatar(name);
+  res.status(HttpStatusCodes.OK).send(data);
+}
 
 const checkUserHandler: RequestHandler = async (req, res) => {
   const { name } = getData<UserParams>(req);
   const { data } = await Scraper.getInstance().exists(name);
-  res.status(200).send(data);
+  res.status(HttpStatusCodes.OK).send(data);
 };
 
-export default { getUserHandler, checkUserHandler };
+export default { getUserHandler, getAvatarHandler, checkUserHandler };
