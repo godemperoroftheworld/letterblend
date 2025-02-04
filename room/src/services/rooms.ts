@@ -1,8 +1,6 @@
 import Room from '@/models/room';
 import * as crypto from 'crypto';
 
-const rooms: Record<string, Room> = {};
-
 export default class RoomsService {
   public rooms: Record<string, Room> = {};
 
@@ -28,7 +26,7 @@ export default class RoomsService {
   }
 
   deleteRoom(id: string) {
-    delete rooms[id];
+    delete this.rooms[id];
   }
 
   private generateCode() {

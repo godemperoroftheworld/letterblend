@@ -30,6 +30,10 @@ export default class Room {
     return this.isStarted;
   }
 
+  get empty() {
+    return !this.users.size;
+  }
+
   get moviesSorted() {
     const movieValue = (movie: number) => {
       return this.movieUsers[movie]
@@ -44,6 +48,10 @@ export default class Room {
 
   start() {
     this.isStarted = true;
+  }
+
+  hasUser(user: string) {
+    return this.users.has(user);
   }
 
   addUser(user: string) {
@@ -100,8 +108,9 @@ export default class Room {
     return {
       id: this.id,
       movies: this.moviesSorted,
-      users: this.users,
       started: this.isStarted,
+      owner: this.owner,
+      users: Array.from(this.users),
     };
   }
 }

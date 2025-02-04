@@ -23,6 +23,7 @@ const onDeleteRoom: RequestHandler = (req, res) => {
   const { id } = req.params;
   if (!roomsService.hasRoom(id)) {
     res.status(400).send({ errors: ['Room does not exist'] });
+    return;
   }
   roomsService.deleteRoom(id);
   res.sendStatus(200);
@@ -33,6 +34,7 @@ const onPutRoom: RequestHandler = (req, res) => {
   const { movies } = req.body;
   if (!roomsService.hasRoom(id)) {
     res.status(400).send({ errors: ['Room does not exist'] });
+    return;
   }
   const room = roomsService.getRoom(id);
   room.setMovies(movies);
@@ -44,13 +46,24 @@ const onStartRoom: RequestHandler = (req, res) => {
   const user = req.header('X-Letterboxd-User') as string;
   if (!roomsService.hasRoom(id)) {
     res.status(400).send({ errors: ['Room does not exist'] });
+    return;
   }
   const room = roomsService.getRoom(id);
   if (room.owner !== user) {
     res.status(400).send({ errors: ['User does not have permissions to start room'] });
+    return;
   }
   if (room.started) {
     res.status(400).send({ errors: ['Room already started'] });
+    return;
+  }
+  if (room.empty) {
+    res.status(400).send({ errors: ['Room is empty'] });
+    return;
+  }
+  if (!room.hasUser(room.owner)) {
+    res.status(400).send({ errors: ['Owner not in room'] });
+    return;
   }
   room.start();
   io.to(id).emit('start');
