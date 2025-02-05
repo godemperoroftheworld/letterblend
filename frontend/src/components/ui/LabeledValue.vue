@@ -5,16 +5,26 @@
     uppercase?: boolean;
     errored?: boolean;
     success?: boolean;
+    labelSize?: 'xs' | 'sm' | 'lg' | 'base';
   }
-  defineProps<Props>();
+  const props = defineProps<Props>();
+
+  const isSmallLabel = computed(() => props.labelSize === 'xs' || props.labelSize === 'sm');
 </script>
 
 <template>
-  <div class="flex flex-col gap-2">
+  <div
+    class="flex flex-col"
+    :class="{ 'gap-0.5': isSmallLabel, 'gap-2': !isSmallLabel }">
     <label
       v-show="label"
-      class="w-64 max-w-fit text-center font-semibold text-balance"
-      :class="{ uppercase: uppercase }"
+      class="w-fit max-w-64 text-center font-semibold"
+      :class="{
+        uppercase,
+        'text-sm': labelSize === 'sm',
+        'text-xs': labelSize === 'xs',
+        'text-lg': labelSize === 'lg',
+      }"
       :for="name">
       {{ label }}
     </label>
@@ -29,9 +39,3 @@
     </div>
   </div>
 </template>
-
-<style scoped lang="scss">
-  .form-control > *:first-child {
-    width: 100%;
-  }
-</style>

@@ -6,11 +6,12 @@
   interface Props {
     name?: string;
     show?: boolean;
+    fallback?: boolean;
   }
-  const props = defineProps<Props>();
+  const props = withDefaults(defineProps<Props>(), { show: true });
 
   const storageName = useLocalStorage('user', '');
-  const eitherName = computed(() => props.name ?? storageName.value);
+  const eitherName = computed(() => props.name ?? (props.fallback ? storageName.value : ''));
   const shouldFetchExists = computed(() => props.show && !!eitherName.value?.length);
   const { data: nameExists } = useExists(eitherName, { enabled: shouldFetchExists });
   const shouldFetchAvatar = computed(() => shouldFetchExists.value && !!nameExists.value);

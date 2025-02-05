@@ -1,5 +1,5 @@
 <template>
-  <div class="relative max-w-fit rounded-full select-none">
+  <div class="relative z-0 max-w-fit rounded-full select-none">
     <h2
       class="absolute top-3 left-1/2 -translate-x-1/2 text-center text-2xl font-extrabold text-white uppercase italic">
       Letter-

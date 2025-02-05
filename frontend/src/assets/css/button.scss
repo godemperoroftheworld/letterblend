@@ -14,9 +14,17 @@
     }
     &.button-disabled {
         background-color: gray;
+        cursor: not-allowed;
+    }
+    &.button-hollow {
+        background: variables.$color-content;
+        outline: variables.$color-paper solid 2px;
+        outline-offset: 2px;
+        margin-inline: 2px;
+        margin-block: 2px;
     }
 
-    &:hover {
+    &:hover,&:active {
         background-color: darken(variables.$color-secondary, 5%);
 
         &.button-submit {
@@ -30,6 +38,9 @@
         }
         &.button-disabled {
             background-color: darken(gray, 5%);
+        }
+        &.button-hollow {
+            background-color: variables.$color-paper;
         }
     }
 

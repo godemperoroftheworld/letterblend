@@ -19,6 +19,7 @@
     "@tailwindcss/vite": "^4.0.3",
     "@tanstack/vue-query": "^5.66.0",
     "@vueuse/core": "^12.0.0",
+    "@vueuse/nuxt": "^12.5.0",
     "add": "^2.0.6",
     "axios": "^1.7.9",
     "lodash": "^4.17.21",

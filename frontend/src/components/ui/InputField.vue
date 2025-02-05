@@ -2,7 +2,7 @@
   import { computed } from 'vue';
   import { useDebounceFn } from '@vueuse/core';
 
-  export interface InputProps {
+  export interface InputProps<T> {
     type?: 'text' | 'password' | 'number';
     textSize?: 'xs' | 'sm' | 'lg';
     debounceMs?: number;
@@ -10,7 +10,7 @@
   }
 
   const model = defineModel<T>();
-  const props = withDefaults(defineProps<InputProps>(), { type: 'text' });
+  const props = withDefaults(defineProps<InputProps<T>>(), { type: 'text' });
 
   const updateValue = useDebounceFn((val: T) => {
     model.value = val;
@@ -35,5 +35,6 @@
     :value="innerValue"
     :type="type"
     :class="textClass"
-    class="focus:outline-info bg-logo max-w-sm rounded p-2 outline-offset-2 focus:outline-1" />
+    size="20"
+    class="focus:outline-info bg-content box-border rounded p-2 outline-offset-2 focus:outline-1 sm:max-w-sm" />
 </template>

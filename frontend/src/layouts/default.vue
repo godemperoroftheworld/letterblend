@@ -1,24 +1,49 @@
 <script setup lang="ts">
-  import Logo from '@/components/LogoView.vue';
+  import Logo from '@/components/ui/LogoView.vue';
+  import GenericButton from '@/components/ui/button/GenericButton.vue';
+  import { IconArrowBack } from '@tabler/icons-vue';
+  import ContentView from '@/components/ui/ContentView.vue';
 
   const route = useRoute();
+  const router = useRouter();
   const isHome = computed(() => route.path === '/');
 </script>
 
 <template>
   <div
-    class="bg-logo shadow-paper/50 inset-shadow-paper/50 border-dark/50 fixed top-0 right-0 bottom-0 left-0 m-8 flex flex-col gap-4 rounded-3xl border-2 p-4 inset-shadow-xs shadow-xs md:mx-auto md:my-auto md:h-3/4 md:w-3/4">
-    <router-link to="/">
-      <logo class="mx-auto h-40 w-40" />
-    </router-link>
-    <main class="relative flex-grow text-white lg:p-4">
-      <slot />
-    </main>
+    class="relative flex h-full min-h-fit w-full flex-grow flex-col gap-2 overflow-y-scroll p-2 md:gap-4 lg:gap-8 lg:p-8">
+    <content-view class="mx-auto h-fit w-fit md:hidden">
+      <router-link
+        to="/"
+        class="mx-auto w-fit">
+        <logo class="h-36 w-36" />
+      </router-link>
+    </content-view>
+    <content-view class="mx-auto my-auto h-fit min-h-3/4 w-full min-w-fit flex-grow sm:w-3/4">
+      <generic-button
+        v-show="!isHome"
+        class="fixed top-4 left-4 z-1 w-32 md:absolute lg:top-8 lg:left-8"
+        type="hollow"
+        @click.prevent="router.back"
+        @keyup.enter="router.back">
+        <icon-arrow-back />
+        Back
+      </generic-button>
+      <router-link
+        to="/"
+        class="mx-auto hidden w-fit md:block">
+        <logo class="h-40 w-40" />
+      </router-link>
+      <main
+        class="relative mt-13 flex flex-grow place-content-stretch content-stretch items-stretch text-white md:mt-0 lg:p-4">
+        <slot />
+      </main>
+    </content-view>
   </div>
 </template>
 
 <style scoped lang="scss">
   main > * {
-    height: 100%;
+    width: 100%;
   }
 </style>

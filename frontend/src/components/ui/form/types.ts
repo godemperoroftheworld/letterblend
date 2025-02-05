@@ -1,13 +1,14 @@
 import type { Component, UnwrapRef } from 'vue';
-import type { InputProps } from '@/components/InputField.vue';
-import type { SelectProps } from '@/components/SelectField.vue';
+import type { InputProps } from '@/components/ui/InputField.vue';
+import type { SelectProps } from '@/components/ui/SelectField.vue';
 import type { RuleExpression } from 'vee-validate';
 import type { DefaultError, UseMutationReturnType } from '@tanstack/vue-query';
 
 // FIELD
-type FieldComponentProps<T extends PropertyKey> = Partial<InputProps & SelectProps<T>>;
+type FieldComponentProps<T extends PropertyKey> = Partial<InputProps<T> & SelectProps<T>>;
 export type FieldProps<T extends PropertyKey> = {
   label?: string;
+  labelSize?: 'xs' | 'sm' | 'lg' | 'base';
   name: string;
   as: Component;
   rules?: RuleExpression<T>;
@@ -16,6 +17,7 @@ export type FieldProps<T extends PropertyKey> = {
   validateOnChange?: boolean;
   validateOnInput?: boolean;
   array?: boolean;
+  length?: { min?: number; max?: number };
 } & FieldComponentProps<T>;
 
 // FORM
@@ -31,7 +33,7 @@ export type FormValueType<T> = { [P in keyof T]: unknown extends T[P] ? Property
 export interface FormProps<T extends FormObject> {
   name: string;
   fields: FormFields<T>;
-  submitted: (data: FormValueType<T>) => Promise<void>;
+  submitted: (data: FormValueType<T>) => void | Promise<void>;
   showSubmitButton?: boolean;
   showCancelButton?: boolean;
   cancelButtonText?: string;

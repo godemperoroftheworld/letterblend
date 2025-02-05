@@ -1,5 +1,4 @@
 import type { MaybeDeepRef } from '@/utils/unref';
-import { toRefs } from 'vue';
 
 interface BlendParams {
   top: number; // int, min 1
@@ -16,7 +15,7 @@ export function useBlend(names: MaybeDeepRef<string[]>, params?: MaybeDeepRef<Bl
   return useDataQuery<BlendEntry[]>(['blend', names, params], 'blend', {
     config: {
       method: 'POST',
-      data: { names, ...toRefs(params) },
+      data: { names, ...unrefDeep(params) },
     },
   });
 }

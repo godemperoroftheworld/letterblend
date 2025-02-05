@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import { computed } from 'vue';
-  import LoadingIcon from '@/components/icons/LoadingIcon.vue';
+  import LoadingIcon from '@/components/ui/icons/LoadingIcon.vue';
 
   interface Props {
     text: string;
-    type?: 'submit' | 'info' | 'danger';
+    type?: 'submit' | 'info' | 'danger' | 'hollow';
     disabled?: boolean;
     loading?: boolean;
   }

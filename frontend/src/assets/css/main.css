@@ -7,7 +7,7 @@
   --color-dark: #14181c;
   --color-background: #2c3440;
   --color-paper: #556678;
-  --color-logo: #202830;
+  --color-content: #202830;
 }
 
 @utility text-outline-* {
@@ -19,4 +19,76 @@
   color: white;
   width: 100dvw;
   height: 100dvh;
+}
+
+@media not (prefers-reduced-motion) {
+    .transition-default {
+      transition-property: all;
+      transition-duration: 300ms;
+      transition-delay: 0ms;
+      animation-timing-function: ease-in-out;
+    }
+
+    .fade-enter-active,
+    .fade-leave-active {
+      transition: opacity 250ms;
+    }
+
+    .fade-enter-from,
+    .fade-leave-to {
+      opacity: 0;
+    }
+
+    .scale-enter-active {
+      animation: scale 250ms;
+    }
+    .scale-leave-active {
+      animation: scale 250ms reverse;
+    }
+
+    .slide-enter-active {
+      animation: slide 250ms;
+    }
+    .slide-leave-active {
+      animation: slide 250ms reverse;
+    }
+
+    .scale-in {
+      animation: scale 250ms;
+    }
+
+    .fade-in {
+      animation: fade 300ms;
+    }
+
+    .slide-in {
+      animation: slide 300ms;
+    }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes scale {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes slide {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
 }

@@ -1,6 +1,6 @@
-<script setup lang="ts" generic="T, V">
+<script setup lang="ts" generic="T, V extends FormObject">
   import FormView, { type FormEmits } from './FormView.vue';
-  import type { DataFormProps, StrippedFormProps } from './types';
+  import type { DataFormProps, FormObject, StrippedFormProps } from './types';
   import { computed, unref, type UnwrapRef } from 'vue';
 
   const props = defineProps<DataFormProps<T, V>>();
