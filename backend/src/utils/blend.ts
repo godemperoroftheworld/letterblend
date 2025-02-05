@@ -5,12 +5,14 @@ export type BlendParams = {
   names: string[];
   top?: number; // int, min 1
   threshold?: number; // float, 0-1
+  data?: boolean; // whether to get data
 };
 
 async function getBlendedList({
   names = [],
   top = 10,
   threshold = 0.5,
+  data = false,
 }: BlendParams) {
   if (!names.length) return [];
   // Scrape watchlist entries from letterboxd
@@ -44,10 +46,10 @@ async function getBlendedList({
     .ids(slugs)
     .then((value) => {
       return value.map(async (r) => {
-        const data = await TMDB.movie.getDetails({
+        const tmdbData = await TMDB.movie.getDetails({
           pathParameters: { movie_id: r.id },
-        });
-        return { ...r, users: entryMap[r.slug], data: data.data };
+        }).then((r) => r.data);
+        return { ...r, users: entryMap[r.slug], data: data ? tmdbData : undefined, poster: tmdbData?.poster_path };
       });
     });
   return await Promise.all(resultsPromise);
