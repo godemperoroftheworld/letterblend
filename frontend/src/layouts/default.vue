@@ -3,7 +3,6 @@
   import GenericButton from '@/components/ui/button/GenericButton.vue';
   import { IconArrowBack } from '@tabler/icons-vue';
   import ContentView from '@/components/ui/ContentView.vue';
-  import Loader from '@/components/ui/Loader.vue';
 
   const route = useRoute();
   const router = useRouter();
@@ -11,7 +10,6 @@
 </script>
 
 <template>
-  <loader />
   <div
     class="relative flex h-full min-h-fit w-full flex-grow flex-col gap-2 overflow-y-scroll p-2 md:gap-4 lg:gap-8 lg:p-8">
     <content-view class="mx-auto h-fit w-fit md:hidden">
@@ -24,7 +22,7 @@
     <content-view class="mx-auto my-auto h-fit min-h-3/4 w-full flex-grow sm:w-3/4">
       <generic-button
         v-show="!isHome"
-        class="absolute top-4 left-4 z-1 w-40 lg:top-8 lg:left-8"
+        class="absolute top-4 left-4 z-1 w-40 max-sm:hidden lg:top-8 lg:left-8"
         type="hollow"
         @click.prevent="router.back"
         @keyup.enter="router.back">
@@ -37,7 +35,7 @@
         <logo class="h-40 w-40" />
       </router-link>
       <main
-        class="relative mt-15 flex flex-shrink-0 flex-grow place-content-stretch content-stretch items-stretch text-white md:mt-0 lg:p-4">
+        class="relative flex flex-shrink-0 flex-grow place-content-stretch content-stretch items-stretch text-white md:mt-0 lg:p-4">
         <slot />
       </main>
     </content-view>

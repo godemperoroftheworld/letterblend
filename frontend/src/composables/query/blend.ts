@@ -13,6 +13,5 @@ export function useBlend(names: MaybeDeepRef<string[]>, params?: MaybeDeepRef<Bl
       method: 'POST',
       data: { names, ...unrefDeep(params) },
     },
-    showLoader: true,
   });
 }

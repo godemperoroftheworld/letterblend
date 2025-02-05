@@ -3,11 +3,12 @@
   import useLoader from '@/utils/load';
 
   const { loading } = useLoader();
+  const isClient = computed(() => import.meta.client);
 </script>
 
 <template>
   <div
-    v-show="loading"
+    v-show="isClient && loading"
     class="fixed top-0 left-0 z-10 flex h-dvh w-dvw items-center justify-center bg-slate-500/50">
     <loading-icon class="text-background h-24 w-24" />
   </div>
