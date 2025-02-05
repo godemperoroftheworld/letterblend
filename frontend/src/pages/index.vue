@@ -56,7 +56,7 @@
           :submitted="submitted" />
       </div>
       <text-button
-        class="mx-auto w-32"
+        class="mx-auto mt-auto mb-0 w-40"
         text="Submit"
         type="submit"
         :disabled="userForm && !formValid"

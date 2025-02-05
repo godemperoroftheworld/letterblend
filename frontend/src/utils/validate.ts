@@ -1,8 +1,7 @@
 import { string } from 'yup';
 import type { GenericValidateFunction } from 'vee-validate';
 import type { ExistsResponse } from '@/composables/query/exists';
-import useExists from '@/composables/query/exists';
-import queryClient from '@/query';
+import { queryClient } from '@/plugins/query';
 import LetterblendApi from '@/api';
 
 export const validateLetterboxdName: GenericValidateFunction<string> = async (value: string) => {

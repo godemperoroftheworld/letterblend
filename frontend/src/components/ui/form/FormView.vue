@@ -116,17 +116,17 @@
     </div>
     <div
       v-if="showSubmitButton || showCancelButton"
-      class="mt-2 flex justify-between text-center"
+      class="mt-4 flex justify-between text-center"
       :class="{ 'w-full': showCancelButton && showSubmitButton }">
       <text-button
         v-if="showCancelButton"
-        class="w-32"
+        class="w-40"
         type="danger"
         :text="cancelButtonText"
         @click.prevent="emits('cancelled')" />
       <text-button
         v-if="showSubmitButton"
-        class="w-32"
+        class="w-40"
         :disabled="!isEmpty(errors)"
         :loading="isSubmitting"
         type="submit"

@@ -41,7 +41,7 @@
           class="h-7 w-7" />
       </div>
     </template>
-    <div class="transition-default flex h-full flex-col overflow-hidden p-4 lg:p-8">
+    <div class="transition-default flex flex-grow flex-col overflow-hidden p-4 lg:p-8">
       <slot />
     </div>
   </div>

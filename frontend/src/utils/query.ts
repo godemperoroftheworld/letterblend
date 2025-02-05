@@ -14,6 +14,7 @@ import { computed, unref, watch } from 'vue';
 import type { MaybeDeepRef } from '@/utils/unref';
 import type { MaybeRef } from '@vueuse/core';
 import Notifier from '@/utils/notification';
+import useLoader from '@/utils/load';
 
 export type DataQueryReturnType<T, E = DefaultError, R = T> = Omit<
   UseQueryReturnType<T, E>,
@@ -35,18 +36,28 @@ export interface UseDataQueryParams<T, E = DefaultError, R = T> {
   options?: DataQueryOptions<T, E>;
   config?: Omit<AxiosRequestConfig<T>, 'url' | 'baseURL'>;
   transform?: (data: T | undefined) => R | undefined;
+  showLoader?: boolean;
 }
 
 export function useDataQuery<T, E = DefaultError, R = T>(
   key: MaybeDeepRef<Array<unknown>>,
   url: MaybeRefOrGetter<string>,
-  { options, config, transform }: UseDataQueryParams<T, E, R>,
+  { options, config, transform, showLoader }: UseDataQueryParams<T, E, R>,
 ): DataQueryReturnType<T, E, R> {
+  const { emit } = useLoader();
+
   const queryFn: QueryFunction<T, Array<unknown>> = async () => {
-    return await LetterblendAPI.instance.request<T>({
+    if (showLoader) {
+      emit(true);
+    }
+    const result = await LetterblendAPI.instance.request<T>({
       ...unrefDeep(config),
       url: toValue(url),
     });
+    if (showLoader) {
+      emit(false);
+    }
+    return result;
   };
 
   const queryKey = computed<Array<unknown>>(() => {

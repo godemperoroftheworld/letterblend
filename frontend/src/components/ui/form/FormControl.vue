@@ -12,7 +12,6 @@
     labelSize: 'sm',
   });
   const fieldRef = ref<UnwrapNestedRefs<FieldContext>>();
-  const empty = computed(() => !fieldRef.value?.value);
   const loading = computed(() => fieldRef.value?.meta.pending);
   const touched = computed(() => fieldRef.value?.meta.touched);
   const errored = computed(() => !!fieldRef.value?.errorMessage);
@@ -25,7 +24,7 @@
       :label="label"
       :label-size="labelSize"
       :uppercase="uppercase"
-      :errored="!empty && errored"
+      :errored="touched && errored"
       :success="touched && !errored">
       <field
         ref="fieldRef"

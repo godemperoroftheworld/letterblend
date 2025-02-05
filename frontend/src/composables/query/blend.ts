@@ -1,21 +1,18 @@
 import type { MaybeDeepRef } from '@/utils/unref';
+import type { Movie } from '@/types/movie';
+import type { DefaultError } from '@tanstack/vue-query';
 
 interface BlendParams {
   top: number; // int, min 1
   threshold: number; // float, min 0 max 1
   data: boolean; // populate with TMDB data
 }
-interface BlendEntry {
-  id: string;
-  slug: string;
-  users: string[];
-  poster: string;
-}
 export function useBlend(names: MaybeDeepRef<string[]>, params?: MaybeDeepRef<BlendParams>) {
-  return useDataQuery<BlendEntry[]>(['blend', names, params], 'blend', {
+  return useDataQuery<Movie[], DefaultError, Movie[]>(['blend', names, params], 'blend', {
     config: {
       method: 'POST',
       data: { names, ...unrefDeep(params) },
     },
+    showLoader: true,
   });
 }

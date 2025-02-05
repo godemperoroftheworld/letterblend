@@ -16,7 +16,7 @@
 
   // Functions
   async function submitted({ name }: FormResult) {
-    const settingsValues = settingsForm.value?.values;
+    const settingsValues = settingsForm.value?.data.values;
     await router.push({
       name: 'result',
       query: { names: name.join(','), ...settingsValues },
@@ -30,7 +30,6 @@
   watch(
     () => !!userForm.value?.valid,
     (val) => {
-      console.log('user: ' + val);
       userValid.value = val;
     },
     { deep: true, immediate: true },
@@ -39,7 +38,6 @@
   watch(
     () => !!settingsForm.value?.data.valid,
     (val) => {
-      console.log('settings: ' + val);
       settingsValid.value = val;
     },
     { deep: true, immediate: true },
@@ -54,14 +52,13 @@
         class="lg:col-span-3">
         <form-view
           ref="userForm"
-          class="h-full"
           name="userForm"
           :fields="{
             name: {
               as: NameField,
               array: true,
               rules: validateLetterboxdName,
-              length: { min: 2, max: 7 },
+              length: { min: 2, max: 5 },
             },
           }"
           :defaults="{ name: [storageName, ''] }"
@@ -84,7 +81,7 @@
     <text-button
       text="Submit"
       type="submit"
-      class="w-32"
+      class="w-40 max-md:my-4"
       :disabled="!userValid || !settingsValid"
       @keyup.enter="userForm?.submit()"
       @click.prevent="userForm?.submit()" />
