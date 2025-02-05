@@ -19,20 +19,16 @@
   async function submitted({ name }: NameForm) {
     localStorage.setItem('user', name);
   }
-
-  watch(formName, (val) => {
-    console.log('name: ' + val);
-  });
 </script>
 
 <template>
   <div class="grid grid-cols-1 gap-8 lg:grid-cols-5">
     <card-view
-      title="Blend"
+      title="Get Started"
       class="col-span-1 lg:col-span-3">
       <div class="flex w-full flex-grow items-center justify-center gap-8">
         <avatar-view
-          class="h-24 w-24"
+          class="h-24 w-24 flex-shrink-0 lg:h-36 lg:w-36"
           :show="formValid"
           :name="formName" />
         <form-view
@@ -54,10 +50,10 @@
           :submitted="submitted" />
       </div>
       <text-button
-        class="mx-auto"
+        class="mx-auto w-32"
         text="Submit"
         type="submit"
-        :disabled="!formValid"
+        :disabled="userForm && !formValid"
         @keyup.prevent="userForm.submit()"
         @click.prevent="userForm.submit()" />
     </card-view>

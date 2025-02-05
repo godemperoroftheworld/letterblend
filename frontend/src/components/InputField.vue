@@ -6,6 +6,7 @@
     type?: 'text' | 'password' | 'number';
     textSize?: 'xs' | 'sm' | 'lg';
     debounceMs?: number;
+    value?: T;
   }
 
   const model = defineModel<T>();
@@ -18,17 +19,21 @@
   const textClass = computed(() => {
     return props.textSize ? `text-${props.textSize}` : '';
   });
-  const value = computed({
-    get: () => model.value,
-    set: updateValue,
+  const innerValue = ref<T>();
+  onMounted(() => {
+    innerValue.value = props.value;
+  });
+  watch(innerValue, (val) => {
+    updateValue(val);
   });
 </script>
 
 <template>
   <input
     v-bind="$attrs"
-    v-model="value"
+    v-model="innerValue"
+    :value="innerValue"
     :type="type"
     :class="textClass"
-    class="border-paper/50 focus:ring-info bg-logo max-w-sm rounded border p-2 outline-none focus:ring" />
+    class="focus:outline-info bg-logo max-w-sm rounded p-2 outline-offset-2 focus:outline-1" />
 </template>

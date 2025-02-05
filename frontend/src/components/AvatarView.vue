@@ -11,9 +11,9 @@
 
   const storageName = useLocalStorage('user', '');
   const eitherName = computed(() => props.name ?? storageName.value);
-  const shouldFetchExists = computed(() => props.show && !!eitherName.value);
+  const shouldFetchExists = computed(() => props.show && !!eitherName.value?.length);
   const { data: nameExists } = useExists(eitherName, { enabled: shouldFetchExists });
-  const shouldFetchAvatar = computed(() => shouldFetchExists.value && nameExists.value);
+  const shouldFetchAvatar = computed(() => shouldFetchExists.value && !!nameExists.value);
   const { data: avatar, isLoading } = useAvatar(eitherName, { enabled: shouldFetchAvatar });
 </script>
 

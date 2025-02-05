@@ -1,6 +1,6 @@
 <script setup lang="ts">
   interface Props {
-    label: string;
+    label?: string;
     name: string;
     uppercase?: boolean;
     errored?: boolean;
@@ -12,7 +12,8 @@
 <template>
   <div class="flex flex-col gap-2">
     <label
-      class="w-64 max-w-fit text-center text-sm font-semibold text-balance"
+      v-show="label"
+      class="w-64 max-w-fit text-center font-semibold text-balance"
       :class="{ uppercase: uppercase }"
       :for="name">
       {{ label }}
@@ -21,8 +22,8 @@
       :id="name"
       class="form-control relative flex-grow"
       :class="{
-        'border-primary rounded border-2': success,
-        'rounded border-2 border-red-600': errored,
+        'outline-primary rounded outline-2': success,
+        'rounded outline-2 outline-red-600': errored,
       }">
       <slot v-bind="{ ...$attrs, ...$props }" />
     </div>

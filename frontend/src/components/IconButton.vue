@@ -1,9 +1,10 @@
 <script setup lang="ts">
+  import type { Icon } from '@tabler/icons-vue';
   import { computed } from 'vue';
   import LoadingIcon from '@/components/icons/LoadingIcon.vue';
 
   interface Props {
-    text: string;
+    icon: Icon;
     type?: 'submit' | 'info' | 'danger';
     disabled?: boolean;
     loading?: boolean;
@@ -21,15 +22,16 @@
 
 <template>
   <button
-    v-bind="$attrs"
-    class="button shadow-paper/50 min-w-24 rounded p-2 px-4 font-medium text-white uppercase shadow-2xs drop-shadow-none active:shadow-none disabled:cursor-not-allowed"
+    class="button aspect-square cursor-pointer rounded text-xl disabled:cursor-not-allowed"
     :disabled="disabled || loading"
     :class="bgClass">
     <template v-if="loading">
       <loading-icon class="mx-auto animate-spin" />
     </template>
     <template v-else>
-      {{ text }}
+      <component
+        :is="icon"
+        class="mx-auto" />
     </template>
   </button>
 </template>

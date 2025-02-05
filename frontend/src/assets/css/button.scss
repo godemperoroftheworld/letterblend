@@ -1,0 +1,39 @@
+@use './variables';
+
+.button {
+    cursor: pointer;
+
+    &.button-submit {
+        background-color: variables.$color-primary;
+    }
+    &.button-danger {
+        background-color: red;
+    }
+    &.button-info {
+        background-color: variables.$color-info;
+    }
+    &.button-disabled {
+        background-color: gray;
+    }
+
+    &:hover {
+        background-color: darken(variables.$color-secondary, 5%);
+
+        &.button-submit {
+            background-color: darken(variables.$color-primary, 5%);
+        }
+        &.button-danger {
+            background-color: darken(red, 5%);
+        }
+        &.button-info {
+            background-color: darken(variables.$color-info, 5%);
+        }
+        &.button-disabled {
+            background-color: darken(gray, 5%);
+        }
+    }
+
+    &:not(:disabled):active {
+        filter: brightness(0.9);
+    }
+}

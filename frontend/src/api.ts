@@ -11,7 +11,7 @@ export default class LetterblendApi {
       baseURL: import.meta.env.VITE_BASE_URL,
     });
     this.axiosInstance.interceptors.request.use((config) => {
-      config.headers['X-Letterboxd-User'] = localStorage.getItem('letterboxd-user');
+      config.headers['X-Letterboxd-User'] = localStorage.getItem('user');
       return config;
     });
   }

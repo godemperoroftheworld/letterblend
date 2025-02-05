@@ -1,10 +1,16 @@
 <script setup lang="ts" generic="T extends FormObject">
-  import { Form as ValidatedForm, type FormContext, type SubmissionHandler } from 'vee-validate';
+  import {
+    FieldArray,
+    Form as ValidatedForm,
+    type FormContext,
+    type SubmissionHandler,
+  } from 'vee-validate';
   import { computed, type UnwrapNestedRefs } from 'vue';
   import TextButton from '@/components/TextButton.vue';
   import FormControl from '@/components/form/FormControl.vue';
   import type { FieldProps, FormObject, FormProps, FormValueType } from '@/components/form/types';
   import isEmpty from 'lodash/isEmpty';
+  import { IconPlus, IconTrash } from '@tabler/icons-vue';
 
   export interface FormEmits<T> {
     (e: 'submitted', values: T): void;
@@ -43,18 +49,46 @@
     ref="formRef"
     :name="name"
     :initial-values="defaults"
-    class="flex flex-col items-center gap-4"
+    class="flex flex-col items-center justify-between"
     @submit="onSubmit as SubmissionHandler">
-    <template
-      v-for="key in keys"
-      :key="key">
-      <form-control
-        :name="String(key)"
-        :empty="!values[key]"
-        :errored="!!errorBag[key]?.length"
-        :success="!errorBag[key]?.length"
-        v-bind="getFieldProps(key)" />
-    </template>
+    <div class="flex flex-col items-center gap-4">
+      <template
+        v-for="key in keys"
+        :key="key">
+        <template v-if="fields[key].array">
+          <field-array
+            v-slot="{ fields: arrayFields, push, remove }"
+            :name="String(key)">
+            <template
+              v-for="(entry, idx) in arrayFields"
+              :key="entry.key">
+              <div class="relative flex items-center gap-4">
+                <form-control
+                  :name="`${String(key)}[${idx}]`"
+                  v-bind="fields[key] as FieldProps" />
+                <div class="absolute -right-4 bottom-0 flex h-full w-fit translate-x-full gap-2">
+                  <icon-button
+                    type="danger"
+                    :disabled="arrayFields.length < 3"
+                    :icon="IconTrash"
+                    @click="remove(idx)" />
+                  <icon-button
+                    v-if="idx + 1 === arrayFields.length"
+                    type="submit"
+                    :icon="IconPlus"
+                    @click="push('')" />
+                </div>
+              </div>
+            </template>
+          </field-array>
+        </template>
+        <template v-else>
+          <form-control
+            :name="String(key)"
+            v-bind="fields[key] as FieldProps" />
+        </template>
+      </template>
+    </div>
     <div
       v-if="showSubmitButton || showCancelButton"
       class="mt-2 flex justify-between text-center"
