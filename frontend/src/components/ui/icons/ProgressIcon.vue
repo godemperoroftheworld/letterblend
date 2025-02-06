@@ -8,29 +8,30 @@
   const props = defineProps<Props>();
 
   const progress = ref<number>(0);
-  let interval: ReturnType<typeof setTimeout>;
   let delay: ReturnType<typeof setTimeout>;
 
-  const progressStep = computed(() => 5000 / props.timeMs);
+  let loopTime: number;
   function updateProgress() {
-    progress.value = progress.value + progressStep.value;
+    clearTimeout(delay);
+    const loopLength = Date.now() - loopTime;
+    progress.value = (loopLength * 100) / props.timeMs;
     if (progress.value >= 100) {
       progress.value = 0;
-      endProgress();
-    }
-  }
-  function endProgress() {
-    clearInterval(interval);
-    if (props.loop) {
-      delay = setTimeout(beginProgress, props.loopDelay ?? 0);
+      loopTime = Date.now();
+      if (props.loop) {
+        delay = setTimeout(updateProgress, 50);
+      }
+    } else {
+      delay = setTimeout(updateProgress, 50);
     }
   }
   function beginProgress() {
     progress.value = 0;
-    interval = setInterval(updateProgress, 50);
+    loopTime = Date.now();
+    updateProgress();
   }
   function clearProgress() {
-    clearInterval(interval);
+    progress.value = 0;
     clearTimeout(delay);
   }
 
@@ -54,6 +55,7 @@
 <template>
   <div class="relative">
     <svg
+      v-show="progress"
       class="aspect-square min-h-full min-w-full -rotate-90"
       viewBox="0 0 36 36"
       xmlns="http://www.w3.org/2000/svg">

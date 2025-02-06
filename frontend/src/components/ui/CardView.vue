@@ -4,6 +4,7 @@
   const props = defineProps<{
     title: string;
     collapsable?: boolean;
+    justify?: 'between' | 'center';
   }>();
 
   const open = ref(false);
@@ -41,7 +42,12 @@
           class="h-7 w-7" />
       </div>
     </template>
-    <div class="transition-default flex flex-grow flex-col overflow-hidden p-4 lg:p-8">
+    <div
+      class="transition-default flex h-[calc(100%-2rem)] flex-grow flex-col items-center gap-4 overflow-hidden p-4 lg:p-8"
+      :class="{
+        'justify-between': props.justify === 'between',
+        'justify-center': props.justify === 'center',
+      }">
       <slot />
     </div>
   </div>

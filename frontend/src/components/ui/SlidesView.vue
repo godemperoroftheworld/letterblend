@@ -25,14 +25,25 @@
     return props.slides[nextIndex.value];
   });
 
+  // Autoplay
+  let autoplayTimer: ReturnType<typeof setTimeout>;
+  function doAutoplay() {
+    clearTimeout(autoplayTimer);
+    if (props.autoplay) {
+      autoplayTimer = setTimeout(() => {
+        goNext();
+        doAutoplay();
+      }, props.autoplay);
+    }
+  }
+
+  // Navigation animation
   const clicked = ref(false);
   const goingNext = ref(false);
   let nextTimer: ReturnType<typeof setTimeout>;
   function goNext() {
     goingNext.value = true;
-    if (nextTimer) {
-      clearTimeout(nextTimer);
-    }
+    clearTimeout(nextTimer);
     nextTimer = setTimeout(() => {
       next();
       goingNext.value = false;
@@ -42,14 +53,23 @@
   let backTimer: ReturnType<typeof setTimeout>;
   function goBack() {
     goingBack.value = true;
-    if (backTimer) {
-      clearTimeout(backTimer);
-    }
+    clearTimeout(backTimer);
     backTimer = setTimeout(() => {
       prev();
       goingBack.value = false;
     }, 300);
   }
+
+  onMounted(doAutoplay);
+  watch(() => props.autoplay, doAutoplay);
+  watch(clicked, (val) => {
+    if (val) clearTimeout(autoplayTimer);
+  });
+  onBeforeUnmount(() => {
+    clearTimeout(backTimer);
+    clearTimeout(nextTimer);
+    clearTimeout(autoplayTimer);
+  });
 </script>
 
 <template>
@@ -92,7 +112,7 @@
         <progress-icon
           class="text-content absolute top-0.5 -left-1 -z-10 h-12 w-12 -translate-y-full"
           :enable="!clicked"
-          :time-ms="5000"
+          :time-ms="autoplay"
           loop />
       </div>
     </template>

@@ -8,6 +8,7 @@
   import TextButton from '@/components/ui/button/TextButton.vue';
   import FormView from '@/components/ui/form/FormView.vue';
   import SlidesView from '@/components/ui/SlidesView.vue';
+  import InfoMessage from '@/components/ui/InfoMessage.vue';
 
   interface NameForm {
     name: string;
@@ -27,37 +28,50 @@
 </script>
 
 <template>
-  <div class="grid grid-cols-1 gap-4 lg:grid-cols-5 lg:gap-8">
+  <div class="grid gap-4 max-xl:grid-rows-5 lg:gap-8 xl:grid-cols-5">
     <card-view
       title="Get Started"
-      class="col-span-1 lg:col-span-3">
-      <div class="flex w-full flex-grow flex-col items-center justify-center gap-8 md:flex-row">
-        <avatar-view
-          class="h-36 w-36 flex-shrink-0"
-          :show="formValid"
-          :name="formName"
-          fallback />
-        <form-view
-          ref="userForm"
-          name="userForm"
-          :fields="{
-            name: {
-              label: 'Enter your Letterboxd Username',
-              labelSize: 'base',
-              uppercase: true,
-              as: InputField,
-              validateOnChange: true,
-              validateOnBlur: false,
-              rules: validateLetterboxdName,
-              debounceMs: 200,
-            },
-          }"
-          :defaults="{ name: storedName }"
-          :show-submit-button="false"
-          :submitted="submitted" />
+      justify="center"
+      class="max-xl:row-span-3 xl:col-span-3">
+      <div class="flex min-h-2/3 w-full flex-col items-center justify-center">
+        <div class="flex w-full flex-col items-center justify-center gap-8 md:flex-row">
+          <avatar-view
+            class="h-36 w-36 flex-shrink-0"
+            :show="formValid"
+            :name="formName"
+            fallback />
+          <form-view
+            ref="userForm"
+            name="userForm"
+            :fields="{
+              name: {
+                label: 'Enter your Letterboxd Username',
+                labelSize: 'base',
+                uppercase: true,
+                as: InputField,
+                validateOnChange: true,
+                validateOnBlur: false,
+                rules: validateLetterboxdName,
+                debounceMs: 200,
+              },
+            }"
+            :defaults="{ name: storedName }"
+            :show-submit-button="false"
+            :submitted="submitted" />
+        </div>
+        <div class="w-full max-w-lg md:px-8">
+          <info-message class="mt-4 w-full min-w-64">
+            Don't have an account? That's ok, make one
+            <a
+              class="font-bold underline"
+              href="https://letterboxd.com/?register=true"
+              >here</a
+            >
+          </info-message>
+        </div>
       </div>
       <text-button
-        class="mx-auto mt-auto mb-0 w-40"
+        class="mx-auto mt-auto w-64"
         text="Submit"
         type="submit"
         :disabled="userForm && !formValid"
@@ -66,31 +80,34 @@
     </card-view>
     <card-view
       title="How-To"
-      class="order-first hidden md:block lg:order-none lg:col-span-2">
-      <slides-view
-        class="h-64"
-        :slides="[
-          {
-            title: 'Grab Some Friends',
-            description: 'Friends are not provided...',
-            image: '/img/friends.svg',
-          },
-          {
-            title: `Use this app`,
-            description: `You're already in the right place, might as well.`,
-            image: '/img/app.svg',
-          },
-          {
-            title: `Make a decision`,
-            description: `It's easy now!`,
-            image: '/img/decide.svg',
-          },
-          {
-            title: 'Movie time!',
-            description: 'Finally! That took forever...',
-            image: '/img/movie.svg',
-          },
-        ]" />
+      class="order-first max-xl:row-span-2 xl:order-none xl:col-span-2">
+      <div class="flex w-full flex-grow flex-col items-center justify-center gap-8 md:flex-row">
+        <slides-view
+          class="my-auto h-64 w-full"
+          :slides="[
+            {
+              title: 'Grab Some Friends',
+              description: 'Friends are not provided...',
+              image: '/img/friends.svg',
+            },
+            {
+              title: `Use this app`,
+              description: `You're already in the right place, might as well.`,
+              image: '/img/app.svg',
+            },
+            {
+              title: `Make a decision`,
+              description: `It's easy now!`,
+              image: '/img/decide.svg',
+            },
+            {
+              title: 'Movie time!',
+              description: 'Finally! That took forever...',
+              image: '/img/movie.svg',
+            },
+          ]"
+          :autoplay="5000" />
+      </div>
     </card-view>
   </div>
 </template>
