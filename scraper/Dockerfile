@@ -6,4 +6,4 @@ RUN poetry config virtualenvs.create false
 RUN poetry install --no-root
 # Run the application
 EXPOSE $PORT
-CMD gunicorn -b 0.0.0.0:${PORT} --chdir ./app --worker-class eventlet -w 1 app:app
+CMD gunicorn -b [::]:${PORT} --chdir ./app --worker-class eventlet -w 1 app:app
