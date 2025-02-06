@@ -7,6 +7,7 @@
   import { validateLetterboxdName } from '@/utils/validate';
   import TextButton from '@/components/ui/button/TextButton.vue';
   import FormView from '@/components/ui/form/FormView.vue';
+  import SlidesView from '@/components/ui/SlidesView.vue';
 
   interface NameForm {
     name: string;
@@ -65,6 +66,31 @@
     </card-view>
     <card-view
       title="How-To"
-      class="order-first hidden md:block lg:order-none lg:col-span-2" />
+      class="order-first hidden md:block lg:order-none lg:col-span-2">
+      <slides-view
+        class="h-64"
+        :slides="[
+          {
+            title: 'Grab Some Friends',
+            description: 'Friends are not provided...',
+            image: '/img/friends.svg',
+          },
+          {
+            title: `Use this app`,
+            description: `You're already in the right place, might as well.`,
+            image: '/img/app.svg',
+          },
+          {
+            title: `Make a decision`,
+            description: `It's easy now!`,
+            image: '/img/decide.svg',
+          },
+          {
+            title: 'Movie time!',
+            description: 'Finally! That took forever...',
+            image: '/img/movie.svg',
+          },
+        ]" />
+    </card-view>
   </div>
 </template>
