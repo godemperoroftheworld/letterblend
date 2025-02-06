@@ -17,4 +17,9 @@ export default defineNuxtConfig({
       },
     },
   },
+  nitro: {
+    routeRules: {
+      'api/**': { proxy: `${process.env.BFF_URL}/**` },
+    },
+  },
 });
