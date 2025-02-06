@@ -8,5 +8,13 @@ export default defineNuxtConfig({
   srcDir: 'src',
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      proxy: {
+        '/api': {
+          target: process.env.BFF_URL,
+          changeOrigin: true,
+        },
+      },
+    },
   },
 });

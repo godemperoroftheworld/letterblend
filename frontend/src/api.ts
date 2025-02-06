@@ -8,7 +8,7 @@ export default class LetterblendApi {
 
   private constructor() {
     this.axiosInstance = axios.create({
-      baseURL: import.meta.env.VITE_BASE_URL,
+      baseURL: '/api/',
     });
     this.axiosInstance.interceptors.request.use((config) => {
       config.headers['X-Letterboxd-User'] = localStorage.getItem('user');
