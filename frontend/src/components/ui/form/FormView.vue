@@ -63,7 +63,7 @@
     :initial-values="defaults"
     class="flex flex-col items-center justify-between"
     @submit="onSubmit as SubmissionHandler">
-    <div class="flex flex-grow flex-col items-center gap-5">
+    <div class="flex max-w-full shrink flex-grow flex-col items-center gap-5">
       <template
         v-for="key in keys"
         :key="key">
@@ -80,7 +80,7 @@
           </form-array>
         </template>
         <template v-else>
-          <div>
+          <div class="max-w-full shrink">
             <slot
               name="beforeField"
               :value="null" />

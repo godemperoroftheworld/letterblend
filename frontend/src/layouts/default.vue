@@ -11,7 +11,7 @@
 
 <template>
   <div
-    class="relative flex h-full min-h-fit w-full flex-grow flex-col gap-2 overflow-y-scroll p-2 md:gap-4 lg:gap-8 lg:p-8">
+    class="relative flex h-full min-h-fit w-full flex-grow flex-col gap-2 overflow-hidden p-2 md:gap-4 lg:gap-8 lg:p-8">
     <content-view class="mx-auto h-fit w-fit md:hidden">
       <router-link
         to="/"
@@ -35,7 +35,7 @@
         <logo class="h-40 w-40" />
       </router-link>
       <main
-        class="relative flex flex-shrink-0 flex-grow place-content-stretch content-stretch items-stretch text-white md:mt-0 lg:p-4">
+        class="relative flex flex-grow place-content-stretch content-stretch items-stretch overflow-scroll text-white md:mt-0 lg:p-4">
         <slot />
       </main>
     </content-view>

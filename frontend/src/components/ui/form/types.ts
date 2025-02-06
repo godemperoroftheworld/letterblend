@@ -13,9 +13,6 @@ export type FieldProps<T extends PropertyKey> = {
   as: Component;
   rules?: RuleExpression<T>;
   uppercase?: boolean;
-  validateOnBlur?: boolean;
-  validateOnChange?: boolean;
-  validateOnInput?: boolean;
   array?: boolean;
   length?: { min?: number; max?: number };
 } & FieldComponentProps<T>;

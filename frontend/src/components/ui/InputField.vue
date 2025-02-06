@@ -7,12 +7,12 @@
     textSize?: 'xs' | 'sm' | 'lg';
     debounceMs?: number;
     value?: T;
+    step?: number;
   }
-
-  const model = defineModel<T>();
   const props = withDefaults(defineProps<InputProps<T>>(), { type: 'text' });
+  const model = defineModel<T>();
 
-  const updateValue = useDebounceFn((val: T) => {
+  const updateValue = useDebounceFn((val: T | undefined) => {
     model.value = val;
   }, props.debounceMs ?? 0);
 
@@ -20,21 +20,19 @@
     return props.textSize ? `text-${props.textSize}` : '';
   });
   const innerValue = ref<T>();
-  onMounted(() => {
-    innerValue.value = props.value;
-  });
-  watch(innerValue, (val) => {
-    updateValue(val);
-  });
+  watch(
+    () => model.value,
+    (val) => {
+      innerValue.value = val;
+    },
+    { immediate: true },
+  );
+  watch(innerValue, updateValue);
 </script>
 
 <template>
   <input
-    v-bind="$attrs"
     v-model="innerValue"
-    :value="innerValue"
-    :type="type"
     :class="textClass"
-    size="20"
     class="focus:outline-info bg-content box-border rounded p-2 outline-offset-2 focus:outline-1 sm:max-w-sm" />
 </template>

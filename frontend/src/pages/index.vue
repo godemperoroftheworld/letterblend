@@ -25,6 +25,10 @@
     localStorage.setItem('user', name);
     await router.push('/blend');
   }
+
+  watch(formName, (val) => {
+    console.log('updated: ' + val);
+  });
 </script>
 
 <template>
@@ -34,14 +38,14 @@
       justify="center"
       class="max-xl:row-span-3 xl:col-span-3">
       <div class="flex min-h-2/3 w-full flex-col items-center justify-center">
-        <div class="flex w-full flex-col items-center justify-center gap-8 md:flex-row">
+        <div class="flex w-full items-center justify-center gap-4 lg:flex-col lg:gap-8">
           <avatar-view
-            class="h-36 w-36 flex-shrink-0"
-            :show="formValid"
+            class="md:h-36 md:w-36"
             :name="formName"
             fallback />
           <form-view
             ref="userForm"
+            class="relative max-sm:max-w-2/3"
             name="userForm"
             :fields="{
               name: {
@@ -49,7 +53,6 @@
                 labelSize: 'base',
                 uppercase: true,
                 as: InputField,
-                validateOnChange: true,
                 validateOnBlur: false,
                 rules: validateLetterboxdName,
                 debounceMs: 200,
@@ -81,33 +84,31 @@
     <card-view
       title="How-To"
       class="order-first max-xl:row-span-2 xl:order-none xl:col-span-2">
-      <div class="flex w-full flex-grow flex-col items-center justify-center gap-8 md:flex-row">
-        <slides-view
-          class="my-auto h-64 w-full"
-          :slides="[
-            {
-              title: 'Grab Some Friends',
-              description: 'Friends are not provided...',
-              image: '/img/friends.svg',
-            },
-            {
-              title: `Use this app`,
-              description: `You're already in the right place, might as well.`,
-              image: '/img/app.svg',
-            },
-            {
-              title: `Make a decision`,
-              description: `It's easy now!`,
-              image: '/img/decide.svg',
-            },
-            {
-              title: 'Movie time!',
-              description: 'Finally! That took forever...',
-              image: '/img/movie.svg',
-            },
-          ]"
-          :autoplay="5000" />
-      </div>
+      <slides-view
+        class="my-auto h-64 max-h-full w-full"
+        :slides="[
+          {
+            title: 'Grab Some Friends',
+            description: 'Friends are not provided...',
+            image: '/img/friends.svg',
+          },
+          {
+            title: `Use this app`,
+            description: `You're already in the right place, might as well.`,
+            image: '/img/app.svg',
+          },
+          {
+            title: `Make a decision`,
+            description: `It's easy now!`,
+            image: '/img/decide.svg',
+          },
+          {
+            title: 'Movie time!',
+            description: 'Finally! That took forever...',
+            image: '/img/movie.svg',
+          },
+        ]"
+        :autoplay="5000" />
     </card-view>
   </div>
 </template>

@@ -30,7 +30,7 @@
     </label>
     <div
       :id="name"
-      class="form-control relative flex-grow"
+      class="form-control relative w-fit max-w-64 flex-grow"
       :class="{
         'outline-primary rounded outline-2': success,
         'rounded outline-2 outline-red-600': errored,

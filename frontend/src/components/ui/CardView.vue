@@ -43,7 +43,7 @@
       </div>
     </template>
     <div
-      class="transition-default flex h-[calc(100%-2rem)] flex-grow flex-col items-center gap-4 overflow-hidden p-4 lg:p-8"
+      class="transition-default relative flex h-[calc(100%-2rem)] flex-grow flex-col items-center gap-4 overflow-hidden p-4 lg:p-8"
       :class="{
         'justify-between': props.justify === 'between',
         'justify-center': props.justify === 'center',
