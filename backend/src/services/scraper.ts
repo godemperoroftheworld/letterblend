@@ -62,6 +62,10 @@ export default class Scraper {
     return result;
   }
 
+  async id(slug: string) {
+    return this.service.get(`movies/${slug}/id`).then(((r) => r.data));
+  }
+
   async ids(slugs: string[]) {
     return this.service
       .get(`/movies/id`, {
