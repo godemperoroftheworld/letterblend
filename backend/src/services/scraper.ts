@@ -1,6 +1,8 @@
 import axios, { Axios } from "axios";
 import env from "@/constants/env";
-import List from "@/types/scraper";
+import List, {Users} from "@/types/scraper";
+import intersection from 'lodash/intersection';
+
 
 export default class Scraper {
   private static instance: Scraper;
@@ -38,11 +40,26 @@ export default class Scraper {
   }
 
   async followers(user: string) {
-    return this.service.get(`/users/${user}/followers`).then((r) => r.data);
+    return this.service.get(`/users/${user}/followers`).then((r) => r.data as Users);
   }
 
   async following(user: string) {
-    return this.service.get(`/users/${user}/following`).then((r) => r.data);
+    return this.service.get(`/users/${user}/following`).then((r) => r.data as Users);
+  }
+
+  async friends(user: string) {
+    const followers = await this.followers(user);
+    const following = await this.following(user);
+    const friendKeys = intersection(Object.keys(following), Object.keys(followers));
+    const result: Users = {};
+    friendKeys.forEach((k) => {
+      if (followers[k]) {
+        result[k] = followers[k];
+      } else {
+        result[k] = following[k];
+      }
+    });
+    return result;
   }
 
   async ids(slugs: string[]) {

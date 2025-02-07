@@ -1,3 +1,6 @@
+export type Users = Record<string, { display_name: string }>
+
+
 export interface ListEntry {
   name: string;
   no: number;
