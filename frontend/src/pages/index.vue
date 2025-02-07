@@ -62,17 +62,15 @@
             :show-submit-button="false"
             :submitted="submitted" />
         </div>
-        <div class="w-full max-w-lg md:px-8">
-          <info-message class="mt-4 w-full min-w-64">
-            Don't have an account? That's ok, make one
-            <a
-              class="font-bold underline"
-              href="https://letterboxd.com/?register=true"
-              target="_blank">
-              here
-            </a>
-          </info-message>
-        </div>
+        <info-message class="my-6 w-full max-w-lg min-w-64 md:px-8">
+          Don't have an account? That's ok, make one
+          <a
+            class="font-bold underline"
+            href="https://letterboxd.com/?register=true"
+            target="_blank">
+            here
+          </a>
+        </info-message>
       </div>
       <text-button
         class="mx-auto w-64"

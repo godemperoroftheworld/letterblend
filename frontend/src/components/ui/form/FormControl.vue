@@ -20,15 +20,15 @@
   const errored = computed(() => !!fieldRef.value?.errorMessage);
 
   const touched = ref(false);
+  const showValidation = ref(false);
   const model = defineModel<T>();
   watch(model, async (val) => {
     fieldRef.value?.setValue(val);
+    showValidation.value = true;
   });
   onMounted(() => {
     model.value = fieldRef.value?.value;
-    if (props.validateOnMount) {
-      touched.value = true;
-    }
+    showValidation.value = props.validateOnMount;
   });
 </script>
 
@@ -41,8 +41,8 @@
       :label="label"
       :label-size="labelSize"
       :uppercase="uppercase"
-      :errored="touched && errored"
-      :success="touched && !errored">
+      :errored="showValidation && touched && errored"
+      :success="showValidation && !errored">
       <field
         ref="fieldRef"
         v-slot="{ setTouched }"

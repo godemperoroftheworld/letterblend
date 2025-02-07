@@ -30,7 +30,7 @@
     </label>
     <div
       :id="name"
-      class="form-control relative w-fit flex-grow"
+      class="form-control relative flex-grow"
       :class="{
         'outline-primary rounded outline-2': success,
         'rounded outline-2 outline-red-600': errored,
@@ -39,3 +39,9 @@
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+  .form-control > * {
+    width: 100%;
+  }
+</style>
