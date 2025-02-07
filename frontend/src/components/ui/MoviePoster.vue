@@ -16,6 +16,7 @@
       :class="{ 'bg-paper animate-pulse': !loaded }"
       class="aspect-[2/3] w-full overflow-hidden rounded">
       <nuxt-img
+        class="aspect-[2/3] w-full"
         :src="`api/poster/id/${data.id}`"
         provider="raw"
         @load="loaded = true" />
