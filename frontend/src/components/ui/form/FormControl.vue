@@ -1,11 +1,5 @@
 <script setup lang="ts" generic="T extends PropertyKey">
-  import {
-    ErrorMessage,
-    Field,
-    type FieldContext,
-    useFormContext,
-    useSetFormValues,
-  } from 'vee-validate';
+  import { ErrorMessage, Field, type FieldContext } from 'vee-validate';
   import type { FieldProps } from './types';
   import LabeledValue from '../LabeledValue.vue';
   import LoadingIcon from '@/components/ui/icons/LoadingIcon.vue';
@@ -24,7 +18,6 @@
   const model = defineModel<T>();
   watch(model, async (val) => {
     fieldRef.value?.setValue(val);
-    showValidation.value = true;
   });
   onMounted(() => {
     model.value = fieldRef.value?.value;
@@ -41,8 +34,8 @@
       :label="label"
       :label-size="labelSize"
       :uppercase="uppercase"
-      :errored="showValidation && touched && errored"
-      :success="showValidation && !errored">
+      :errored="touched && errored"
+      :success="(showValidation || touched) && !errored">
       <field
         ref="fieldRef"
         v-slot="{ setTouched }"

@@ -6,6 +6,7 @@
   import CardView, { type CardExpose } from '@/components/ui/CardView.vue';
   import type { FormObject } from '@/components/ui/form/types';
   import { computedDeep } from '@/utils/computed';
+  import { useDataQuery } from '@/utils/query';
 
   // Setup
   interface FormResult {
@@ -34,15 +35,29 @@
   // Form Data
   const userForm = ref<FormExpose<FormObject>>();
   const settingsForm = ref<FormExpose<FormObject>>();
-  const userCount = computedDeep(() => userForm.value?.values?.name.length ?? 0);
+  const userNames = computedDeep<string[]>(() => userForm.value?.values?.name ?? []);
   const userValid = computedDeep(() => !!userForm.value?.valid);
   const settingsValid = computedDeep(() => !!settingsForm.value?.valid);
-  watch(userCount, (val, oldVal) => {
-    if (val >= USER_COLLAPSE_COUNT && oldVal < USER_COLLAPSE_COUNT) {
+  watch(userNames, (val, oldVal) => {
+    if (val.length >= USER_COLLAPSE_COUNT && oldVal.length < USER_COLLAPSE_COUNT) {
       collapsableSettings.value?.toggle();
-    } else if (val < USER_COLLAPSE_COUNT && oldVal >= USER_COLLAPSE_COUNT) {
+    } else if (val.length < USER_COLLAPSE_COUNT && oldVal.length >= USER_COLLAPSE_COUNT) {
       collapsableSettings.value?.toggle();
     }
+  });
+
+  // Autocomplete
+  const fixedNames = computed(() => userNames.value.filter((u) => !!u));
+  const canFetchFriends = computed(() => userValid.value && !!fixedNames.value?.length);
+  const { data: friends } = useDataQuery(['friends', fixedNames], '/user/friends', {
+    options: {
+      enabled: canFetchFriends,
+    },
+    config: {
+      method: 'POST',
+      data: { names: fixedNames },
+    },
+    transform: (data) => Object.keys(data),
   });
 </script>
 
@@ -60,6 +75,9 @@
               as: NameField,
               array: true,
               rules: validateLetterboxdName,
+              validateOnMount: true,
+              options: friends ?? [],
+              debounceMs: 200,
               length: { min: 2, max: 5 },
             },
           }"

@@ -9,7 +9,11 @@
     value?: T;
     step?: number;
   }
+  interface Emits {
+    (e: 'changed', val: T): void;
+  }
   const props = withDefaults(defineProps<InputProps<T>>(), { type: 'text' });
+  const emits = defineEmits<Emits>();
   const model = defineModel<T>();
 
   const updateValue = useDebounceFn((val: T | undefined) => {
@@ -27,7 +31,10 @@
     },
     { immediate: true },
   );
-  watch(innerValue, updateValue);
+  watch(innerValue, (val) => {
+    updateValue(val);
+    emits('changed', val);
+  });
 </script>
 
 <template>

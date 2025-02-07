@@ -105,6 +105,11 @@ export async function fetchDataQuery<T, E = DefaultError, R = T>(
   return undefined;
 }
 
+export type UseDataQueryType<T, E = DefaultError, R = T> = (
+  key: MaybeDeepRef<Array>,
+  url: MaybeRefOrGetter<string>,
+  params: UseDataQueryParams<T, E, R>,
+) => DataQueryReturnType<T, E, R>;
 export function useDataQuery<T, E = DefaultError, R = T>(
   key: MaybeDeepRef<Array<unknown>>,
   url: MaybeRefOrGetter<string>,

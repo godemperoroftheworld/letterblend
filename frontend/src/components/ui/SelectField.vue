@@ -1,34 +1,30 @@
 <script setup lang="ts" generic="T extends PropertyKey">
-  import { onMounted, ref, watch } from 'vue';
-  import type { Option as OptionType } from '../utils/option';
+  import { onMounted, watch } from 'vue';
+  import type { Option as OptionType } from '@/utils/option';
 
   export interface SelectProps<T extends PropertyKey> {
-    options: OptionType<T>[];
-    modelValue?: T;
+    options: T[] | OptionType<T>[];
     selectFirst?: boolean;
   }
   interface Emits {
-    (e: 'update:modelValue', option: T | undefined): void;
     (e: 'selected', option: T | undefined): void;
   }
+  const model = defineModel<T>();
   const emits = defineEmits<Emits>();
   const props = defineProps<SelectProps<T>>();
 
-  const selected = ref<T>();
-
   onMounted(() => {
     if (props.selectFirst && props.options.length) {
-      selected.value = props.options[0].id;
+      model.value = 'id' in props.options[0] ? props.options[0].id : props.options[0];
     } else if (props.modelValue) {
-      selected.value = props.modelValue;
+      model.value = props.modelValue;
     }
   });
 
   watch(
-    selected,
+    model,
     (val) => {
       emits('selected', val);
-      emits('update:modelValue', val);
     },
     { immediate: true },
   );
@@ -45,10 +41,10 @@
         select an option
       </option>
       <option
-        v-for="option in options"
-        :key="option.id"
-        :value="option.id">
-        {{ option.label }}
+        v-for="(option, idx) in options"
+        :key="idx"
+        :value="'id' in option ? option.id : option">
+        {{ 'label' in option ? option.label : option }}
       </option>
     </select>
     <span

@@ -18,7 +18,7 @@
     return '';
   });
   const shouldFetchExists = computed(() => !!avatarName.value.length);
-  const { data: nameExists, isLoading: isLoadingName } = useExists(shouldFetchExists, {
+  const { data: nameExists, isLoading: isLoadingName } = useExists(avatarName, {
     enabled: shouldFetchExists,
   });
   const shouldFetchAvatar = computed(() => shouldFetchExists.value && !!nameExists.value);
