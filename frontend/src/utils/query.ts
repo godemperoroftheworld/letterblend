@@ -93,7 +93,7 @@ export async function fetchDataQuery<T, E = DefaultError, R = T>(
     await queryClient.fetchQuery(buildOptions(key, queryFn, params.options));
   } else if (state.status !== 'success') {
     await waitUntil(() => {
-      const { status } = queryClient.getQueryState(['exists', value]);
+      const { status } = queryClient.getQueryState(key);
       return status === 'success';
     });
   }

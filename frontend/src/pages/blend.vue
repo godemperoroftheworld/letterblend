@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import { useLocalStorage } from '@vueuse/core';
+  import { breakpointsTailwind, useBreakpoints, useLocalStorage } from '@vueuse/core';
   import FormView, { type FormExpose } from '@/components/ui/form/FormView.vue';
   import TextButton from '@/components/ui/button/TextButton.vue';
   import NameField from '@/components/ui/NameField.vue';
-  import CardView from '@/components/ui/CardView.vue';
+  import CardView, { type CardExpose } from '@/components/ui/CardView.vue';
   import type { FormObject } from '@/components/ui/form/types';
-  import { useFormContext } from 'vee-validate';
+  import { computedDeep } from '@/utils/computed';
 
   // Setup
   interface FormResult {
@@ -13,6 +13,9 @@
   }
   const router = useRouter();
   const storageName = useLocalStorage('user', '');
+
+  // Constants
+  const USER_COLLAPSE_COUNT = 4;
 
   // Functions
   async function submitted({ name }: FormResult) {
@@ -23,25 +26,24 @@
     });
   }
 
+  // Collapsable settings
+  const breakpoints = useBreakpoints(breakpointsTailwind);
+  const isSmall = breakpoints.smaller('md');
+  const collapsableSettings = ref<CardExpose>();
+
   // Form Data
   const userForm = ref<FormExpose<FormObject>>();
   const settingsForm = ref<FormExpose<FormObject>>();
-  const userValid = ref(false);
-  watch(
-    () => !!userForm.value?.valid,
-    (val) => {
-      userValid.value = val;
-    },
-    { deep: true, immediate: true },
-  );
-  const settingsValid = ref(false);
-  watch(
-    () => !!settingsForm.value?.data.valid,
-    (val) => {
-      settingsValid.value = val;
-    },
-    { deep: true, immediate: true },
-  );
+  const userCount = computedDeep(() => userForm.value?.values?.name.length ?? 0);
+  const userValid = computedDeep(() => !!userForm.value?.valid);
+  const settingsValid = computedDeep(() => !!settingsForm.value?.valid);
+  watch(userCount, (val, oldVal) => {
+    if (val >= USER_COLLAPSE_COUNT && oldVal < USER_COLLAPSE_COUNT) {
+      collapsableSettings.value?.toggle();
+    } else if (val < USER_COLLAPSE_COUNT && oldVal >= USER_COLLAPSE_COUNT) {
+      collapsableSettings.value?.toggle();
+    }
+  });
 </script>
 
 <template>
@@ -67,21 +69,18 @@
         </form-view>
       </card-view>
       <card-view
+        ref="collapsableSettings"
         title="Settings"
-        class="flex-shrink-0 max-md:hidden lg:col-span-2">
-        <blend-settings ref="settingsForm" />
-      </card-view>
-      <card-view
-        title="Settings"
-        collapsable
-        class="flex-shrink-0 md:hidden lg:col-span-2">
+        :collapsable="isSmall"
+        :collapsed-default="false"
+        class="flex-shrink-0 lg:col-span-2">
         <blend-settings ref="settingsForm" />
       </card-view>
     </div>
     <text-button
       text="Submit"
       type="submit"
-      class="w-40 max-md:my-4"
+      class="w-64 max-md:my-4"
       :disabled="!userValid || !settingsValid"
       @keyup.enter="userForm?.submit()"
       @click.prevent="userForm?.submit()" />

@@ -62,7 +62,6 @@
     </template>
   </field-array>
   <generic-button
-    v-if="fieldArrayRef"
     class="mt-auto sm:hidden"
     type="submit"
     :disabled="disableAdd"

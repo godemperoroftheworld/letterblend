@@ -1,28 +1,36 @@
 <script setup lang="ts">
   import { IconChevronDown, IconChevronUp } from '@tabler/icons-vue';
 
+  export interface CardExpose {
+    toggle: () => void;
+  }
   const props = defineProps<{
     title: string;
     collapsable?: boolean;
+    collapsedDefault?: boolean;
     justify?: 'between' | 'center';
   }>();
 
-  const open = ref(false);
+  const open = ref(true);
   watch(
     () => props.collapsable,
     (val) => {
       open.value = !val;
     },
   );
-  onMounted(() => {
-    open.value = !props.collapsable;
+
+  function toggle() {
+    open.value = !open.value;
+  }
+  defineExpose({
+    toggle,
   });
 </script>
 
 <template>
   <div
-    class="bg-background transition-default relative flex flex-col overflow-hidden rounded-xl pt-4"
-    :class="{ 'max-h-14': collapsable && !open, 'max-h-full': collapsable && open }">
+    class="bg-background transition-default relative flex max-h-full flex-col overflow-hidden rounded-xl pt-4"
+    :class="{ '!max-h-14': collapsable && !open }">
     <h3
       class="text-info text-shadow-white text-shadow pointer-events-none h-8 text-center text-xl font-bold uppercase">
       {{ title }}
@@ -30,6 +38,8 @@
     <template v-if="collapsable">
       <input
         v-model="open"
+        :value="collapsedDefault"
+        :checked="collapsedDefault"
         class="absolute top-0 left-0 h-16 w-full cursor-pointer opacity-0"
         type="checkbox" />
       <div class="absolute top-4 right-4 lg:top-4 lg:right-8">

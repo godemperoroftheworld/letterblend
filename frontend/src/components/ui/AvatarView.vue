@@ -10,11 +10,19 @@
   const props = defineProps<Props>();
 
   const storageName = useLocalStorage('user', '');
-  const eitherName = computed(() => props.name ?? (props.fallback ? storageName.value : ''));
-  const shouldFetchExists = computed(() => !!eitherName.value?.length);
-  const { data: nameExists, isLoading: isLoadingName } = useExists(eitherName);
+  const avatarName = computed(() => {
+    if (props.name) return props.name;
+    if (props.fallback) {
+      return storageName.value;
+    }
+    return '';
+  });
+  const shouldFetchExists = computed(() => !!avatarName.value.length);
+  const { data: nameExists, isLoading: isLoadingName } = useExists(shouldFetchExists, {
+    enabled: shouldFetchExists,
+  });
   const shouldFetchAvatar = computed(() => shouldFetchExists.value && !!nameExists.value);
-  const { data: avatar, isLoading } = useAvatar(eitherName, { enabled: shouldFetchAvatar });
+  const { data: avatar, isLoading } = useAvatar(avatarName, { enabled: shouldFetchAvatar });
 </script>
 
 <template>
