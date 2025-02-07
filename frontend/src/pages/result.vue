@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { type BlendParams, useBlend } from '@/composables/query/blend';
+  import { useBlend } from '@/composables/query/blend';
   import MoviePoster from '@/components/ui/MoviePoster.vue';
   import CardView from '@/components/ui/CardView.vue';
   import CarouselView from '@/components/ui/CarouselView.vue';
@@ -9,6 +9,7 @@
 
   // Data
   const route = useRoute();
+  const router = useRouter();
   const top = computed(() => Number(route.query.top));
   const threshold = computed(() => Number(route.query.threshold));
   const names = computed(() => (route.query.names as string).split(','));
@@ -23,12 +24,12 @@
   const isSmall = breakpoints.smaller('md');
 
   function settingsSubmitted(settings: BlendSettingsType) {
-    route.query = { ...route.query, ...settings };
+    router.replace({ name: 'result', query: { names: route.query.names, ...settings } });
   }
 </script>
 
 <template>
-  <div class="grid gap-2 max-md:grid-rows-2 md:grid-cols-5 md:gap-4 lg:gap-8">
+  <div class="gap-2 max-md:flex max-md:flex-col md:grid md:grid-cols-5 md:gap-4 lg:gap-8">
     <card-view
       title="Results"
       class="h-fit shrink-0 md:col-span-3">
@@ -36,7 +37,9 @@
         :entries="results"
         :loading="isFetching">
         <template #default="data: Movie">
-          <movie-poster v-bind="data" />
+          <movie-poster
+            class="w-full"
+            v-bind="data" />
         </template>
       </carousel-view>
     </card-view>
@@ -44,7 +47,9 @@
       class="h-fit md:col-span-2"
       :collapsable="isSmall"
       title="Settings">
-      <blend-settings :submitted="settingsSubmitted" />
+      <blend-settings
+        :submitted="settingsSubmitted"
+        :show-submit-button="true" />
     </card-view>
   </div>
 </template>

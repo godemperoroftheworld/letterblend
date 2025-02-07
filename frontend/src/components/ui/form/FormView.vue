@@ -120,7 +120,7 @@
     </div>
     <div
       v-if="showSubmitButton || showCancelButton"
-      class="mt-4 flex justify-between text-center"
+      class="mt-5 flex justify-between text-center"
       :class="{ 'w-full': showCancelButton && showSubmitButton }">
       <text-button
         v-if="showCancelButton"

@@ -8,8 +8,9 @@
   export type BlendSettings = Omit<BlendParams, 'details'>;
   interface Props {
     submitted?: (data: BlendSettings) => Promise<void>;
+    showSubmitButton?: boolean;
   }
-  withDefaults(defineProps<Props>(), { submitted: noop });
+  withDefaults(defineProps<Props>(), { submitted: noop, showSubmitButton: false });
 
   const settingsForm = ref();
   defineExpose({ data: settingsForm });
@@ -35,6 +36,6 @@
       },
     }"
     :defaults="{ top: 10, threshold: 0.6 }"
-    :show-submit-button="false"
+    :show-submit-button="showSubmitButton"
     :submitted="submitted" />
 </template>

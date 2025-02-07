@@ -8,6 +8,19 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   modules: ['@nuxt/eslint', '@nuxt/image-edge', '@vueuse/nuxt'],
   srcDir: 'src',
+  runtimeConfig: {
+    public: {
+      url: process.env.URL,
+    },
+  },
+  image: {
+    providers: {
+      raw: {
+        name: 'raw',
+        provider: '~/providers/raw.ts',
+      },
+    },
+  },
   vite: {
     plugins: [tailwindcss(), svgLoader(), nodePolyfills()],
     server: {

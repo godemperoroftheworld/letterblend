@@ -34,6 +34,7 @@ const variables = {
   ScrapeServiceURL: process.env.SCRAPE_SERVICE ?? "",
   RoomServiceURL: process.env.ROOM_SERVICE ?? "",
   MovieAPI: process.env.MOVIE_API ?? "",
+  PosterAPI: process.env.POSTER_API ?? "",
 } as const;
 
 export default variables;

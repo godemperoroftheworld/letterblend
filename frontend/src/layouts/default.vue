@@ -22,7 +22,7 @@
     <content-view class="mx-auto my-auto h-fit min-h-3/4 w-full max-w-screen-xl flex-grow">
       <generic-button
         v-show="!isHome"
-        class="absolute top-4 left-4 z-1 w-40 max-sm:fixed max-sm:w-24 lg:top-8 lg:left-8"
+        class="absolute top-4 left-4 z-1 w-40 max-sm:w-24 lg:top-8 lg:left-8"
         button-style="hollow"
         @click.prevent="router.back"
         @keyup.enter="router.back">

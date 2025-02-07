@@ -2,22 +2,31 @@
   import type { Movie } from '@/types/movie';
   import AvatarView from '@/components/ui/AvatarView.vue';
   defineProps<Movie>();
+
+  const loaded = ref(false);
 </script>
 
 <template>
   <a
-    v-tippy="name"
-    class="relative overflow-hidden rounded"
+    class="relative"
     :href="`https://letterboxd.com/film/${slug}`"
     target="_blank">
-    <div class="absolute bottom-0.5 left-0.5 flex gap-0.5">
+    <div
+      v-tippy="name"
+      :class="{ 'bg-paper animate-pulse': !loaded }"
+      class="aspect-[2/3] w-full overflow-hidden rounded">
+      <nuxt-img
+        :src="`api/poster/id/${data.id}`"
+        provider="raw"
+        @load="loaded = true" />
+    </div>
+    <div class="mx-auto mt-1 flex h-6 w-fit gap-1">
       <avatar-view
         v-for="user in users"
         :key="user"
         v-tippy="user"
-        class="h-6 w-6"
+        class="transition-default h-6 w-6 hover:scale-125"
         :name="user" />
     </div>
-    <nuxt-img :src="`https://image.tmdb.org/t/p/original/${data.poster_path}`" />
   </a>
 </template>
