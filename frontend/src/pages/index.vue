@@ -25,10 +25,6 @@
     localStorage.setItem('user', name);
     await router.push('/blend');
   }
-
-  watch(formName, (val) => {
-    console.log('updated: ' + val);
-  });
 </script>
 
 <template>
@@ -75,7 +71,7 @@
       <text-button
         class="mx-auto w-64"
         text="Submit"
-        type="submit"
+        button-style="submit"
         :disabled="userForm && !formValid"
         @keyup.enter="userForm.submit()"
         @click.prevent="userForm.submit()" />

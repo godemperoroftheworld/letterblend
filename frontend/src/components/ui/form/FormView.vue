@@ -44,7 +44,7 @@
 
   const formRef = ref<UnwrapNestedRefs<FormContext>>();
   const values = computed(() => formRef.value?.values as T);
-  const isValid = computed(() => formRef.value?.meta.valid);
+  const isValid = computed(() => isEmpty(formRef.value?.errors));
   const isValidating = computed(() => !!formRef.value?.isValidating);
 
   function getField(key: keyof T) {
@@ -61,7 +61,7 @@
 
 <template>
   <validated-form
-    v-slot="{ isSubmitting, errors }"
+    v-slot="{ isSubmitting, errors, submitForm }"
     ref="formRef"
     :name="name"
     :initial-values="defaults"
@@ -125,7 +125,7 @@
       <text-button
         v-if="showCancelButton"
         class="w-40"
-        type="danger"
+        button-style="danger"
         :text="cancelButtonText"
         @click.prevent="emits('cancelled')" />
       <text-button
@@ -133,8 +133,9 @@
         class="w-40"
         :disabled="!isEmpty(errors)"
         :loading="isSubmitting"
-        type="submit"
-        text="Submit" />
+        button-style="submit"
+        text="Submit"
+        @click="formRef.$el.requestSubmit()" />
     </div>
   </validated-form>
 </template>

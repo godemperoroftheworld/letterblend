@@ -37,18 +37,20 @@
   // Form Data
   const userForm = ref<FormExpose<FormObject>>();
   const settingsForm = ref<FormExpose<FormObject>>();
-  const userNames = computedDeep<string[]>(() => userForm.value?.values?.name ?? []);
+  const userNames = computed<string[]>(() => userForm.value?.values?.name ?? []);
   const userValid = computedDeep(() => !!userForm.value?.valid);
   const settingsValid = computedDeep(() => !!settingsForm.value?.data.valid);
   watch(userNames, (val, oldVal) => {
-    if (val.length >= USER_COLLAPSE_COUNT && oldVal.length < USER_COLLAPSE_COUNT) {
-      collapsableSettings.value?.toggle();
-    } else if (val.length < USER_COLLAPSE_COUNT && oldVal.length >= USER_COLLAPSE_COUNT) {
-      collapsableSettings.value?.toggle();
+    if (val.length < oldVal.length) {
+      if (val.length < USER_COLLAPSE_COUNT) {
+        collapsableSettings.value?.setCollapsed(false);
+      }
+    } else {
+      if (val.length >= USER_COLLAPSE_COUNT) {
+        collapsableSettings.value?.setCollapsed(true);
+      }
     }
   });
-  watch(userValid, (val) => console.log('user: ' + val));
-  watch(settingsValid, (val) => console.log('settings: ' + val));
 
   // Autocomplete
   const fixedNames = computed(() => {
@@ -91,8 +93,8 @@
               length: { min: 2, max: 5 },
             },
           }"
-          :defaults="{ name: [storageName, ''] }"
           :show-submit-button="false"
+          :defaults="{ name: [storageName, ''] }"
           :submitted="submitted">
         </form-view>
       </card-view>
@@ -107,7 +109,7 @@
     </div>
     <text-button
       text="Submit"
-      type="submit"
+      button-style="submit"
       class="w-64 max-md:my-4"
       :disabled="!userValid || !settingsValid"
       @keyup.enter="userForm?.submit()"

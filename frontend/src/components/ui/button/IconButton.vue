@@ -5,7 +5,7 @@
 
   interface Props {
     icon: Icon;
-    type?: 'submit' | 'info' | 'danger';
+    buttonStyle?: 'submit' | 'info' | 'danger';
     disabled?: boolean;
     loading?: boolean;
     size?: number;
@@ -14,8 +14,8 @@
 
   const bgClass = computed(() => {
     if (props.disabled || props.loading) return 'button-disabled';
-    if (props.type) {
-      return `button-${props.type}`;
+    if (props.buttonStyle) {
+      return `button-${props.buttonStyle}`;
     }
     return '';
   });
@@ -25,6 +25,7 @@
   <button
     class="button flex cursor-pointer items-center rounded p-2"
     :disabled="disabled || loading"
+    type="button"
     :class="bgClass">
     <template v-if="loading">
       <loading-icon class="mx-auto aspect-square animate-spin" />

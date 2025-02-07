@@ -3,6 +3,13 @@
   import { number } from 'yup';
   import FormView from '@/components/ui/form/FormView.vue';
   import noop from 'lodash/noop';
+  import type { BlendParams } from '@/composables/query/blend';
+
+  export type BlendSettings = Omit<BlendParams, 'details'>;
+  interface Props {
+    submitted?: (data: BlendSettings) => Promise<void>;
+  }
+  withDefaults(defineProps<Props>(), { submitted: noop });
 
   const settingsForm = ref();
   defineExpose({ data: settingsForm });
@@ -29,5 +36,5 @@
     }"
     :defaults="{ top: 10, threshold: 0.6 }"
     :show-submit-button="false"
-    :submitted="noop" />
+    :submitted="submitted" />
 </template>

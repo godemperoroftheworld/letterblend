@@ -39,21 +39,21 @@
           v-bind="fieldProps" />
         <icon-button
           class="sm:hidden"
-          type="danger"
+          button-style="danger"
           :disabled="arrayFields.length <= length.min"
           :icon="IconTrash"
-          @click="remove(idx)" />
+          @click="remove(entry)" />
         <div
           class="absolute -right-4 bottom-0 hidden w-fit translate-x-full items-center gap-2 sm:flex">
           <icon-button
-            type="danger"
+            button-style="danger"
             :disabled="arrayFields.length <= length.min"
             :icon="IconTrash"
-            @click="remove(idx)" />
+            @click="remove(entry)" />
           <icon-button
             v-if="idx + 1 === arrayFields.length"
             :disabled="disableAdd"
-            type="submit"
+            button-style="submit"
             :icon="IconPlus"
             :size="12"
             @click="fieldArrayRef?.push('')" />
@@ -63,7 +63,7 @@
   </field-array>
   <generic-button
     class="mt-auto sm:hidden"
-    type="submit"
+    button-style="submit"
     :disabled="disableAdd"
     @click="fieldArrayRef.push('')">
     <icon-plus />

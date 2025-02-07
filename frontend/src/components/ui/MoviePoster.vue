@@ -8,7 +8,7 @@
   <a
     v-tippy="name"
     class="relative overflow-hidden rounded"
-    href="https://letterboxd.com/film/eternal-sunshine-of-the-spotless-mind"
+    :href="`https://letterboxd.com/film/${slug}`"
     target="_blank">
     <div class="absolute bottom-0.5 left-0.5 flex gap-0.5">
       <avatar-view

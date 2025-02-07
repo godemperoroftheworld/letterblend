@@ -2,7 +2,7 @@ import type { MaybeDeepRef } from '@/utils/unref';
 import type { Movie } from '@/types/movie';
 import type { DefaultError } from '@tanstack/vue-query';
 
-interface BlendParams {
+export interface BlendParams {
   top: number; // int, min 1
   threshold: number; // float, min 0 max 1
   details: boolean; // populate with TMDB data

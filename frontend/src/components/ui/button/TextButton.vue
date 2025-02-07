@@ -4,7 +4,7 @@
 
   interface Props {
     text: string;
-    type?: 'submit' | 'info' | 'danger' | 'hollow';
+    buttonStyle?: 'submit' | 'info' | 'danger' | 'hollow';
     disabled?: boolean;
     loading?: boolean;
   }
@@ -12,8 +12,8 @@
 
   const bgClass = computed(() => {
     if (props.disabled || props.loading) return 'button-disabled';
-    if (props.type) {
-      return `button-${props.type}`;
+    if (props.buttonStyle) {
+      return `button-${props.buttonStyle}`;
     }
     return '';
   });
@@ -22,6 +22,7 @@
 <template>
   <button
     v-bind="$attrs"
+    type="button"
     class="button shadow-paper/50 min-w-24 rounded p-2 px-4 font-medium text-white uppercase shadow-2xs drop-shadow-none active:shadow-none disabled:cursor-not-allowed"
     :disabled="disabled || loading"
     :class="bgClass">
