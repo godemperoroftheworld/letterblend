@@ -11,16 +11,6 @@ export type BlendParams = {
 interface BlendEntry { name: string, slug: string, users: string[], id: number, data: Responses.Movie.GetDetails }
 
 async function getMovieID(entry: Pick<BlendEntry, 'name' | 'slug'>): Promise<number> {
-  // Try TMDB search by name (faster than scraper, but sometimes innacurate)
-  try {
-    const { data: { results } } = await TMDB.search.movies({ query: { query: entry.name, page: 1 }});
-    if (results.length) {
-      const movie = results[0];
-      if (movie.title === entry.name || movie.original_title === entry.name) {
-        return movie.id;
-      }
-    }
-  } catch (e) {}
   // Fallback to get TMDB ID from scraper
   return await Scraper.getInstance().id(entry.slug);
 }
