@@ -9,6 +9,7 @@
   import { useDataQuery } from '@/utils/query';
   import { queryClient } from '@/plugins/query';
   import { uniq } from 'lodash';
+  import InfoMessage from '@/components/ui/InfoMessage.vue';
 
   // Setup
   interface FormResult {
@@ -18,7 +19,7 @@
   const storageName = useLocalStorage('user', '');
 
   // Constants
-  const USER_COLLAPSE_COUNT = 4;
+  const USER_COLLAPSE_COUNT = 3;
 
   // Functions
   async function submitted({ name }: FormResult) {
@@ -79,6 +80,9 @@
       <card-view
         title="Users"
         class="lg:col-span-3">
+        <info-message class="w-full max-w-sm">
+          Enter your friend's usernames. There can be up to five of you.
+        </info-message>
         <form-view
           ref="userForm"
           name="userForm"

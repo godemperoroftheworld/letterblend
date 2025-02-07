@@ -5,7 +5,7 @@
 <template>
   <div
     class="border-info text-info flex items-center justify-center gap-2 rounded border-2 p-2 text-center">
-    <icon-info-circle />
+    <icon-info-circle class="h-6" />
     <span class="w-fit cursor-default"><slot /></span>
   </div>
 </template>

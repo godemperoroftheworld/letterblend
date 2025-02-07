@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
-  modules: ['@nuxt/eslint', '@nuxt/image-edge', '@vueuse/nuxt'],
+  modules: ['@nuxt/eslint', '@nuxt/image-edge', '@vueuse/nuxt', 'nuxt-particles'],
   srcDir: 'src',
   runtimeConfig: {
     public: {
@@ -20,6 +20,9 @@ export default defineNuxtConfig({
         provider: '~/providers/raw.ts',
       },
     },
+  },
+  particles: {
+    mode: 'slim',
   },
   vite: {
     plugins: [tailwindcss(), svgLoader(), nodePolyfills()],
