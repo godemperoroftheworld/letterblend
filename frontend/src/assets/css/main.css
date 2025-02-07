@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import 'tippy.js/dist/tippy.css';
 
 @theme {
   --color-primary: #00B021;
@@ -8,6 +9,27 @@
   --color-background: #2c3440;
   --color-paper: #556678;
   --color-content: #202830;
+}
+
+@utility no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+@layer utilities {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
 }
 
 @utility text-outline-* {

@@ -12,7 +12,7 @@
   const { data: results, isFetching } = useBlend(names, {
     top,
     threshold,
-    data: false,
+    details: true,
   });
 </script>
 

@@ -5,7 +5,7 @@ import type { DefaultError } from '@tanstack/vue-query';
 interface BlendParams {
   top: number; // int, min 1
   threshold: number; // float, min 0 max 1
-  data: boolean; // populate with TMDB data
+  details: boolean; // populate with TMDB data
 }
 export function useBlend(names: MaybeDeepRef<string[]>, params?: MaybeDeepRef<BlendParams>) {
   return useDataQuery<Movie[], DefaultError, Movie[]>(['blend', names, params], 'blend', {
