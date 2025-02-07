@@ -46,7 +46,16 @@ interface FollowerParams {
 const getFriendsHandler: RequestHandler = async (req, res) => {
   const { names } = getData<FollowerParams>(req);
 
-  const friends = await Promise.all(names.map((name) => Scraper.getInstance().friends(name)));
+  // Filter to existing
+  const existingNames = await Promise.all(names.map((name) => {
+    return new Promise<{ name: string, exists: boolean }>((resolve) => {
+      Scraper.getInstance().exists(name).then(({ data: { exists } }) => {
+        resolve({ name, exists });
+      });
+    });
+  })).then((r) => r.filter((v) => v.exists).map((v) => v.name));
+  // Friends
+  const friends = await Promise.all(existingNames.map((name) => Scraper.getInstance().friends(name)));
   const friendsMerged: Users = merge({}, ...friends);
   res.status(HttpStatusCodes.OK).send(friendsMerged);
 };
