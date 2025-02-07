@@ -39,8 +39,7 @@
   const settingsForm = ref<FormExpose<FormObject>>();
   const userNames = computedDeep<string[]>(() => userForm.value?.values?.name ?? []);
   const userValid = computedDeep(() => !!userForm.value?.valid);
-  const userValidating = computedDeep(() => !!userForm.value?.validating);
-  const settingsValid = computedDeep(() => !!settingsForm.value?.valid);
+  const settingsValid = computedDeep(() => !!settingsForm.value?.data.valid);
   watch(userNames, (val, oldVal) => {
     if (val.length >= USER_COLLAPSE_COUNT && oldVal.length < USER_COLLAPSE_COUNT) {
       collapsableSettings.value?.toggle();
@@ -48,6 +47,8 @@
       collapsableSettings.value?.toggle();
     }
   });
+  watch(userValid, (val) => console.log('user: ' + val));
+  watch(settingsValid, (val) => console.log('settings: ' + val));
 
   // Autocomplete
   const fixedNames = computed(() => {

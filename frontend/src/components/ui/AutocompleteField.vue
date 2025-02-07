@@ -1,7 +1,6 @@
 <script setup lang="ts" generic="T">
   import InputField, { type InputProps } from '@/components/ui/InputField.vue';
   import { useFuse } from '@vueuse/integrations/useFuse';
-  import type { SelectProps } from '@/components/ui/SelectField.vue';
 
   export interface DropdownProps<T> extends InputProps<T> {
     options?: string[];
