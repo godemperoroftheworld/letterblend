@@ -47,6 +47,7 @@
       v-bind="{ ...$props, ...$attrs }"
       @focusin="opened = true"
       @changed="(val) => (innerValue = val)"
+      @keyup.prevent="opened = true"
       @keyup.enter="dropdownOptions.length ? selectEntry(dropdownOptions[0]) : undefined" />
     <div
       v-show="opened"
