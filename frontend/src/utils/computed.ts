@@ -1,5 +1,7 @@
+import type { Ref } from 'vue';
+
 export function computedDeep<T>(getter: () => T) {
-  const value = ref<T>();
+  const value: Ref<T> = ref<T>();
   watch(
     getter,
     (val) => {

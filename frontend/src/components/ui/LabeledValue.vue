@@ -41,7 +41,7 @@
 </template>
 
 <style scoped lang="scss">
-  .form-control > * {
+  .form-control > input {
     width: 100%;
   }
 </style>

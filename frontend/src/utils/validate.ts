@@ -10,7 +10,7 @@ export const validateLetterboxdName: GenericValidateFunction<string> = async (va
     return e.errors as string[];
   }
 
-  const exists = fetchDataQuery<ExistsResponse>(['exists', value], `user/${value}/exists`, {
+  const exists = await fetchDataQuery<ExistsResponse>(['exists', value], `user/${value}/exists`, {
     transform: (result) => !!result?.exists,
   });
   if (exists) return true;

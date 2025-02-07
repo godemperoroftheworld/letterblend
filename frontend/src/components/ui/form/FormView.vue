@@ -12,9 +12,11 @@
   import isEmpty from 'lodash/isEmpty';
   import FormArray from '@/components/ui/form/FormArray.vue';
   import AccordionView from '@/components/ui/AccordionView.vue';
+  import { computedDeep } from '@/utils/computed';
 
   export interface FormExpose<T> {
     valid: boolean;
+    validating: boolean;
     values: T;
     submit: () => void;
   }
@@ -43,6 +45,7 @@
   const formRef = ref<UnwrapNestedRefs<FormContext>>();
   const values = computed(() => formRef.value?.values as T);
   const isValid = computed(() => formRef.value?.meta.valid);
+  const isValidating = computed(() => !!formRef.value?.isValidating);
 
   function getField(key: keyof T) {
     return props.fields[key] as Omit<FieldProps<T[keyof T]>, 'name'>;
@@ -50,7 +53,8 @@
 
   defineExpose({
     valid: isValid,
-    values: values,
+    values,
+    validating: isValidating,
     submit: () => formRef.value?.$el.requestSubmit(),
   });
 </script>

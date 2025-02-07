@@ -4,10 +4,10 @@
   import type { SelectProps } from '@/components/ui/SelectField.vue';
 
   export interface DropdownProps<T> extends InputProps<T> {
-    options: string[];
+    options?: string[];
   }
   defineOptions({ inheritAttrs: false });
-  const props = defineProps<DropdownProps<T>>();
+  const props = withDefaults(defineProps<DropdownProps<T>>(), { options: [] });
   const model = defineModel<T>();
 
   // Internal value, no debounce
@@ -16,13 +16,10 @@
 
   // Search
   const valueStr = computed(() => (innerValue.value ? String(innerValue.value) : ''));
-  const matchingOptions = useFuse(valueStr, props.options, {
+  const matchingOptions = useFuse(valueStr, () => props.options, {
     resultLimit: 5,
   });
   const dropdownOptions = computed(() => {
-    if (matchingOptions.results.value.find((o) => o.item === valueStr.value)) {
-      return [];
-    }
     return matchingOptions.results.value.sort((a, b) => a.score - b.score).map((v) => v.item);
   });
 
@@ -32,33 +29,39 @@
   onClickOutside(fieldRef, () => {
     opened.value = false;
   });
+  function selectEntry(entry: T) {
+    model.value = entry;
+    opened.value = false;
+  }
 </script>
 
 <template>
   <div
     ref="fieldRef"
-    class="relative">
+    class="relative"
+    @keydown.tab="opened = false">
     <input-field
       v-model="model"
+      autocomplete="off"
       class="h-full w-full"
       v-bind="{ ...$props, ...$attrs }"
       @focusin="opened = true"
-      @changed="(val) => (innerValue = val)" />
+      @changed="(val) => (innerValue = val)"
+      @keyup.enter="dropdownOptions.length ? selectEntry(dropdownOptions[0]) : undefined" />
     <div
       v-show="opened"
       ref="dropdownRef"
-      class="bg-content absolute mt-1 flex w-full flex-col rounded-b text-sm">
-      <ul>
-        <li
+      class="bg-content absolute z-10 mt-1 w-full rounded-b text-sm">
+      <div class="flex flex-col">
+        <a
           v-for="(entry, idx) in dropdownOptions"
           :key="idx"
-          class="cursor-pointer p-2 hover:bg-slate-500/50"
-          @click.prevent="model = entry">
-          <a @keyup.enter="model = entry">
-            {{ entry }}
-          </a>
-        </li>
-      </ul>
+          class="w-full cursor-pointer p-2 hover:bg-slate-500/50"
+          @click.prevent="selectEntry(entry)"
+          @keyup.enter="selectEntry(entry)">
+          {{ entry }}
+        </a>
+      </div>
     </div>
   </div>
 </template>

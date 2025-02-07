@@ -7,6 +7,8 @@
   import type { FormObject } from '@/components/ui/form/types';
   import { computedDeep } from '@/utils/computed';
   import { useDataQuery } from '@/utils/query';
+  import { queryClient } from '@/plugins/query';
+  import { uniq } from 'lodash';
 
   // Setup
   interface FormResult {
@@ -37,6 +39,7 @@
   const settingsForm = ref<FormExpose<FormObject>>();
   const userNames = computedDeep<string[]>(() => userForm.value?.values?.name ?? []);
   const userValid = computedDeep(() => !!userForm.value?.valid);
+  const userValidating = computedDeep(() => !!userForm.value?.validating);
   const settingsValid = computedDeep(() => !!settingsForm.value?.valid);
   watch(userNames, (val, oldVal) => {
     if (val.length >= USER_COLLAPSE_COUNT && oldVal.length < USER_COLLAPSE_COUNT) {
@@ -47,12 +50,18 @@
   });
 
   // Autocomplete
-  const fixedNames = computed(() => userNames.value.filter((u) => !!u));
-  const canFetchFriends = computed(() => userValid.value && !!fixedNames.value?.length);
-  const { data: friends } = useDataQuery(['friends', fixedNames], '/user/friends', {
-    options: {
-      enabled: canFetchFriends,
-    },
+  const fixedNames = computed(() => {
+    return uniq([
+      storageName.value,
+      ...userNames.value
+        .filter((u) => !!u)
+        .filter((u) => {
+          const value = queryClient.getQueryData(['exists', u]);
+          return value ? value.exists : false;
+        }),
+    ]);
+  });
+  const { data: friends } = useDataQuery(['friends', storageName, fixedNames], '/user/friends', {
     config: {
       method: 'POST',
       data: { names: fixedNames },
