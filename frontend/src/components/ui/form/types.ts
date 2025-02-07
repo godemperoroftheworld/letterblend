@@ -7,14 +7,19 @@ import type { DefaultError, UseMutationReturnType } from '@tanstack/vue-query';
 // FIELD
 type FieldComponentProps<T extends PropertyKey> = Partial<InputProps<T> & SelectProps<T>>;
 export type FieldProps<T extends PropertyKey> = {
+  // Label
   label?: string;
   labelSize?: 'xs' | 'sm' | 'lg' | 'base';
+  uppercase?: boolean;
+  // Field
   name: string;
   as: Component;
   rules?: RuleExpression<T>;
-  uppercase?: boolean;
+  // Array props
   array?: boolean;
   length?: { min?: number; max?: number };
+  // Validation
+  validateOnMount?: boolean;
 } & FieldComponentProps<T>;
 
 // FORM

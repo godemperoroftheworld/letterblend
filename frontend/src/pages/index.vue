@@ -32,15 +32,15 @@
 </script>
 
 <template>
-  <div class="grid gap-4 max-xl:grid-rows-5 lg:gap-8 xl:grid-cols-5">
+  <div class="grid gap-4 max-lg:grid-rows-5 lg:grid-cols-5 lg:gap-8">
     <card-view
       title="Get Started"
       justify="center"
-      class="max-xl:row-span-3 xl:col-span-3">
+      class="max-lg:row-span-3 lg:col-span-3">
       <div class="flex min-h-2/3 w-full flex-col items-center justify-center">
         <div class="flex w-full items-center justify-center gap-4 lg:flex-col lg:gap-8">
           <avatar-view
-            class="md:h-36 md:w-36"
+            class="max-lg:max-h-32 max-lg:max-w-32 lg:w-36"
             :name="formName"
             fallback />
           <form-view
@@ -53,7 +53,7 @@
                 labelSize: 'base',
                 uppercase: true,
                 as: InputField,
-                validateOnBlur: false,
+                validateOnMount: true,
                 rules: validateLetterboxdName,
                 debounceMs: 200,
               },
@@ -68,13 +68,14 @@
             <a
               class="font-bold underline"
               href="https://letterboxd.com/?register=true"
-              >here</a
-            >
+              target="_blank">
+              here
+            </a>
           </info-message>
         </div>
       </div>
       <text-button
-        class="mx-auto mt-auto w-64"
+        class="mx-auto w-64"
         text="Submit"
         type="submit"
         :disabled="userForm && !formValid"
@@ -83,7 +84,7 @@
     </card-view>
     <card-view
       title="How-To"
-      class="order-first max-xl:row-span-2 xl:order-none xl:col-span-2">
+      class="max-lg:order-first max-lg:row-span-2 lg:col-span-2">
       <slides-view
         class="my-auto h-64 max-h-full w-full"
         :slides="[

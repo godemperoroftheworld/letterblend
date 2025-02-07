@@ -12,36 +12,30 @@
   import type { UnwrapNestedRefs } from 'vue';
 
   const props = withDefaults(defineProps<FieldProps<T>>(), {
-    validateOnBlur: true,
-    validateOnInput: false,
-    validateOnChange: true,
-    validateOnModelUpdate: false,
     labelSize: 'sm',
   });
 
   const fieldRef = ref<UnwrapNestedRefs<FieldContext>>();
   const loading = computed(() => fieldRef.value?.meta.pending);
-  const touched = computed(() => fieldRef.value?.meta.touched);
   const errored = computed(() => !!fieldRef.value?.errorMessage);
 
-  const formContext = useFormContext();
+  const touched = ref(false);
   const model = defineModel<T>();
   watch(model, async (val) => {
-    fieldRef.value?.setTouched(true);
     fieldRef.value?.setValue(val);
-    // const { errors, valid } = await fieldRef.value?.validate();
-    // fieldRef.value?.setErrors(errors);
-    // if (fieldRef.value?.meta) {
-    //   fieldRef.value.meta.valid = valid;
-    // }
   });
   onMounted(() => {
     model.value = fieldRef.value?.value;
+    if (props.validateOnMount) {
+      touched.value = true;
+    }
   });
 </script>
 
 <template>
-  <div class="relative">
+  <div
+    class="relative"
+    @click="touched = true">
     <labeled-value
       :name="name"
       :label="label"
@@ -51,6 +45,7 @@
       :success="touched && !errored">
       <field
         ref="fieldRef"
+        v-slot="{ setTouched }"
         class="w-64 max-w-full"
         :name="name"
         :rules="rules">

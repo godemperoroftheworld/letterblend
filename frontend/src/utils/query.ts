@@ -15,6 +15,7 @@ import type { MaybeDeepRef } from '@/utils/unref';
 import type { MaybeRef } from '@vueuse/core';
 import Notifier from '@/utils/notification';
 import useLoader from '@/utils/load';
+import { queryClient } from '@/plugins/query';
 
 export type DataQueryReturnType<T, E = DefaultError, R = T> = Omit<
   UseQueryReturnType<T, E>,
@@ -39,41 +40,81 @@ export interface UseDataQueryParams<T, E = DefaultError, R = T> {
   showLoader?: boolean;
 }
 
-export function useDataQuery<T, E = DefaultError, R = T>(
-  key: MaybeDeepRef<Array<unknown>>,
-  url: MaybeRefOrGetter<string>,
-  { options, config, transform, showLoader }: UseDataQueryParams<T, E, R>,
-): DataQueryReturnType<T, E, R> {
-  const { emit } = useLoader();
-
-  const queryFn: QueryFunction<T, Array<unknown>> = async () => {
+function buildQueryFn<T, E = DefaultError, R = T>(
+  url,
+  config: AxiosRequestConfig<T>,
+  showLoader?: boolean,
+): QueryFunction<T, Array<unknown>> {
+  return async () => {
     if (showLoader) {
-      emit(true);
+      const scope = effectScope();
+      scope.run(() => {
+        const { emit } = useLoader();
+        emit(true);
+      });
+      scope.stop();
     }
     const result = await LetterblendAPI.instance.request<T>({
       ...unrefDeep(config),
       url: toValue(url),
     });
     if (showLoader) {
-      emit(false);
+      const scope = effectScope();
+      scope.run(() => {
+        const { emit } = useLoader();
+        emit(false);
+      });
+      scope.stop();
     }
     return result;
   };
+}
 
-  const queryKey = computed<Array<unknown>>(() => {
-    const originalKey = key as Array<unknown>;
-    return [...originalKey];
-  });
+function buildOptions<T, E = DefaultError>(
+  key: Array<unknown>,
+  queryFn: QueryFunction<T, Array<unknown>>,
+  options: DataQueryOptions<T, E>,
+): UseQueryOptions<T, E, T, T> {
+  return {
+    ...unref(options),
+    queryKey: [...key],
+    queryFn,
+  };
+}
 
-  const queryOptions = computed(() => {
-    return {
-      ...unref(options),
-      queryKey,
-      queryFn,
-    } as UseQueryOptions<T, E, T, T, Array<unknown>>;
-  });
+export async function fetchDataQuery<T, E = DefaultError, R = T>(
+  key: MaybeDeepRef<Array<unknown>>,
+  url: MaybeRefOrGetter<string>,
+  params: UseDataQueryParams<T, E, R>,
+) {
+  const state = queryClient.getQueryState(key);
+  if (state == null) {
+    const queryFn = buildQueryFn(url, params);
+    await queryClient.fetchQuery(buildOptions(key, queryFn, params.options));
+  } else if (state.status !== 'success') {
+    await waitUntil(() => {
+      const { status } = queryClient.getQueryState(['exists', value]);
+      return status === 'success';
+    });
+  }
+  const result = queryClient.getQueryData(key);
 
-  const { data, error, ...rest } = useQuery(queryOptions.value);
+  if (result != null) {
+    return params.transform ? params.transform(result) : (result as unknown as R);
+  }
+  return undefined;
+}
+
+export function useDataQuery<T, E = DefaultError, R = T>(
+  key: MaybeDeepRef<Array<unknown>>,
+  url: MaybeRefOrGetter<string>,
+  { options, config, transform, showLoader }: UseDataQueryParams<T, E, R>,
+): DataQueryReturnType<T, E, R> {
+  const queryFn = buildQueryFn(url, config);
+
+  const queryOptions = computed(() => buildOptions(key, queryFn, options));
+
+  const { data, error, ...rest } = useQuery(queryOptions.value, queryClient);
   const newData = computed(() => {
     if (data.value) {
       return transform ? transform(data.value) : (data.value as unknown as R);

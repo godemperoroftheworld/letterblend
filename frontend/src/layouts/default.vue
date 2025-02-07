@@ -19,7 +19,7 @@
         <logo class="h-36 w-36" />
       </router-link>
     </content-view>
-    <content-view class="mx-auto my-auto h-fit min-h-3/4 w-full flex-grow sm:w-3/4">
+    <content-view class="mx-auto my-auto h-fit min-h-3/4 w-full max-w-screen-xl flex-grow">
       <generic-button
         v-show="!isHome"
         class="absolute top-4 left-4 z-1 w-40 max-sm:fixed max-sm:w-24 lg:top-8 lg:left-8"

@@ -1,6 +1,6 @@
 import type { MaybeRefOrGetter } from 'vue';
-import type { UseQueryOptions } from '@tanstack/vue-query';
-import type { DataQueryOptions, DataQueryProps } from '@/utils/query';
+import type { DataQueryOptions } from '@/utils/query';
+import { useDataQuery } from '@/utils/query';
 
 interface AvatarResponse {
   exists: boolean;

@@ -12,7 +12,7 @@
     <nuxt-img
       class="min-h-0"
       :src="image" />
-    <h3 class="text-secondary text-center text-lg font-bold capitalize">{{ title }}</h3>
-    <p class="text-center text-sm font-medium text-white italic">{{ description }}</p>
+    <h3 class="text-center text-lg font-bold text-white capitalize">{{ title }}</h3>
+    <p class="text-secondary text-center text-sm font-medium italic">{{ description }}</p>
   </div>
 </template>

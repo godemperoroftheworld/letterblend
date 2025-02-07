@@ -12,9 +12,6 @@
   }
   const props = withDefaults(defineProps<Props>(), { size: 24 });
 
-  const sizeStyle = computed(() => {
-    return `width: ${props.size}px; height: ${props.size}px`;
-  });
   const bgClass = computed(() => {
     if (props.disabled || props.loading) return 'button-disabled';
     if (props.type) {

@@ -17,7 +17,6 @@
   onMounted(() => {
     open.value = !props.collapsable;
   });
-  watch(open, (val) => console.log(val));
 </script>
 
 <template>

@@ -15,8 +15,6 @@
   const { data: nameExists, isLoading: isLoadingName } = useExists(eitherName);
   const shouldFetchAvatar = computed(() => shouldFetchExists.value && !!nameExists.value);
   const { data: avatar, isLoading } = useAvatar(eitherName, { enabled: shouldFetchAvatar });
-
-  watch(eitherName, (val) => console.log('avatar: ' + val), { immediate: true });
 </script>
 
 <template>
