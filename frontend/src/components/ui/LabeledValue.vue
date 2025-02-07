@@ -40,7 +40,7 @@
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
   .form-control > input {
     width: 100%;
   }
