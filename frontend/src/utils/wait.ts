@@ -1,4 +1,6 @@
-export async function waitUntil(condition: () => Promise<boolean>) {
+import type { MaybePromise } from 'vee-validate';
+
+export async function waitUntil(condition: () => MaybePromise<boolean>) {
   const result = await condition();
   if (!result) {
     return new Promise((resolve, reject) => {

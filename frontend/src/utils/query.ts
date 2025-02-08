@@ -14,7 +14,7 @@ import { computed, unref, watch } from 'vue';
 import type { MaybeDeepRef } from '@/utils/unref';
 import type { MaybeRef } from '@vueuse/core';
 import Notifier from '@/utils/notification';
-import useLoader from '@/utils/load';
+import useLoader from '@/composables/load';
 import { queryClient } from '@/plugins/query';
 
 export type DataQueryReturnType<T, E = DefaultError, R = T> = Omit<
@@ -40,9 +40,9 @@ export interface UseDataQueryParams<T, E = DefaultError, R = T> {
   showLoader?: boolean;
 }
 
-function buildQueryFn<T, E = DefaultError, R = T>(
-  url,
-  config: AxiosRequestConfig<T>,
+function buildQueryFn<T>(
+  url: MaybeRefOrGetter<string>,
+  config: MaybeDeepRef<AxiosRequestConfig<T>>,
   showLoader?: boolean,
 ): QueryFunction<T, Array<unknown>> {
   return async () => {
@@ -71,13 +71,13 @@ function buildQueryFn<T, E = DefaultError, R = T>(
 }
 
 function buildOptions<T, E = DefaultError>(
-  key: Array<unknown>,
+  key: MaybeDeepRef<Array<unknown>>,
   queryFn: QueryFunction<T, Array<unknown>>,
   options: DataQueryOptions<T, E>,
 ): UseQueryOptions<T, E, T, T> {
   return {
     ...unref(options),
-    queryKey: [...key],
+    queryKey: [...unref(key)],
     queryFn,
   };
 }
@@ -85,28 +85,28 @@ function buildOptions<T, E = DefaultError>(
 export async function fetchDataQuery<T, E = DefaultError, R = T>(
   key: MaybeDeepRef<Array<unknown>>,
   url: MaybeRefOrGetter<string>,
-  params: UseDataQueryParams<T, E, R>,
+  { config = {}, showLoader = false, options = {}, transform }: UseDataQueryParams<T, E, R>,
 ) {
   const state = queryClient.getQueryState(key);
   if (state == null) {
-    const queryFn = buildQueryFn(url, params);
-    await queryClient.fetchQuery(buildOptions(key, queryFn, params.options));
+    const queryFn = buildQueryFn<T>(url, config, showLoader);
+    await queryClient.fetchQuery(buildOptions(key, queryFn, options ?? {}));
   } else if (state.status !== 'success') {
     await waitUntil(() => {
-      const { status } = queryClient.getQueryState(key);
-      return status === 'success';
+      const state = queryClient.getQueryState(key);
+      return state?.status === 'success';
     });
   }
-  const result = queryClient.getQueryData(key);
+  const result = queryClient.getQueryData<T>(key);
 
   if (result != null) {
-    return params.transform ? params.transform(result) : (result as unknown as R);
+    return transform ? transform(result) : (result as unknown as R);
   }
   return undefined;
 }
 
 export type UseDataQueryType<T, E = DefaultError, R = T> = (
-  key: MaybeDeepRef<Array>,
+  key: MaybeDeepRef<Array<unknown>>,
   url: MaybeRefOrGetter<string>,
   params: UseDataQueryParams<T, E, R>,
 ) => DataQueryReturnType<T, E, R>;
@@ -115,7 +115,7 @@ export function useDataQuery<T, E = DefaultError, R = T>(
   url: MaybeRefOrGetter<string>,
   { options, config, transform, showLoader }: UseDataQueryParams<T, E, R>,
 ): DataQueryReturnType<T, E, R> {
-  const queryFn = buildQueryFn(url, config);
+  const queryFn = buildQueryFn(url, config, showLoader);
 
   const queryOptions = computed(() => buildOptions(key, queryFn, options));
 

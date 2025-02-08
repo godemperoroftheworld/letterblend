@@ -1,12 +1,15 @@
 <script setup lang="ts">
   import Logo from '@/components/ui/LogoView.vue';
   import GenericButton from '@/components/ui/button/GenericButton.vue';
-  import { IconArrowBack } from '@tabler/icons-vue';
+  import { IconArrowBack, IconSparkles } from '@tabler/icons-vue';
   import ContentView from '@/components/ui/ContentView.vue';
+  import ToggleView from '@/components/ui/ToggleView.vue';
+  import { useLocalStorage } from '@vueuse/core';
 
   const route = useRoute();
   const router = useRouter();
   const isHome = computed(() => route.path === '/');
+  const particlesEnabled = useLocalStorage('particles', true, { initOnMounted: true });
 </script>
 
 <template>
@@ -29,6 +32,11 @@
         <icon-arrow-back />
         <span class="max-sm:hidden">Back</span>
       </generic-button>
+      <div class="absolute top-0 right-0 z-10 p-4">
+        <toggle-view
+          v-model="particlesEnabled"
+          :icon="IconSparkles" />
+      </div>
       <router-link
         to="/"
         class="mx-auto hidden w-fit md:block">

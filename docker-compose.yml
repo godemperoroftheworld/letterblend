@@ -1,0 +1,43 @@
+services:
+  letterblend-scraper:
+    build:
+      context: .
+      args:
+        - PORT=1000
+      dockerfile: scraper/Dockerfile
+    ports:
+      - "1000:1000"
+    networks:
+      - letterblend-network
+  letterblend-room:
+    build:
+      context: .
+      args:
+        - PORT=2000
+      dockerfile: room/Dockerfile
+    ports:
+      - "2000:2000"
+    networks:
+      - letterblend-network
+  letterblend-api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+  letterboxd-blend:
+    build:
+      context: .
+      args:
+        SCRAPE_SERVICE_URL: letterblend-scraper:1000
+        ROOM_SERVICE_URL: letterblend-room:2000
+        PORT: 3000
+      dockerfile: backend/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      MOVIE_API: ${MOVIE_API}
+    networks:
+      - letterblend-network
+networks:
+  letterblend-network:
+    driver: bridge

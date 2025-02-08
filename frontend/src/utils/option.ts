@@ -1,4 +1,4 @@
-export interface Option<T extends PropertyKey> {
+export interface Option<T extends PropertyKey | boolean> {
   label: string;
   id: T;
 }
