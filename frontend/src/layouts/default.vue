@@ -21,11 +21,11 @@
         :icon="IconSparkles" />
     </div>
     <content-view class="mx-auto h-fit w-fit md:hidden">
-      <router-link
+      <nuxt-link
         to="/"
         class="mx-auto w-fit">
         <logo class="h-36 w-36" />
-      </router-link>
+      </nuxt-link>
     </content-view>
     <content-view class="mx-auto my-auto h-fit min-h-3/4 w-full max-w-screen-xl flex-grow">
       <generic-button
@@ -42,11 +42,11 @@
           v-model="particlesEnabled"
           :icon="IconSparkles" />
       </div>
-      <router-link
+      <nuxt-link
         to="/"
         class="mx-auto hidden w-fit md:block">
         <logo class="h-40 w-40" />
-      </router-link>
+      </nuxt-link>
       <main
         class="relative flex flex-grow place-content-stretch content-stretch items-stretch text-white md:mt-0 lg:p-4">
         <slot />

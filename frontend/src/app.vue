@@ -1,3 +1,8 @@
+<script setup lang="ts">
+  import Loader from '@/components/ui/Loader.vue';
+  import Particles from '@/components/Particles.vue';
+</script>
+
 <template>
   <Head>
     <Title>Letterblend</Title>
@@ -15,7 +20,14 @@
   <particles />
 </template>
 
-<script setup lang="ts">
-  import Loader from '@/components/ui/Loader.vue';
-  import Particles from '@/components/Particles.vue';
-</script>
+<style lang="scss">
+  .page-enter-active,
+  .page-leave-active {
+    transition: all 0.4s;
+  }
+  .page-enter-from,
+  .page-leave-to {
+    opacity: 0;
+    filter: blur(1rem);
+  }
+</style>
