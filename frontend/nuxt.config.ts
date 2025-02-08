@@ -13,6 +13,7 @@ export default defineNuxtConfig({
       url: process.env.URL,
     },
   },
+
   image: {
     providers: {
       raw: {
