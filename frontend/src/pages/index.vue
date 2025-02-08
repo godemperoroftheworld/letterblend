@@ -14,13 +14,14 @@
     name: string;
   }
 
+  // Form info
   const userForm = ref();
-  const router = useRouter();
-  const storedName = useLocalStorage('user', '');
+  const storedName = useLocalStorage('user', '', { initOnMounted: true });
   const formValid = computed(() => !!userForm.value?.valid);
   const formName = computed(() => userForm.value?.values['name']);
 
-  // Form
+  // Form submission
+  const router = useRouter();
   async function submitted({ name }: NameForm) {
     localStorage.setItem('user', name);
     await router.push('/blend');

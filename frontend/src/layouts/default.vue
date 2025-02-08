@@ -15,6 +15,11 @@
 <template>
   <div
     class="relative flex h-full min-h-fit w-full flex-grow flex-col gap-2 overflow-hidden p-2 md:gap-4 lg:gap-8 lg:p-8">
+    <div class="right-0 -mb-15 ml-auto flex h-15 flex-col sm:hidden">
+      <toggle-view
+        v-model="particlesEnabled"
+        :icon="IconSparkles" />
+    </div>
     <content-view class="mx-auto h-fit w-fit md:hidden">
       <router-link
         to="/"
@@ -32,7 +37,7 @@
         <icon-arrow-back />
         <span class="max-sm:hidden">Back</span>
       </generic-button>
-      <div class="absolute top-0 right-0 z-10 p-4">
+      <div class="top-0 right-0 z-10 p-4 max-sm:hidden">
         <toggle-view
           v-model="particlesEnabled"
           :icon="IconSparkles" />
