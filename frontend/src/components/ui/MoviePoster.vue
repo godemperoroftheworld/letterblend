@@ -11,9 +11,9 @@
     <a
       v-tippy="name"
       :href="`https://letterboxd.com/film/${slug}`"
-      target="_blank">
-      :class="{ 'bg-paper animate-pulse': !loaded }" class="aspect-[2/3] w-full overflow-hidden
-      rounded">
+      target="_blank"
+      :class="{ 'bg-paper animate-pulse': !loaded }"
+      class="aspect-[2/3] w-full overflow-hidden rounded">
       <nuxt-img
         class="aspect-[2/3] w-full"
         :src="`api/poster/id/${data.id}`"
