@@ -16,7 +16,7 @@
 
   // Form info
   const userForm = ref();
-  const storedName = useLocalStorage('user', '', { initOnMounted: true });
+  const storedName = useLocalStorage('user', '');
   const formValid = computed(() => !!userForm.value?.valid);
   const formName = computed(() => userForm.value?.values['name']);
 

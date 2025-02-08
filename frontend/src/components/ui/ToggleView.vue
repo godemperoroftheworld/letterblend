@@ -41,7 +41,7 @@
 
 <template>
   <label
-    class="transition-default focus-within:ring-info ring-opacity-10 relative flex h-7 w-16 cursor-pointer items-center rounded-full bg-slate-500 select-none focus-within:ring-2">
+    class="transition-default bg-content outline-paper hover:bg-paper active:bg-paper focus-within:ring-info relative mx-[2px] my-[2px] flex h-7 w-16 cursor-pointer items-center rounded-full outline-2 outline-offset-2 select-none focus-within:ring-2 focus-within:ring-offset-4">
     <input
       type="checkbox"
       class="sr-only"
