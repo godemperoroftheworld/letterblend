@@ -79,7 +79,7 @@
     <div class="grid w-full flex-grow gap-2 md:gap-4 lg:grid-cols-5 lg:gap-8">
       <card-view
         title="Users"
-        class="lg:col-span-3">
+        class="min-h-fit lg:col-span-3">
         <info-message class="w-full max-w-sm">
           Enter your friend's usernames. There can be up to five of you.
         </info-message>

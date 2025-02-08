@@ -27,8 +27,7 @@
         <logo class="h-36 w-36" />
       </router-link>
     </content-view>
-    <content-view
-      class="mx-auto my-auto h-fit max-h-full min-h-3/4 w-full max-w-screen-xl flex-grow">
+    <content-view class="mx-auto my-auto h-fit min-h-3/4 w-full max-w-screen-xl flex-grow">
       <generic-button
         v-show="!isHome"
         class="absolute top-4 left-4 z-1 max-sm:fixed max-sm:min-w-fit sm:w-40 lg:top-8 lg:left-8"
@@ -49,7 +48,7 @@
         <logo class="h-40 w-40" />
       </router-link>
       <main
-        class="relative flex flex-grow place-content-stretch content-stretch items-stretch overflow-y-scroll text-white md:mt-0 lg:p-4">
+        class="relative flex flex-grow place-content-stretch content-stretch items-stretch text-white md:mt-0 lg:p-4">
         <slot />
       </main>
     </content-view>

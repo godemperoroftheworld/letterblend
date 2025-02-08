@@ -61,7 +61,7 @@
 
 <template>
   <validated-form
-    v-slot="{ isSubmitting, errors, submitForm }"
+    v-slot="{ isSubmitting, errors }"
     ref="formRef"
     :name="name"
     :initial-values="defaults"
