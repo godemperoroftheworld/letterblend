@@ -1,0 +1,26 @@
+<svg opacity="0.8" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <!-- Define clip paths for intersections -->
+        <clipPath id="clip-blue-green">
+            <circle cx="8" cy="11.5" r="6" />
+        </clipPath>
+        <clipPath id="clip-green-orange">
+            <circle cx="14" cy="17" r="6" />
+        </clipPath>
+        <clipPath id="clip-orange-blue">
+            <circle cx="16" cy="7" r="6" />
+        </clipPath>
+    </defs>
+
+    <!-- Blue Circle -->
+    <circle cx="16" cy="7" r="6" fill="#40bcf4" />
+    <!-- Orange Circle -->
+    <circle cx="14" cy="17" r="6" fill="#F27405" />
+    <!-- Green Circle -->
+    <circle cx="8" cy="11.5" r="6" fill="#00B021" />
+
+    <!-- White Intersection Areas -->
+    <circle cx="16" cy="7" r="6" fill="white" clip-path="url(#clip-blue-green)" />
+    <circle cx="8" cy="11.5" r="6" fill="white" clip-path="url(#clip-green-orange)" />
+    <circle cx="14" cy="17" r="6" fill="white" clip-path="url(#clip-orange-blue)" />
+</svg>
