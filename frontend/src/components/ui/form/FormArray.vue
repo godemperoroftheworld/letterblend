@@ -42,21 +42,21 @@
           button-style="danger"
           :disabled="arrayFields.length <= length.min"
           :icon="IconTrash"
-          @click="remove(entry)" />
+          @click="remove(idx)" />
         <div
           class="absolute -right-4 bottom-0 hidden w-fit translate-x-full items-center gap-2 sm:flex">
           <icon-button
             button-style="danger"
             :disabled="arrayFields.length <= length.min"
             :icon="IconTrash"
-            @click="remove(entry)" />
+            @click="remove(idx)" />
           <icon-button
             v-if="idx + 1 === arrayFields.length"
             :disabled="disableAdd"
             button-style="submit"
             :icon="IconPlus"
             :size="12"
-            @click="fieldArrayRef?.push('')" />
+            @click="push('')" />
         </div>
       </div>
     </template>
@@ -65,7 +65,7 @@
     class="mt-auto sm:hidden"
     button-style="submit"
     :disabled="disableAdd"
-    @click="fieldArrayRef.push('')">
+    @click="fieldArrayRef?.push('')">
     <icon-plus />
     Add Entry
   </generic-button>

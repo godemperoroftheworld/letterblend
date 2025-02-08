@@ -7,20 +7,19 @@
 </script>
 
 <template>
-  <a
-    class="relative"
-    :href="`https://letterboxd.com/film/${slug}`"
-    target="_blank">
-    <div
+  <div class="relative">
+    <a
       v-tippy="name"
-      :class="{ 'bg-paper animate-pulse': !loaded }"
-      class="aspect-[2/3] w-full overflow-hidden rounded">
+      :href="`https://letterboxd.com/film/${slug}`"
+      target="_blank">
+      :class="{ 'bg-paper animate-pulse': !loaded }" class="aspect-[2/3] w-full overflow-hidden
+      rounded">
       <nuxt-img
         class="aspect-[2/3] w-full"
         :src="`api/poster/id/${data.id}`"
         provider="raw"
         @load="loaded = true" />
-    </div>
+    </a>
     <div class="mx-auto mt-1 flex h-6 w-fit gap-1">
       <avatar-view
         v-for="user in users"
@@ -29,5 +28,5 @@
         class="transition-default h-6 w-6 hover:scale-125"
         :name="user" />
     </div>
-  </a>
+  </div>
 </template>
