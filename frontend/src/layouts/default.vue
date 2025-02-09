@@ -37,7 +37,7 @@
         <icon-arrow-back />
         <span class="max-sm:hidden">Back</span>
       </generic-button>
-      <div class="absolute top-0 right-0 z-10 w-fit p-4 max-sm:hidden">
+      <div class="absolute top-4 right-4 z-1 w-fit max-sm:hidden">
         <toggle-view
           v-model="particlesEnabled"
           :icon="IconSparkles" />

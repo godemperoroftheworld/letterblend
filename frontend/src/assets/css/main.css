@@ -38,8 +38,8 @@
 
 body {
     background-image: linear-gradient(to top,var(--color-dark),var(--color-background));
-    width: 100svw;
-    height: 100svh;
+    width: 100dvw;
+    height: 100dvh;
     color: white;
     overflow: hidden;
 }
