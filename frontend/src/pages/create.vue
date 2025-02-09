@@ -89,11 +89,13 @@
           :fields="{
             name: {
               as: NameField,
-              array: true,
               rules: validateLetterboxdName,
               validateOnMount: true,
-              options: friends ?? [],
-              debounceMs: 200,
+              props: {
+                options: friends ?? [],
+                debounceMs: 200,
+              },
+              array: true,
               length: { min: 2, max: 5 },
             },
           }"
@@ -108,6 +110,7 @@
         :collapsable="isSmall"
         :collapsed-default="false"
         class="flex-shrink-0 lg:col-span-2">
+        <info-message class="w-full max-w-sm">Configure your blend as you'd like it.</info-message>
         <blend-settings ref="settingsForm" />
       </card-view>
     </div>

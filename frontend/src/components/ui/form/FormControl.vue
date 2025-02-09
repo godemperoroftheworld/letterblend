@@ -5,7 +5,7 @@
   import LoadingIcon from '@/components/icons/LoadingIcon.vue';
   import type { UnwrapNestedRefs } from 'vue';
 
-  const props = withDefaults(defineProps<FieldProps<T> & { loading?: boolean }>(), {
+  const formProps = withDefaults(defineProps<FieldProps<T> & { loading?: boolean }>(), {
     labelSize: 'sm',
   });
 
@@ -21,7 +21,7 @@
   });
   onMounted(() => {
     model.value = fieldRef.value?.value;
-    showValidation.value = props.validateOnMount;
+    showValidation.value = formProps.validateOnMount;
   });
 </script>
 
@@ -43,8 +43,9 @@
         :rules="rules">
         <component
           :is="as"
-          v-bind="{ ...$props, ...$attrs }"
           v-model="model"
+          :name="name"
+          v-bind="props"
           :class="{ 'bg-paper text-paper animate-pulse': loading }" />
       </field>
       <div

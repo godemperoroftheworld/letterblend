@@ -18,11 +18,11 @@ export default class RoomService {
   }
 
   async updateRoom(id: string, params: { movies?: Movie[], settings?: Settings }): Promise<Room> {
-    return await this.service.put(`/${id}`, params);
+    return await this.service.put(`/${id}`, params).then((r) => r.data);
   }
 
   async updateRoomUsers(id: string, users: string[]) {
-    return await this.service.put(`/${id}/users`, { users });
+    return await this.service.put(`/${id}/users`, { users }).then((r) => r.data);
   }
 
   async deleteRoom(id: string) {

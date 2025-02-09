@@ -41,5 +41,7 @@
   <input
     v-model="innerValue"
     :class="textClass"
+    :type="type"
+    :step="step"
     class="focus:outline-info bg-content box-border rounded p-2 outline-offset-2 focus:outline-1 sm:max-w-sm" />
 </template>

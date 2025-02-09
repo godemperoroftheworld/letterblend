@@ -3,13 +3,13 @@
   import CardView from '@/components/ui/CardView.vue';
   import CarouselView from '@/components/ui/CarouselView.vue';
   import type { Movie } from '@/types/movie';
-  import type { BlendSettings as BlendSettingsType } from '@/components/blend/BlendSettings.vue';
   import { breakpointsTailwind } from '@vueuse/core';
   import { useRoom } from '@/composables/query/room';
+  import { useUpdateSettings } from '@/composables/mutation/room';
+  import type { RoomSettings } from '@/types/room';
 
   // Data
   const route = useRoute();
-  const router = useRouter();
   const code = computed(() => route.params.code as string);
   const { data: room, isFetching } = useRoom(code);
   const results = computed(() => room.value?.movies);
@@ -18,8 +18,9 @@
   const breakpoints = useBreakpoints(breakpointsTailwind);
   const isSmall = breakpoints.smaller('md');
 
-  function settingsSubmitted(settings: BlendSettingsType) {
-    router.replace({ name: 'result', query: { names: route.query.names, ...settings } });
+  const { mutateAsync: updateSettings } = useUpdateSettings();
+  async function settingsSubmitted(settings: RoomSettings) {
+    await updateSettings({ id: room.value!.code, settings });
   }
 </script>
 
@@ -48,6 +49,7 @@
       <blend-settings
         :submitted="settingsSubmitted"
         :loading="isFetching"
+        submit-button-text="Update"
         :show-submit-button="true" />
     </card-view>
   </div>

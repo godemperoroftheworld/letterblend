@@ -24,7 +24,7 @@
   const router = useRouter();
   async function submitted({ name }: NameForm) {
     localStorage.setItem('user', name);
-    await router.push('/blend');
+    await router.push({ name: 'create' });
   }
 </script>
 
@@ -52,7 +52,9 @@
                 as: InputField,
                 validateOnMount: true,
                 rules: validateLetterboxdName,
-                debounceMs: 200,
+                props: {
+                  debounceMs: 200,
+                },
               },
             }"
             :defaults="{ name: storedName }"

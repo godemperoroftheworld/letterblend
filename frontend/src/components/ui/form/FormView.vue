@@ -26,6 +26,7 @@
   }
   const props = withDefaults(defineProps<FormProps<T>>(), {
     cancelButtonText: 'Cancel',
+    submitButtonText: 'Submit',
     showSubmitButton: true,
   });
   const emits = defineEmits<FormEmits<T>>();
@@ -40,8 +41,11 @@
   const isSubmitting = ref(false);
   async function onSubmit(values: T) {
     isSubmitting.value = true;
-    await props.submitted(values as FormValueType<T>);
-    isSubmitting.value = false;
+    try {
+      await props.submitted(values as FormValueType<T>);
+    } finally {
+      isSubmitting.value = false;
+    }
     emits('submitted', values);
   }
 
@@ -145,7 +149,7 @@
         :disabled="!isEmpty(errors)"
         :loading="loading || isSubmitting"
         button-style="submit"
-        text="Submit"
+        :text="submitButtonText"
         @click="formRef?.$el.requestSubmit()" />
     </div>
   </validated-form>

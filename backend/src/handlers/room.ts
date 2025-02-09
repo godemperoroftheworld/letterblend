@@ -51,12 +51,14 @@ interface SettingsParams extends RoomParams {
   settings: Settings;
 }
 const updateSettingsHandler: RequestHandler = async (req, res) => {
-  const { id , settings } = getData<SettingsParams>(req);
+  const { id , ...settings } = getData<SettingsParams>(req);
   const user = req.header("X-Letterboxd-User") as string;
   const service = new RoomService(user);
   const room = await service.getRoom(id);
   const newSettings = { ...room.settings, ...settings };
-  return service.updateRoom(id, { settings: newSettings });
+  const newMovies = await getBlendedList({ names: room.users, ...newSettings });
+  const newRoom = await service.updateRoom(id, { settings: newSettings, movies: newMovies });
+  res.status(HttpStatusCode.Ok).send(newRoom);
 }
 
 interface UserParams extends RoomParams {

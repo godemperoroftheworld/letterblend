@@ -35,8 +35,7 @@
   <div
     class="bg-background transition-default relative flex max-h-full flex-col overflow-hidden rounded-xl pt-4"
     :class="{ '!max-h-14': shouldCollapse }">
-    <h3
-      class="text-info text-shadow-white text-shadow pointer-events-none h-8 text-center text-xl font-bold uppercase">
+    <h3 class="pointer-events-none h-8 text-center text-xl font-bold text-white uppercase">
       {{ title }}
     </h3>
     <template v-if="collapsable">

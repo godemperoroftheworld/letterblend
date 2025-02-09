@@ -21,7 +21,8 @@ router.get(
 );
 router.put('/:id/settings',
     param("id").isString().isLength({ min: TOKEN_LENGTH, max: TOKEN_LENGTH }),
-    body('settings').isObject({ strict: true }),
+    body("top").default(10).isInt({ min: 1, max: 30 }),
+    body("threshold").default(0.5).isFloat({ min: 0, max: 1 }),
     validate,
     roomHandlers.updateSettingsHandler,
 );

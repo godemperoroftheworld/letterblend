@@ -1,14 +1,13 @@
 import type { DefaultError, MutationFunction } from '@tanstack/vue-query';
 import { useMutation } from '@tanstack/vue-query';
-import type { BlendSettings } from '@/components/blend/BlendSettings.vue';
 import LetterblendApi from '@/api';
-import type { Room } from '@/types/room';
+import type { Room, RoomSettings } from '@/types/room';
 import { queryClient } from '@/plugins/query';
 import useLoader from '@/composables/load';
 
 interface AddRoomVars {
   users: string[];
-  settings: BlendSettings;
+  settings: RoomSettings;
 }
 export function useAddRoom() {
   const mutationFn: MutationFunction<Room, AddRoomVars> = async ({
@@ -21,6 +20,30 @@ export function useAddRoom() {
   const { emit } = useLoader();
   return useMutation<Room, DefaultError, AddRoomVars>({
     mutationKey: ['room', 'add'],
+    mutationFn,
+    onMutate() {
+      emit(true);
+    },
+    onSettled() {
+      emit(false);
+    },
+    onSuccess: async (room) => {
+      queryClient.setQueryData(['room', room.code], room);
+    },
+  });
+}
+
+interface UpdateSettingsVars {
+  id: string;
+  settings: RoomSettings;
+}
+export function useUpdateSettings() {
+  const mutationFn: MutationFunction<Room, UpdateSettingsVars> = async ({ id, settings }) => {
+    return LetterblendApi.instance.put(`/room/${id}/settings`, settings);
+  };
+  const { emit } = useLoader();
+  return useMutation<Room, DefaultError, UpdateSettingsVars>({
+    mutationKey: ['room', 'update-settings'],
     mutationFn,
     onMutate() {
       emit(true);

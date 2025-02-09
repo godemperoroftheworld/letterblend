@@ -23,7 +23,8 @@ export type FieldProps<T extends PropertyKey> = {
   length?: { min?: number; max?: number };
   // Validation
   validateOnMount?: boolean;
-} & FieldComponentProps<T>;
+  props: FieldComponentProps<T>;
+};
 
 // FORM
 export interface FormObject {
@@ -42,6 +43,7 @@ export interface FormProps<T extends FormObject> {
   showSubmitButton?: boolean;
   showCancelButton?: boolean;
   cancelButtonText?: string;
+  submitButtonText?: string;
   defaults?: T;
   loading?: boolean;
 }

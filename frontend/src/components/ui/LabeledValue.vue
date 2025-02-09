@@ -35,7 +35,7 @@
         'outline-primary rounded outline-2': success,
         'rounded outline-2 outline-red-600': errored,
       }">
-      <slot v-bind="{ ...$attrs, ...$props }" />
+      <slot />
     </div>
   </div>
 </template>

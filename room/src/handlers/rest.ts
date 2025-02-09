@@ -63,10 +63,10 @@ const onPutRoom: RequestHandler = async (req, res) => {
   try {
     await RoomsService.instance.updateRoom({
       code: id,
-      movies,
+      movies: movies.map((movie: Movie) => ({ ...movie, likes: 0, dislikes: 0})),
       settings
     })
-    const room = RoomsService.instance.getRoomStripped(id);
+    const room = await RoomsService.instance.getRoomStripped(id);
     res.status(200).send(room);
   } catch (e: any) {
     const error = e as MongoServerError;

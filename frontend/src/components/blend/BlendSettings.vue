@@ -3,15 +3,19 @@
   import { number } from 'yup';
   import FormView from '@/components/ui/form/FormView.vue';
   import noop from 'lodash/noop';
-  import type { BlendParams } from '@/composables/query/blend';
+  import type { RoomSettings } from '@/types/room';
 
-  export type BlendSettings = Omit<BlendParams, 'details'>;
   interface Props {
-    submitted?: (data: BlendSettings) => Promise<void>;
+    submitted?: (data: RoomSettings) => Promise<void> | void;
     showSubmitButton?: boolean;
+    submitButtonText?: string;
     loading?: boolean;
   }
-  withDefaults(defineProps<Props>(), { submitted: noop, showSubmitButton: false });
+  withDefaults(defineProps<Props>(), {
+    submitted: () => noop,
+    showSubmitButton: false,
+    submitButtonText: 'Submit',
+  });
 
   const settingsForm = ref();
   defineExpose({ data: settingsForm });
@@ -26,18 +30,23 @@
       top: {
         as: InputField,
         label: 'Count',
-        type: 'number',
         rules: number().required().min(1).max(100),
+        props: {
+          type: 'number',
+        },
       },
       threshold: {
         as: InputField,
         label: 'Threshold',
-        step: 0.1,
-        type: 'number',
         rules: number().required().min(0).max(1),
+        props: {
+          step: 0.1,
+          type: 'number',
+        },
       },
     }"
     :defaults="{ top: 10, threshold: 0.6 }"
     :show-submit-button="showSubmitButton"
+    :submit-button-text="submitButtonText"
     :submitted="submitted" />
 </template>
