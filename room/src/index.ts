@@ -16,7 +16,7 @@ function shutDown() {
 // Database
 connectToDatabase().then(() => {
   logger.info("Connected to database.");
-}).catch(logger.err)
+}).catch((e) => logger.err(new Error('Failed to connect to database.')))
 
 // Express
 server.listen(EnvVars.Port, () => {
