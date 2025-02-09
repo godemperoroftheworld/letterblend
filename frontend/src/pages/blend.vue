@@ -10,6 +10,7 @@
   import { queryClient } from '@/plugins/query';
   import { uniq } from 'lodash';
   import InfoMessage from '@/components/ui/InfoMessage.vue';
+  import { useAddRoom } from '@/composables/mutation/room';
 
   // Setup
   interface FormResult {
@@ -22,12 +23,11 @@
   const USER_COLLAPSE_COUNT = 3;
 
   // Functions
+  const { mutateAsync: addRoom } = useAddRoom();
   async function submitted({ name }: FormResult) {
     const settingsValues = settingsForm.value?.data.values;
-    await router.push({
-      name: 'result',
-      query: { names: name.join(','), ...settingsValues },
-    });
+    const room = await addRoom({ users: name, settings: settingsValues });
+    await router.push(`/room/${room.code}`);
   }
 
   // Collapsable settings

@@ -32,11 +32,10 @@ async function getBlendedList({
     }
   });
   // Build sorted list from the map
-  const minCount = Math.round(names.length * Number(threshold));
-  const blendSlugs = shuffle(Object.keys(movieMap)
-      .filter((k) => movieMap[k].users!.length >= minCount))
-      .sort((k1, k2) => movieMap[k1].users!.length - movieMap[k2].users!.length)
-      .slice(0, top);
+  const minCount = Math.ceil(names.length * Number(threshold));
+  const filteredValues = shuffle(Object.keys(movieMap).filter((k) => movieMap[k].users!.length >= minCount));
+  const sortedValues = filteredValues.sort((k1, k2) => movieMap[k2].users!.length - movieMap[k1].users!.length);
+  const blendSlugs = sortedValues.slice(0, top);
   // Populate with poster data and return
   return await Promise.all(blendSlugs.map((slug) =>
     new Promise<Movie>((resolve, reject) => {

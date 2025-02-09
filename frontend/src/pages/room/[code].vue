@@ -1,23 +1,18 @@
 <script setup lang="ts">
-  import { useBlend } from '@/composables/query/blend';
   import MoviePoster from '@/components/ui/MoviePoster.vue';
   import CardView from '@/components/ui/CardView.vue';
   import CarouselView from '@/components/ui/CarouselView.vue';
   import type { Movie } from '@/types/movie';
   import type { BlendSettings as BlendSettingsType } from '@/components/blend/BlendSettings.vue';
   import { breakpointsTailwind } from '@vueuse/core';
+  import { useRoom } from '@/composables/query/room';
 
   // Data
   const route = useRoute();
   const router = useRouter();
-  const top = computed(() => Number(route.query.top));
-  const threshold = computed(() => Number(route.query.threshold));
-  const names = computed(() => (route.query.names as string).split(','));
-  const { data: results, isFetching } = useBlend(names, {
-    top,
-    threshold,
-    details: true,
-  });
+  const code = computed(() => route.params.code as string);
+  const { data: room, isFetching } = useRoom(code);
+  const results = computed(() => room.value?.movies);
 
   // Visual
   const breakpoints = useBreakpoints(breakpointsTailwind);
