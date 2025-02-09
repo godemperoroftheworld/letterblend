@@ -1,6 +1,6 @@
 import axios, { Axios } from "axios";
 import env from "@/constants/env";
-import { Room } from "@/types/room";
+import {Movie, Room, Settings} from "@/types/room";
 
 export default class RoomService {
   private service: Axios;
@@ -9,16 +9,20 @@ export default class RoomService {
     this.service.defaults.headers.common["X-Letterboxd-User"] = user;
   }
 
-  async createRoom(): Promise<Room> {
-    return this.service.post("/").then((r) => r.data);
+  async createRoom(users: string[], movies: Movie[], settings: Settings): Promise<Room> {
+    return this.service.post("/", { users, movies, settings }).then((r) => r.data);
   }
 
   async getRoom(id: string): Promise<Room> {
     return this.service.get(`/${id}`).then((r) => r.data);
   }
 
-  async updateRoom(id: string, movies: number[]): Promise<Room> {
-    return this.service.put(`/${id}`, { movies }).then((r) => r.data);
+  async updateRoom(id: string, params: { movies?: Movie[], settings?: Settings }): Promise<Room> {
+    return await this.service.put(`/${id}`, params);
+  }
+
+  async updateRoomUsers(id: string, users: string[]) {
+    return await this.service.put(`/${id}/users`, { users });
   }
 
   async deleteRoom(id: string) {

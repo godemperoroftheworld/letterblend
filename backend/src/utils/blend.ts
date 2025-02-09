@@ -1,26 +1,17 @@
 import Scraper from "@/services/scraper";
 import TMDB from "@/services/tmdb";
-import {Responses} from "node-themoviedb";
+import {Movie, Settings} from "@/types/room";
+import shuffle from "lodash/shuffle";
 
-export type BlendParams = {
+export type BlendParams = Settings & {
   names: string[];
-  top?: number; // int, min 1
-  threshold?: number; // float, 0-1
-  details?: boolean; // include details
 };
-interface BlendEntry { name: string, slug: string, users: string[], id: number, data: Responses.Movie.GetDetails }
-
-async function getMovieID(entry: Pick<BlendEntry, 'name' | 'slug'>): Promise<number> {
-  // Fallback to get TMDB ID from scraper
-  return await Scraper.getInstance().id(entry.slug);
-}
 
 async function getBlendedList({
   names = [],
   top = 10,
   threshold = 0.5,
-  details = false
-}: BlendParams) {
+}: BlendParams): Promise<Movie[]> {
   if (!names.length) return [];
   // Scrape watchlist entries from letterboxd and flatten
   const promises = names.map(async (name) => {
@@ -32,35 +23,27 @@ async function getBlendedList({
   ).then();
   // Build map from slug to movie info
   // Build map of who watched what movies
-  const movieMap: Record<string, Pick<BlendEntry, 'name' | 'slug'> & Partial<BlendEntry>> = {};
+  const movieMap: Record<string, Partial<Movie>> = {};
   allScrapedWatchlistEntries.forEach(({ entry, user }) => {
     if (!movieMap[entry.slug]) {
-      movieMap[entry.slug] = { name: entry.name, slug: entry.slug, users: [user],  };
+      movieMap[entry.slug] = { name: entry.name, users: [user] };
     } else {
-    movieMap[entry.slug].users!.push(user);
+      movieMap[entry.slug].users!.push(user);
     }
   });
-    // Build sorted list from the map
+  // Build sorted list from the map
   const minCount = Math.round(names.length * Number(threshold));
-  const blendSlugs = Object.values(movieMap)
-      .filter((v) => v.users!.length >= minCount)
-      .sort((v1, v2) => v2.users!.length - v1.users!.length)
-      .slice(0, top)
-      .map((v) => v.slug!);
-  // Populate with TMDB data and return
+  const blendSlugs = shuffle(Object.keys(movieMap)
+      .filter((k) => movieMap[k].users!.length >= minCount))
+      .sort((k1, k2) => movieMap[k1].users!.length - movieMap[k2].users!.length)
+      .slice(0, top);
+  // Populate with poster data and return
   return await Promise.all(blendSlugs.map((slug) =>
-    new Promise<BlendEntry>((resolve, reject) => {
+    new Promise<Movie>((resolve, reject) => {
       const entry = movieMap[slug];
-      getMovieID(entry).then((id) => {
+      Scraper.getInstance().id(slug).then((id) => {
         entry.id = id;
-        if (details) {
-          TMDB.movie.getDetails({ pathParameters: { movie_id: id }}).then(({ data }) => {
-            entry.data = data;
-            resolve(entry as BlendEntry);
-          }).catch(reject)
-        } else {
-          resolve(entry as BlendEntry);
-        }
+        resolve(entry as Movie);
       }).catch(reject);
     })
   ));

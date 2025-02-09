@@ -6,4 +6,6 @@ import server from './server';
 const SERVER_START_MSG = 'Express server started on port: ' + EnvVars.Port.toString();
 server.listen(EnvVars.Port, () => {
   logger.info(SERVER_START_MSG);
+  logger.info("Scraper URL: " + EnvVars.ScrapeServiceURL);
+  logger.info("Rooms URL: " + EnvVars.RoomServiceURL)
 });
