@@ -7,7 +7,9 @@
     disabled?: boolean;
     loading?: boolean;
   }
-  const props = defineProps<Props>();
+  const props = withDefaults(defineProps<Props>(), {
+    buttonStyle: 'hollow',
+  });
 
   const bgClass = computed(() => {
     if (props.disabled || props.loading) return 'button-disabled';

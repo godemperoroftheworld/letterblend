@@ -7,6 +7,9 @@
   import { useRoom } from '@/composables/query/room';
   import { useUpdateSettings } from '@/composables/mutation/room';
   import type { RoomSettings } from '@/types/room';
+  import GenericButton from '@/components/ui/button/GenericButton.vue';
+  import { IconShare } from '@tabler/icons-vue';
+  import { Tippy } from 'vue-tippy';
 
   // Data
   const route = useRoute();
@@ -18,9 +21,24 @@
   const breakpoints = useBreakpoints(breakpointsTailwind);
   const isSmall = breakpoints.smaller('md');
 
+  // Settings Update
   const { mutateAsync: updateSettings } = useUpdateSettings();
   async function settingsSubmitted(settings: RoomSettings) {
     await updateSettings({ id: room.value!.code, settings });
+  }
+
+  // Share
+  function share() {
+    const data: ShareData = {
+      title: 'Check out my Letterblend!',
+      text: "It's really awesome.",
+      url: window.location.href,
+    };
+    if ('canShare' in navigator && navigator.canShare(data)) {
+      navigator.share(data);
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+    }
   }
 </script>
 
@@ -41,6 +59,17 @@
             :data="data" />
         </template>
       </carousel-view>
+      <tippy
+        content="Copied to clipboard!"
+        trigger="click">
+        <generic-button
+          class="w-40"
+          button-style="info"
+          @click="share">
+          <icon-share />
+          Share
+        </generic-button>
+      </tippy>
     </card-view>
     <card-view
       class="h-fit md:col-span-2"
