@@ -19,7 +19,7 @@ connectToDatabase().then(() => {
 }).catch((e) => logger.err(new Error('Failed to connect to database.')))
 
 // Express
-server.listen(EnvVars.Port, () => {
+server.listen(EnvVars.Port, "::", () => {
   logger.info(SERVER_START_MSG);
 });
 process.on('SIGTERM', shutDown);

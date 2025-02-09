@@ -28,7 +28,7 @@ dotenv.config({
 
 const variables = {
   NodeEnv: process.env.NODE_ENV ?? '',
-  Port: process.env.PORT ?? 0,
+  Port: Number(process.env.PORT ?? 0),
   MongoPath: process.env.MONGO_PATH ?? '',
 } as const;
 
