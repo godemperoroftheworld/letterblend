@@ -59,9 +59,6 @@
     return props.fields[key] as Omit<FieldProps<T[keyof T]>, 'name'>;
   }
 
-  watch(isSubmitting, (val) => {
-    console.log('submit: ' + val);
-  });
   defineExpose({
     valid: isValid,
     values,

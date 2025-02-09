@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { breakpointsTailwind, useBreakpoints, useLocalStorage } from '@vueuse/core';
+  import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
   import FormView, { type FormExpose } from '@/components/ui/form/FormView.vue';
   import TextButton from '@/components/ui/button/TextButton.vue';
   import NameField from '@/components/ui/NameField.vue';
@@ -11,13 +11,14 @@
   import { uniq } from 'lodash';
   import InfoMessage from '@/components/ui/InfoMessage.vue';
   import { useAddRoom } from '@/composables/mutation/room';
+  import useUser from '@/composables/user';
 
   // Setup
   interface FormResult {
     name: string[];
   }
   const router = useRouter();
-  const storageName = useLocalStorage('user', '');
+  const { user: storageName } = useUser();
 
   // Constants
   const USER_COLLAPSE_COUNT = 3;

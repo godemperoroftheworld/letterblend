@@ -10,11 +10,15 @@
   import GenericButton from '@/components/ui/button/GenericButton.vue';
   import { IconShare } from '@tabler/icons-vue';
   import { useTippy } from 'vue-tippy';
+  import useUser from '@/composables/user';
 
   // Data
   const route = useRoute();
+  const { isSet: hasName } = useUser();
   const code = computed(() => route.params.code as string);
-  const { data: room, isFetching } = useRoom(code);
+  const { data: room, isFetching } = useRoom(code, {
+    enabled: hasName,
+  });
   const results = computed(() => room.value?.movies);
 
   // Visual
@@ -65,18 +69,13 @@
             :data="data" />
         </template>
       </carousel-view>
-      <tippy
-        ref="contentTip"
-        content="Copied to clipboard!"
-        trigger="click">
-        <generic-button
-          class="w-40"
-          button-style="info"
-          @click="share">
-          <icon-share />
-          Share
-        </generic-button>
-      </tippy>
+      <generic-button
+        class="w-40"
+        button-style="info"
+        @click="share">
+        <icon-share />
+        Share
+      </generic-button>
     </card-view>
     <card-view
       class="h-fit md:col-span-2"

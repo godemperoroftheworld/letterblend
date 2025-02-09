@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { useLocalStorage } from '@vueuse/core';
   import useAvatar from '@/composables/query/avatar';
   import useExists from '@/composables/query/exists';
+  import useUser from '@/composables/user';
 
   interface Props {
     name?: string;
@@ -9,7 +9,7 @@
   }
   const props = defineProps<Props>();
 
-  const storageName = useLocalStorage('user', '');
+  const { user: storageName } = useUser();
   const avatarName = computed(() => {
     if (props.name) return props.name;
     if (props.fallback) {

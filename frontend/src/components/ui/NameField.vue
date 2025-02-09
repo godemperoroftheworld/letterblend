@@ -1,8 +1,7 @@
 <script setup lang="ts">
-  import InputField, { type InputProps } from '@/components/ui/InputField.vue';
+  import type { InputProps } from '@/components/ui/InputField.vue';
   import AvatarView from '@/components/ui/AvatarView.vue';
   import AutocompleteField from '@/components/ui/AutocompleteField.vue';
-  import { useDataQuery } from '@/utils/query';
 
   interface Props extends InputProps<string> {
     options: string[];
