@@ -9,7 +9,7 @@
   import type { RoomSettings } from '@/types/room';
   import GenericButton from '@/components/ui/button/GenericButton.vue';
   import { IconShare } from '@tabler/icons-vue';
-  import { useTippy } from 'vue-tippy';
+  import { Tippy, useTippy, useTippyComponent } from 'vue-tippy';
   import useUser from '@/composables/user';
 
   // Data
@@ -32,10 +32,6 @@
   }
 
   // Share
-  const tippyRef = ref();
-  const tippy = useTippy(tippyRef, {
-    trigger: 'manual',
-  });
   function share() {
     const data: ShareData = {
       title: 'Check out my Letterblend!',
@@ -45,9 +41,7 @@
     if ('canShare' in navigator && navigator.canShare(data)) {
       navigator.share(data);
     } else {
-      tippy.show();
       navigator.clipboard.writeText(window.location.href);
-      setTimeout(() => tippy.hide, 3000);
     }
   }
 </script>
@@ -69,13 +63,30 @@
             :data="data" />
         </template>
       </carousel-view>
-      <generic-button
-        class="w-40"
-        button-style="info"
-        @click="share">
-        <icon-share />
-        Share
-      </generic-button>
+      <template v-if="isSmall">
+        <generic-button
+          ref="tippyRef"
+          class="w-40"
+          button-style="info"
+          @click="share">
+          <icon-share />
+          Share
+        </generic-button>
+      </template>
+      <template v-else>
+        <tippy
+          content="Copied to clipboard."
+          trigger="click">
+          <generic-button
+            ref="tippyRef"
+            class="w-40"
+            button-style="info"
+            @click="share">
+            <icon-share />
+            Share
+          </generic-button>
+        </tippy>
+      </template>
     </card-view>
     <card-view
       class="h-fit md:col-span-2"

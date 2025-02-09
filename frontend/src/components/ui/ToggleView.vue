@@ -22,7 +22,6 @@
     }
     return !!model.value;
   });
-  watch(isChecked, (val) => console.log('checked: ' + val), { immediate: true });
 
   // Class (CSS)
   const labelIconClass = computed(() => ({
