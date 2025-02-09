@@ -3,6 +3,7 @@
 import * as dotenv from 'dotenv';
 import { parse } from 'ts-command-line-args';
 import path from 'path';
+import * as process from 'process';
 
 interface IArgs {
   env: string;
@@ -28,6 +29,7 @@ dotenv.config({
 const variables = {
   NodeEnv: process.env.NODE_ENV ?? '',
   Port: process.env.PORT ?? 0,
+  MongoPath: process.env.MONGO_PATH ?? '',
 } as const;
 
 export default variables;

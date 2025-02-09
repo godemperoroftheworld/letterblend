@@ -37,6 +37,7 @@
     "jsonfile": "^6.1.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.uniq": "^4.5.0",
+    "mongodb": "4.1",
     "socket.io": "^4.8.1",
     "ts-command-line-args": "^2.5.1"
   },

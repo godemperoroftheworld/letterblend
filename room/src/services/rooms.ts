@@ -1,32 +1,152 @@
-import Room from '@/models/room';
 import * as crypto from 'crypto';
+import { Collection, Document } from 'mongodb';
+import { database } from '@/mongo';
+
+export interface Movie {
+  id: number;
+  name: string;
+  users: string[];
+}
+interface Settings {
+  top: number;
+  threshold: number;
+}
+interface RoomStripped {
+  code: string;
+  owner: string;
+  users: string[];
+  movies: Movie[];
+  settings: Settings;
+  started: boolean;
+  match?: number;
+}
+export interface Room extends Document, Omit<RoomStripped, 'users' | 'movies'> {
+  users: Array<{
+    user: string,
+    swipes: Array<{
+      id: number,
+      liked: boolean
+    }>
+  }>;
+  movies: Array<Movie & {
+    likes: number;
+    dislikes: number;
+  }>;
+}
 
 export default class RoomsService {
-  public rooms: Record<string, Room> = {};
 
-  private static instance: RoomsService;
-  public static getInstance(): RoomsService {
-    if (!this.instance) this.instance = new RoomsService();
-    return this.instance;
+  private static _instance: RoomsService;
+  public static get instance(): RoomsService {
+    if (!this._instance) this._instance = new RoomsService();
+    return this._instance;
   }
 
-  hasRoom(id: string) {
-    return !!this.rooms[id];
+  private readonly rooms: Collection<Room>;
+  private constructor() {
+    this.rooms = database.collection<Room>('rooms');
   }
 
-  createRoom(user: string): Room {
-    const id = this.generateCode();
-    const room = new Room(id, user);
-    this.rooms[id] = room;
-    return room;
+  hasRoom(code: string) {
+    return !!this.rooms.find({ code }).limit(1).count();
   }
 
-  getRoom(id: string) {
-    return this.rooms[id];
+  async createRoom(partial: Omit<Room, 'code'>) {
+    const code = this.generateCode();
+    const room = { ...partial, code } as Room;
+    await this.rooms.insertOne(room);
+    return this.getRoomStripped(code);
   }
 
-  deleteRoom(id: string) {
-    delete this.rooms[id];
+  async getRoom(code: string) {
+    return this.rooms.findOne({ code });
+  }
+
+  async getRoomStripped(code: string) {
+    const room = await this.getRoom(code);
+    if (room) {
+      return {
+        code: room.code,
+        users: room.users.map((u) => u.user),
+        movies: room.movies.map((m) => {
+          const { likes: _i1, dislikes: _i2, ...rest } = m;
+          return rest;
+        }),
+        settings: room.settings,
+        owner: room.owner,
+        started: room.started,
+        match: room.match
+      } as RoomStripped;
+    }
+    return null;
+  }
+
+  async updateUsers(room: Room, usernames: string[]) {
+    if (room && !room.started) {
+      const users = usernames.map((username) => {
+        const user = room.users.find((u) => u.user === username);
+        if (user) return user;
+        return { user: username, swipes: [] }
+      });
+      await this.rooms.updateOne({ code: room.code }, {
+        $set: {
+          users
+        }
+      })
+    }
+  }
+
+  async updateRoom(partial: Partial<Pick<RoomStripped, 'code' | 'settings' | 'movies' | 'started'>>) {
+    return this.rooms.updateOne({ code: partial.code }, {
+      $set: {
+        movies: partial.movies,
+        settings: partial.settings,
+        started: partial.started,
+      }
+    });
+  }
+
+  async rateMovie(code: string, user: string, movie: number, liked: boolean) {
+    // Update user info
+    await this.rooms.updateOne({ code, "users.user": user }, {
+      $push: {
+        'users.$.swipes': { id: movie, liked },
+      }
+    });
+    // Update movie info
+    if (liked) {
+      await this.rooms.updateOne({ code, 'movies.id': movie }, {
+        $inc: { 'movies.$.likes': 1 }
+      })
+    } else {
+      await this.rooms.updateOne({ code, 'movies.id': movie }, {
+        $inc: { 'movies.$.dislikes': 1 }
+      })
+    }
+    // Check for match
+    const session = await this.getRoom(code) as Room;
+    const maxCount = session.users.length;
+    const movieInfo = session.movies.find((m) => m.id === movie);
+    const isMatch = movieInfo?.likes === maxCount;
+    if (isMatch) {
+      await this.rooms.updateOne({ code }, { $set: { match: movieInfo?.id }})
+    }
+    return isMatch;
+  }
+  async getUserStack(code: string, username: string): Promise<number[]> {
+    const room = await this.getRoom(code);
+    if (room) {
+      const user = room.users.find((u) => u.user === username);
+      if (user) {
+        const remaining = room.movies.filter((m) => !user.swipes.some((sm) => sm.id === m.id));
+        return remaining.sort((a, b) => b.likes - a.likes).map((m) => m.id);
+      }
+    }
+    return [];
+  }
+
+  async deleteRoom(code: string) {
+    return this.rooms.deleteOne({ code });
   }
 
   private generateCode() {

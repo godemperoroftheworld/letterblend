@@ -1,6 +1,6 @@
 import express, { RequestHandler } from 'express';
 import restHandlers from '@/handlers/rest';
-import { body, header, oneOf, param, validationResult } from 'express-validator';
+import { body, checkSchema, header, oneOf, param, validationResult } from 'express-validator';
 
 const router = express.Router();
 
@@ -14,14 +14,25 @@ const validator: RequestHandler = (req, res, next) => {
 };
 
 router.use(header('X-Letterboxd-User').isString().notEmpty(), validator);
-router.post('/', restHandlers.onPostRoom);
+router.post('/',
+  body('movies').isArray({ min: 1 }),
+  body('users').isArray({ min: 1 }),
+  body('settings').isObject(),
+  validator,
+  restHandlers.onPostRoom);
 router.get('/:id', param('id').isString().notEmpty(), validator, restHandlers.onGetRoom);
 router.put(
   '/:id',
   param('id').isString().notEmpty(),
   body('movies').isArray({ min: 1 }).optional(),
+  body('settings').isObject().optional(),
   validator,
   restHandlers.onPutRoom,
+);
+router.put("/:id/users", param('id').isString().notEmpty(),
+  body('users').isArray({ min: 1 }).optional(),
+  validator,
+  restHandlers.onPutUsers,
 );
 router.post('/:id/start', param('id').isString().notEmpty(), validator, restHandlers.onStartRoom);
 router.delete('/:id', param('id').isString().notEmpty(), validator, restHandlers.onDeleteRoom);

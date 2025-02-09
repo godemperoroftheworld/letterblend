@@ -1,72 +1,130 @@
 import { RequestHandler } from 'express';
-import RoomsService from '@/services/rooms';
+import RoomsService, { Movie } from '@/services/rooms';
 import io from '@/socket';
+import { HttpStatusCode } from 'axios';
+import uniq from 'lodash/uniq';
+import { MongoServerError } from 'mongodb';
 
-const roomsService = RoomsService.getInstance();
+// TODO : Rooms use MongoDB, Rooms Primary way of interacting with the app
+// FLOW: submit form with users, settings -> bff, gets blend from scraper, makes room here
+// update PUT here to be able to add a user also. We expose this via bff to add a user.
 
-const onGetRoom: RequestHandler = (req, res) => {
+const onGetRoom: RequestHandler = async (req, res) => {
   const { id } = req.params;
-  const result = roomsService.getRoom(id);
+  const result = await RoomsService.instance.getRoomStripped(id);
   if (!result) {
     res.status(400).send({ errors: ['Room does not exist'] });
   }
-  res.status(200).send(result.toApi());
+  res.status(200).send(result);
 };
 
-const onPostRoom: RequestHandler = (req, res) => {
+const onPostRoom: RequestHandler = async (req, res) => {
   const user = req.header('X-Letterboxd-User') as string;
-  const room = roomsService.createRoom(user);
-  res.status(200).send(room.toApi());
+  const { settings, movies, users } = req.body;
+  try {
+    const room = await RoomsService.instance.createRoom({
+      users: uniq([...users, user]).map((user: string) => ({ user, swipes: [] })),
+      owner: user,
+      started: false,
+      movies: movies.map((movie: Movie) => ({ ...movie, likes: 0, dislikes: 0 })),
+      settings,
+    });
+    res.status(HttpStatusCode.Ok).send(room);
+  } catch (e) {
+    const error = e as MongoServerError;
+    res.status(HttpStatusCode.InternalServerError).send({ errors: error.errInfo?.details?.schemaRulesNotSatisfied ?? error.message });
+  }
 };
 
-const onDeleteRoom: RequestHandler = (req, res) => {
+const onDeleteRoom: RequestHandler = async (req, res) => {
   const { id } = req.params;
-  if (!roomsService.hasRoom(id)) {
+  const hasRoom = RoomsService.instance.hasRoom(id);
+  if (!hasRoom) {
     res.status(400).send({ errors: ['Room does not exist'] });
     return;
   }
-  roomsService.deleteRoom(id);
-  res.sendStatus(200);
+  try {
+    await RoomsService.instance.deleteRoom(id);
+    res.sendStatus(HttpStatusCode.NoContent);
+  } catch (e) {
+    const error = e as MongoServerError;
+    res.status(HttpStatusCode.InternalServerError).send({ errors: error.errInfo?.details?.schemaRulesNotSatisfied ?? error.message });
+  }
 };
 
-const onPutRoom: RequestHandler = (req, res) => {
+const onPutRoom: RequestHandler = async (req, res) => {
   const { id } = req.params;
-  const { movies } = req.body;
-  if (!roomsService.hasRoom(id)) {
+  const { movies, settings } = req.body;
+  const hasRoom = RoomsService.instance.hasRoom(id);
+  if (!hasRoom) {
     res.status(400).send({ errors: ['Room does not exist'] });
     return;
   }
-  const room = roomsService.getRoom(id);
-  room.setMovies(movies);
-  res.status(200).send(room.toApi());
+  try {
+    await RoomsService.instance.updateRoom({
+      code: id,
+      movies,
+      settings
+    })
+    const room = RoomsService.instance.getRoomStripped(id);
+    res.status(200).send(room);
+  } catch (e: any) {
+    const error = e as MongoServerError;
+    res.status(HttpStatusCode.InternalServerError).send({ errors: error.errInfo?.details?.schemaRulesNotSatisfied ?? error.message });
+  }
 };
 
-const onStartRoom: RequestHandler = (req, res) => {
+const onPutUsers: RequestHandler = async (req, res) => {
+  const { id } = req.params;
+  const { users } = req.body;
+  if (!RoomsService.instance.hasRoom(id)) {
+    res.status(400).send({ errors: ['Room does not exist'] });
+    return;
+  }
+  const room = await RoomsService.instance.getRoom(id);
+  if (room!.started) {
+    res.status(HttpStatusCode.BadRequest).send({ errors: ['Room is started'] });
+  }
+  try {
+    await RoomsService.instance.updateUsers(room!, users);
+  } catch (e: any) {
+    const error = e as MongoServerError;
+    res.status(HttpStatusCode.InternalServerError).send({ errors: error.errInfo?.details?.schemaRulesNotSatisfied ?? error.message });
+  }
+}
+
+const onStartRoom: RequestHandler = async (req, res) => {
   const { id } = req.params;
   const user = req.header('X-Letterboxd-User') as string;
-  if (!roomsService.hasRoom(id)) {
+  if (!RoomsService.instance.hasRoom(id)) {
     res.status(400).send({ errors: ['Room does not exist'] });
     return;
   }
-  const room = roomsService.getRoom(id);
-  if (room.owner !== user) {
-    res.status(400).send({ errors: ['User does not have permissions to start room'] });
-    return;
+  const room = await RoomsService.instance.getRoomStripped(id);
+  if (!room) {
+    res.status(HttpStatusCode.BadRequest).send({ errors: ['Room does ']})
+  } else {
+    if (room.owner !== user) {
+      res.status(400).send({ errors: ['User does not have permissions to start room'] });
+      return;
+    }
+    if (room.started) {
+      res.status(400).send({ errors: ['Room already started'] });
+      return;
+    }
+    if (!room.users.includes(user)) {
+      res.status(400).send({ errors: ['Owner not in room'] });
+      return;
+    }
   }
-  if (room.started) {
-    res.status(400).send({ errors: ['Room already started'] });
-    return;
+  try {
+    await RoomsService.instance.updateRoom({ code: id, started: true });
+    io.to(id).emit('start');
+    res.sendStatus(HttpStatusCode.NoContent);
+  } catch (e) {
+    const error = e as MongoServerError;
+    res.status(HttpStatusCode.InternalServerError).send({ errors: error.errInfo?.details?.schemaRulesNotSatisfied ?? error.message })
   }
-  if (room.empty) {
-    res.status(400).send({ errors: ['Room is empty'] });
-    return;
-  }
-  if (!room.hasUser(room.owner)) {
-    res.status(400).send({ errors: ['Owner not in room'] });
-    return;
-  }
-  room.start();
-  io.to(id).emit('start');
 };
 
 export default {
@@ -74,5 +132,6 @@ export default {
   onPostRoom,
   onDeleteRoom,
   onPutRoom,
+  onPutUsers,
   onStartRoom,
-};
+}
