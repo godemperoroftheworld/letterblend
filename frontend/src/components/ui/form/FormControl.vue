@@ -5,12 +5,12 @@
   import LoadingIcon from '@/components/icons/LoadingIcon.vue';
   import type { UnwrapNestedRefs } from 'vue';
 
-  const props = withDefaults(defineProps<FieldProps<T>>(), {
+  const props = withDefaults(defineProps<FieldProps<T> & { loading?: boolean }>(), {
     labelSize: 'sm',
   });
 
   const fieldRef = ref<UnwrapNestedRefs<FieldContext>>();
-  const loading = computed(() => fieldRef.value?.meta.pending);
+  const loadingValidation = computed(() => fieldRef.value?.meta.pending);
   const errored = computed(() => !!fieldRef.value?.errorMessage);
 
   const touched = ref(false);
@@ -38,17 +38,17 @@
       :success="(showValidation || touched) && !errored">
       <field
         ref="fieldRef"
-        v-slot="{ setTouched }"
         class="w-64 max-w-full"
         :name="name"
         :rules="rules">
         <component
           :is="as"
           v-bind="{ ...$props, ...$attrs }"
-          v-model="model" />
+          v-model="model"
+          :class="{ 'bg-paper text-paper animate-pulse': loading }" />
       </field>
       <div
-        v-show="loading"
+        v-show="loadingValidation"
         class="absolute top-0 right-2 bottom-0 my-auto h-6 w-6">
         <loading-icon />
       </div>

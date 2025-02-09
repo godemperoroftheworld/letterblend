@@ -12,11 +12,11 @@
   import isEmpty from 'lodash/isEmpty';
   import FormArray from '@/components/ui/form/FormArray.vue';
   import AccordionView from '@/components/ui/AccordionView.vue';
-  import { computedDeep } from '@/utils/computed';
 
   export interface FormExpose<T> {
     valid: boolean;
     validating: boolean;
+    submitting: boolean;
     values: T;
     submit: () => void;
   }
@@ -37,8 +37,11 @@
     () => Object.keys(props.fields).filter((k) => !!props.fields[k].advanced) as Array<keyof T>,
   );
 
+  const isSubmitting = ref(false);
   async function onSubmit(values: T) {
+    isSubmitting.value = true;
     await props.submitted(values as FormValueType<T>);
+    isSubmitting.value = false;
     emits('submitted', values);
   }
 
@@ -47,21 +50,26 @@
   const isValid = computed(() => isEmpty(formRef.value?.errors));
   const isValidating = computed(() => !!formRef.value?.isValidating);
 
+  // Helpers
   function getField(key: keyof T) {
     return props.fields[key] as Omit<FieldProps<T[keyof T]>, 'name'>;
   }
 
+  watch(isSubmitting, (val) => {
+    console.log('submit: ' + val);
+  });
   defineExpose({
     valid: isValid,
     values,
     validating: isValidating,
+    submitting: isSubmitting,
     submit: () => formRef.value?.$el.requestSubmit(),
   });
 </script>
 
 <template>
   <validated-form
-    v-slot="{ isSubmitting, errors }"
+    v-slot="{ errors }"
     ref="formRef"
     :name="name"
     :initial-values="defaults"
@@ -75,7 +83,8 @@
           <form-array
             :array-key="key"
             :length="getField(key).length"
-            :field-props="getField(key)">
+            :field-props="getField(key)"
+            :loading="loading">
             <template #beforeField="{ value }">
               <slot
                 name="beforeField"
@@ -90,7 +99,8 @@
               :value="null" />
             <form-control
               :name="String(key)"
-              v-bind="getField(key)" />
+              v-bind="getField(key)"
+              :loading="loading" />
           </div>
         </template>
       </template>
@@ -127,15 +137,16 @@
         class="w-40"
         button-style="danger"
         :text="cancelButtonText"
+        :loading="loading"
         @click.prevent="emits('cancelled')" />
       <text-button
         v-if="showSubmitButton"
         class="w-40"
         :disabled="!isEmpty(errors)"
-        :loading="isSubmitting"
+        :loading="loading || isSubmitting"
         button-style="submit"
         text="Submit"
-        @click="formRef.$el.requestSubmit()" />
+        @click="formRef?.$el.requestSubmit()" />
     </div>
   </validated-form>
 </template>

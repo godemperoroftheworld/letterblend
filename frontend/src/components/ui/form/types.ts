@@ -43,6 +43,7 @@ export interface FormProps<T extends FormObject> {
   showCancelButton?: boolean;
   cancelButtonText?: string;
   defaults?: T;
+  loading?: boolean;
 }
 
 // DATA FORM

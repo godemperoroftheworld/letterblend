@@ -9,6 +9,7 @@
   interface Props {
     submitted?: (data: BlendSettings) => Promise<void>;
     showSubmitButton?: boolean;
+    loading?: boolean;
   }
   withDefaults(defineProps<Props>(), { submitted: noop, showSubmitButton: false });
 
@@ -20,6 +21,7 @@
   <form-view
     ref="settingsForm"
     name="settingsForm"
+    :loading="loading"
     :fields="{
       top: {
         as: InputField,

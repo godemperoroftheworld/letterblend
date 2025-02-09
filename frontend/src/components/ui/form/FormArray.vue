@@ -10,6 +10,7 @@
     fieldProps: Omit<FieldProps<T>, 'name'>;
     arrayKey: PropertyKey;
     length?: { min?: number; max?: number };
+    loading?: boolean;
   }
   const props = withDefaults(defineProps<Props>(), {
     length: () => ({ min: 1, max: 5 }),
@@ -36,7 +37,8 @@
           :value="entry.value" />
         <form-control
           :name="`${String(arrayKey)}[${idx}]`"
-          v-bind="fieldProps" />
+          v-bind="fieldProps"
+          :loading="loading" />
         <icon-button
           class="sm:hidden"
           button-style="danger"

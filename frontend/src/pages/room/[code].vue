@@ -31,10 +31,13 @@
       <carousel-view
         :entries="results"
         :loading="isFetching">
+        <template #placeholder>
+          <movie-poster class="w-full" />
+        </template>
         <template #default="data: Movie">
           <movie-poster
             class="w-full"
-            v-bind="data" />
+            :data="data" />
         </template>
       </carousel-view>
     </card-view>
@@ -44,6 +47,7 @@
       title="Settings">
       <blend-settings
         :submitted="settingsSubmitted"
+        :loading="isFetching"
         :show-submit-button="true" />
     </card-view>
   </div>

@@ -48,6 +48,7 @@
   <teleport to="body">
     <nuxt-particles
       v-if="particles"
+      id="particles"
       :options="options" />
   </teleport>
 </template>

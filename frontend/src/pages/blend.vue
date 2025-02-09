@@ -115,6 +115,7 @@
       text="Submit"
       button-style="submit"
       class="w-64 max-md:my-4"
+      :loading="userForm?.submitting"
       :disabled="!userValid || !settingsValid"
       @keyup.enter="userForm?.submit()"
       @click.prevent="userForm?.submit()" />

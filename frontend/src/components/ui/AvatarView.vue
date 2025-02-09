@@ -28,7 +28,7 @@
 <template>
   <div
     class="bg-paper shadow-paper/50 relative aspect-square grow overflow-hidden rounded-full shadow-2xs"
-    :class="{ 'animate-pulse': isLoadingName || isLoading }">
+    :class="{ 'animate-pulse': !avatarName || isLoadingName || isLoading }">
     <template v-if="avatar">
       <nuxt-img
         class="absolute bottom-0 h-full w-full"
