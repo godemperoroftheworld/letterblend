@@ -1,5 +1,7 @@
 <template>
-  <card-view title="Sign In">
+  <card-view
+    class="h-fit"
+    title="Sign In">
     <name-form @submitted="submitted" />
   </card-view>
 </template>

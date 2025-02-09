@@ -14,7 +14,7 @@
 
 <template>
   <div
-    class="relative flex h-full min-h-fit w-full flex-grow flex-col gap-2 overflow-hidden p-2 md:gap-4 lg:gap-8 lg:p-8">
+    class="relative flex h-full min-h-fit w-full flex-grow flex-col gap-2 overflow-y-scroll p-2 md:gap-4 lg:gap-8 lg:p-8">
     <content-view class="mx-auto h-fit w-fit md:hidden">
       <nuxt-link
         to="/"
@@ -23,7 +23,7 @@
       </nuxt-link>
     </content-view>
     <content-view
-      class="mx-auto my-auto h-fit max-h-full min-h-3/4 w-full max-w-screen-xl flex-grow">
+      class="mx-auto my-auto h-fit max-h-full w-full max-w-screen-xl flex-grow md:min-h-3/4">
       <generic-button
         v-show="!isHome"
         class="absolute top-4 left-4 z-1 max-sm:fixed max-sm:min-w-fit sm:w-40 lg:top-8 lg:left-8"
@@ -44,7 +44,7 @@
         <logo class="h-40 w-40" />
       </nuxt-link>
       <main
-        class="relative flex max-h-full flex-grow place-content-stretch content-stretch items-stretch overflow-hidden text-white md:mt-0 lg:p-4">
+        class="relative flex h-fit max-h-full flex-grow place-content-stretch content-stretch items-stretch overflow-hidden text-white md:mt-0 lg:p-4">
         <slot />
       </main>
     </content-view>
