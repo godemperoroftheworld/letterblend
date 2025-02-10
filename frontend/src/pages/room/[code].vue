@@ -11,6 +11,7 @@
   import { IconShare } from '@tabler/icons-vue';
   import { Tippy, useTippy, useTippyComponent } from 'vue-tippy';
   import useUser from '@/composables/user';
+  import AvatarView from '@/components/ui/AvatarView.vue';
 
   // Data
   const route = useRoute();
@@ -87,15 +88,40 @@
         </tippy>
       </template>
     </card-view>
-    <card-view
-      class="basis-1/3"
-      :collapsable="isSmall"
-      title="Settings">
-      <blend-settings
-        :submitted="settingsSubmitted"
-        :loading="isFetching"
-        submit-button-text="Update"
-        :show-submit-button="true" />
-    </card-view>
+    <div class="flex basis-1/3 flex-col gap-4">
+      <card-view title="Users">
+        <div class="relative mx-auto flex w-fit flex-col items-center gap-2">
+          <template v-if="room">
+            <div
+              v-for="user in room?.users"
+              :key="user"
+              class="flex w-full justify-between gap-2">
+              <avatar-view
+                class="h-6 w-6 grow-0"
+                :name="user" />
+              <span class="text-info">{{ user }}</span>
+            </div>
+          </template>
+          <template v-else>
+            <div
+              v-for="idx in 2"
+              :key="idx"
+              class="flex w-full justify-between gap-2">
+              <avatar-view class="h-6 w-6" />
+              <span class="bg-paper h-6 w-32 animate-pulse rounded" />
+            </div>
+          </template>
+        </div>
+      </card-view>
+      <card-view
+        :collapsable="isSmall"
+        title="Settings">
+        <blend-settings
+          :submitted="settingsSubmitted"
+          :loading="isFetching"
+          submit-button-text="Update"
+          :show-submit-button="true" />
+      </card-view>
+    </div>
   </div>
 </template>
