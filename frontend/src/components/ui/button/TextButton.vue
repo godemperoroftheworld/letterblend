@@ -23,7 +23,7 @@
   <button
     v-bind="$attrs"
     type="button"
-    class="button shadow-paper/50 min-w-24 rounded p-2 px-4 font-medium text-white uppercase shadow-2xs drop-shadow-none active:shadow-none disabled:cursor-not-allowed"
+    class="button shadow-paper/50 max-w-full min-w-24 rounded p-2 px-4 font-medium text-white uppercase shadow-2xs drop-shadow-none active:shadow-none disabled:cursor-not-allowed"
     :disabled="disabled || loading"
     :class="bgClass">
     <template v-if="loading">

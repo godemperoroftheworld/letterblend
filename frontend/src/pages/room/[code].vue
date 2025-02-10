@@ -47,10 +47,10 @@
 </script>
 
 <template>
-  <div class="gap-2 max-md:flex max-md:flex-col md:grid md:grid-cols-5 md:gap-4 lg:gap-8">
+  <div class="relative flex items-stretch gap-4 max-md:flex-col lg:gap-8">
     <card-view
-      title="Results"
-      class="h-fit shrink-0 md:col-span-3">
+      class="basis-2/3"
+      title="Results">
       <carousel-view
         :entries="results"
         :loading="isFetching">
@@ -65,8 +65,7 @@
       </carousel-view>
       <template v-if="isSmall">
         <generic-button
-          ref="tippyRef"
-          class="w-40"
+          class="mx-auto w-64"
           button-style="info"
           @click="share">
           <icon-share />
@@ -75,11 +74,11 @@
       </template>
       <template v-else>
         <tippy
+          class="mx-auto block w-fit"
           content="Copied to clipboard."
           trigger="click">
           <generic-button
-            ref="tippyRef"
-            class="w-40"
+            class="w-64"
             button-style="info"
             @click="share">
             <icon-share />
@@ -89,7 +88,7 @@
       </template>
     </card-view>
     <card-view
-      class="h-fit md:col-span-2"
+      class="basis-1/3"
       :collapsable="isSmall"
       title="Settings">
       <blend-settings

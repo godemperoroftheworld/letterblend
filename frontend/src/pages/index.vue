@@ -7,18 +7,18 @@
 </script>
 
 <template>
-  <div class="grid gap-4 max-lg:grid-rows-5 lg:grid-cols-5 lg:gap-8">
+  <div class="relative flex items-stretch gap-4 max-md:flex-col lg:gap-8">
     <card-view
       title="Get Started"
       justify="center"
-      class="max-lg:row-span-3 lg:col-span-3">
+      class="basis-3/5">
       <name-form @submitted="router.push({ name: 'create' })" />
     </card-view>
     <card-view
       title="How-To"
-      class="max-lg:order-first max-lg:row-span-2 lg:col-span-2">
+      class="basis-2/5">
       <slides-view
-        class="my-auto h-64 max-h-full w-full"
+        class="h-full"
         :slides="[
           {
             title: 'Grab Some Friends',
@@ -41,7 +41,7 @@
             image: '/img/movie.svg',
           },
         ]"
-        :autoplay="5000" />
+        :autoplay="0" />
     </card-view>
   </div>
 </template>

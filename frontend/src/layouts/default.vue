@@ -13,46 +13,37 @@
 </script>
 
 <template>
-  <div
-    class="relative flex h-full min-h-fit w-full flex-grow flex-col gap-2 overflow-y-scroll p-2 md:gap-4 lg:gap-8 lg:p-8">
-    <content-view class="mx-auto h-fit w-fit md:hidden">
-      <nuxt-link
-        to="/"
-        class="mx-auto w-fit">
-        <logo class="h-36 w-36" />
+  <div class="relative flex min-h-full flex-col items-center justify-center p-4 lg:p-8">
+    <content-view class="mb-2 w-fit md:hidden">
+      <nuxt-link to="/">
+        <logo class="h-32 w-32" />
       </nuxt-link>
     </content-view>
-    <content-view
-      class="mx-auto my-auto h-fit max-h-full w-full max-w-screen-xl flex-grow md:min-h-3/4">
+    <content-view class="min-h-[75dvh] w-full max-w-screen-lg">
       <generic-button
         v-show="!isHome"
-        class="absolute top-4 left-4 z-1 max-sm:fixed max-sm:min-w-fit sm:w-40 lg:top-8 lg:left-8"
+        class="absolute top-4 left-4 z-1 max-md:fixed max-sm:min-w-fit sm:w-40 lg:top-8 lg:left-8"
         button-style="hollow"
         @click.prevent="router.back"
         @keyup.enter="router.back">
         <icon-arrow-back />
         <span class="max-sm:hidden">Back</span>
       </generic-button>
-      <div class="absolute top-4 right-4 z-1 w-fit max-sm:fixed lg:top-8 lg:right-8">
+      <div class="absolute top-4 right-4 z-1 w-fit max-md:fixed lg:top-8 lg:right-8">
         <toggle-view
           v-model="particlesEnabled"
           :icon="IconSparkles" />
       </div>
-      <nuxt-link
-        to="/"
-        class="mx-auto hidden w-fit md:block">
-        <logo class="h-40 w-40" />
-      </nuxt-link>
-      <main
-        class="relative flex h-fit max-h-full flex-grow place-content-stretch content-stretch items-stretch overflow-hidden text-white md:mt-0 lg:p-4">
+      <div class="mx-auto mt-2 w-fit">
+        <nuxt-link
+          to="/"
+          class="max-md:hidden">
+          <logo class="h-40 w-40" />
+        </nuxt-link>
+      </div>
+      <main class="p-4 lg:p-8">
         <slot />
       </main>
     </content-view>
   </div>
 </template>
-
-<style scoped lang="scss">
-  main > * {
-    width: 100%;
-  }
-</style>

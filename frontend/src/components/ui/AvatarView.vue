@@ -31,12 +31,12 @@
     :class="{ 'animate-pulse': !avatarName || isLoadingName || isLoading }">
     <template v-if="avatar">
       <nuxt-img
-        class="absolute bottom-0 h-full w-full"
+        class="h-full w-full"
         :src="avatar" />
     </template>
     <template v-else>
       <svg
-        class="absolute bottom-0 h-full w-full text-white"
+        class="h-full w-full text-white"
         fill="currentColor"
         viewBox="0 0 20 20"
         xmlns="http://www.w3.org/2000/svg">

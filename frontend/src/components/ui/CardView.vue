@@ -8,7 +8,6 @@
     title: string;
     collapsable?: boolean;
     collapsedDefault?: boolean;
-    justify?: 'between' | 'center';
   }>();
 
   const open = ref(!props.collapsedDefault);
@@ -33,9 +32,9 @@
 
 <template>
   <div
-    class="bg-background transition-default relative flex max-h-full flex-col overflow-hidden rounded-xl pt-4"
+    class="bg-background transition-default relative overflow-hidden rounded-xl p-4 pb-8 lg:p-8"
     :class="{ '!max-h-14': shouldCollapse }">
-    <h3 class="pointer-events-none h-8 text-center text-xl font-bold text-white uppercase">
+    <h3 class="mb-4 text-center text-lg font-bold uppercase italic">
       {{ title }}
     </h3>
     <template v-if="collapsable">
@@ -43,7 +42,7 @@
         v-model="open"
         class="absolute top-0 left-0 h-16 w-full cursor-pointer opacity-0"
         type="checkbox" />
-      <div class="absolute top-4 right-4 lg:top-4 lg:right-8">
+      <div class="absolute top-4 right-4 lg:top-8 lg:right-8">
         <icon-chevron-down
           v-if="shouldCollapse"
           class="h-7 w-7" />
@@ -52,12 +51,7 @@
           class="h-7 w-7" />
       </div>
     </template>
-    <div
-      class="transition-default relative flex h-[calc(100%-2rem)] flex-grow flex-col items-center gap-4 overflow-hidden p-4 lg:p-8"
-      :class="{
-        'justify-between': props.justify === 'between',
-        'justify-center': props.justify === 'center',
-      }">
+    <div>
       <slot />
     </div>
   </div>

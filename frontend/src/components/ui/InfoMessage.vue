@@ -23,8 +23,8 @@
 <template>
   <div
     :class="classNames"
-    class="flex items-center justify-center gap-2 rounded border-2 p-2 text-center">
-    <icon-info-circle class="h-6" />
+    class="flex max-w-sm items-center justify-center gap-2 rounded border-2 p-2 text-center text-sm">
+    <icon-info-circle class="h-5" />
     <span class="w-fit cursor-default"><slot /></span>
   </div>
 </template>

@@ -18,8 +18,20 @@
 
   const fieldArrayRef = ref<FieldArrayContext>();
   const formContext = useFormContext();
+  const arrayValues = computed(() => {
+    return formContext.values[props.arrayKey as keyof FieldArrayContext] ?? [];
+  });
+  const disableRemove = computed(() => {
+    if (props.length.min) {
+      return arrayValues.value.length <= props.length.min;
+    }
+    return false;
+  });
   const disableAdd = computed(() => {
-    return formContext.values[props.arrayKey].length === props.length.max;
+    if (props.length.max) {
+      return arrayValues.value.length >= props.length.max;
+    }
+    return false;
   });
 </script>
 
@@ -31,7 +43,7 @@
     <template
       v-for="(entry, idx) in arrayFields"
       :key="entry.key">
-      <div class="relative flex items-center gap-2 md:gap-4">
+      <div class="relative flex items-center gap-2">
         <slot
           name="beforeField"
           :value="entry.value" />
@@ -42,14 +54,14 @@
         <icon-button
           class="sm:hidden"
           button-style="danger"
-          :disabled="arrayFields.length <= length.min"
+          :disabled="disableRemove"
           :icon="IconTrash"
           @click="remove(idx)" />
         <div
           class="absolute -right-4 bottom-0 hidden w-fit translate-x-full items-center gap-2 sm:flex">
           <icon-button
             button-style="danger"
-            :disabled="arrayFields.length <= length.min"
+            :disabled="disableRemove"
             :icon="IconTrash"
             @click="remove(idx)" />
           <icon-button
@@ -64,7 +76,7 @@
     </template>
   </field-array>
   <generic-button
-    class="mt-auto sm:hidden"
+    class="mx-auto w-64 sm:hidden"
     button-style="submit"
     :disabled="disableAdd"
     @click="fieldArrayRef?.push('')">

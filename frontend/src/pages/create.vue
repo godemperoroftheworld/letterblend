@@ -76,12 +76,12 @@
 </script>
 
 <template>
-  <div class="flex flex-col items-center gap-2 md:gap-4 lg:gap-8">
-    <div class="grid w-full flex-grow gap-2 md:gap-4 lg:grid-cols-5 lg:gap-8">
+  <div class="flex flex-col items-center gap-4 lg:gap-8">
+    <div class="relative flex w-full items-stretch gap-4 max-md:flex-col lg:gap-8">
       <card-view
         title="Users"
-        class="min-h-fit lg:col-span-3">
-        <info-message class="w-full max-w-sm">
+        class="basis-2/3">
+        <info-message class="mx-auto mb-4 w-full lg:mb-8">
           Enter your friend's usernames. There can be up to five of you.
         </info-message>
         <form-view
@@ -107,18 +107,20 @@
       </card-view>
       <card-view
         ref="collapsableSettings"
+        class="basis-1/3"
         title="Settings"
         :collapsable="isSmall"
-        :collapsed-default="false"
-        class="flex-shrink-0 lg:col-span-2">
-        <info-message class="w-full max-w-sm">Configure your blend as you'd like it.</info-message>
+        :collapsed-default="false">
+        <info-message class="mx-auto mb-4 w-full lg:mb-8">
+          Configure your blend as you'd like it.
+        </info-message>
         <blend-settings ref="settingsForm" />
       </card-view>
     </div>
     <text-button
       text="Submit"
       button-style="submit"
-      class="w-64 max-md:my-4"
+      class="max-sm:w-full sm:w-64"
       :loading="userForm?.submitting"
       :disabled="!userValid || !settingsValid"
       @keyup.enter="userForm?.submit()"

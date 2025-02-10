@@ -74,7 +74,8 @@
 
 <template>
   <div
-    class="relative flex items-center justify-center"
+    class="slider-content relative flex items-center justify-center px-11"
+    :class="{ 'go-next': goingNext, 'go-back': goingBack }"
     @click.prevent="clicked = true"
     @keyup.enter="clicked = true">
     <button
@@ -83,47 +84,35 @@
       @keyup.enter="goBack">
       <icon-chevron-left class="h-8 w-8" />
     </button>
-    <div
-      class="slider-content relative h-full w-full px-8"
-      :class="{ 'go-next': goingNext, 'go-back': goingBack }">
-      <labeled-image
-        class="slider-prev absolute top-0 -left-8 -translate-x-full px-8"
-        :title="`(${prevIndex + 1}) ${prevState.title}`"
-        :image="prevState.image"
-        :description="prevState.description" />
-      <labeled-image
-        :title="`(${index + 1}) ${state.title}`"
-        :image="state.image"
-        :description="state.description" />
-      <labeled-image
-        class="slider-next absolute top-0 -right-8 translate-x-full px-8"
-        :title="`(${nextIndex + 1}) ${nextState.title}`"
-        :image="nextState.image"
-        :description="nextState.description" />
-    </div>
-    <template v-if="autoplay != null">
-      <div class="absolute top-1/2 right-0 max-h-10 max-w-10 -translate-y-1/2 cursor-pointer">
-        <button
-          class="bg-content z-10 cursor-pointer rounded-full p-1"
-          @click.prevent="goNext"
-          @keyup.enter="goNext">
-          <icon-chevron-right class="h-8 w-8" />
-        </button>
-        <progress-icon
-          class="text-content absolute top-0.5 -left-1 -z-10 h-12 w-12 -translate-y-full"
-          :enable="!clicked"
-          :time-ms="autoplay"
-          loop />
-      </div>
-    </template>
-    <template v-else>
+    <labeled-image
+      class="slider-prev absolute w-full -translate-x-full px-11"
+      :title="`(${prevIndex + 1}) ${prevState.title}`"
+      :image="prevState.image"
+      :description="prevState.description" />
+    <labeled-image
+      class="slider-current"
+      :title="`(${index + 1}) ${state.title}`"
+      :image="state.image"
+      :description="state.description" />
+    <labeled-image
+      class="slider-next absolute w-full translate-x-full px-11"
+      :title="`(${nextIndex + 1}) ${nextState.title}`"
+      :image="nextState.image"
+      :description="nextState.description" />
+    <div class="absolute top-1/2 right-0 max-h-11 max-w-11 -translate-y-1/2 cursor-pointer">
       <button
-        class="button bg-content absolute top-1/2 right-0 z-10 -translate-y-1/2 cursor-pointer rounded-full p-1"
+        class="bg-content z-10 cursor-pointer rounded-full p-1.5"
         @click.prevent="goNext"
         @keyup.enter="goNext">
         <icon-chevron-right class="h-8 w-8" />
       </button>
-    </template>
+      <progress-icon
+        v-if="autoplay"
+        class="text-content absolute top-0.5 -left-1 -z-10 h-12 w-12 -translate-y-full"
+        :enable="!clicked"
+        :time-ms="autoplay"
+        loop />
+    </div>
   </div>
 </template>
 
@@ -136,20 +125,32 @@
   }
 
   .slider-content.go-next {
-    animation: slide-left 300ms ease;
-    transform: translateX(-100%);
-
     & > .slider-next {
-      right: 0;
+      animation: slide-left 300ms ease;
+      transform: translateX(-100%);
+    }
+
+    & > .slider-current {
+      animation:
+        slide-left 300ms ease,
+        fade 300ms ease;
+      transform: translateX(-100%);
+      opacity: 0;
     }
   }
 
   .slider-content.go-back {
-    animation: slide-right 300ms ease;
-    transform: translateX(100%);
-
     & > .slider-prev {
-      left: 0;
+      animation: slide-right 300ms ease;
+      transform: translateX(100%);
+    }
+
+    & > .slider-current {
+      animation:
+        slide-right 300ms ease,
+        fade 300ms ease;
+      transform: translateX(100%);
+      opacity: 0;
     }
   }
 
@@ -167,6 +168,14 @@
     }
     100% {
       transform: translateX(100%);
+    }
+  }
+  @keyframes fade {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
     }
   }
 </style>

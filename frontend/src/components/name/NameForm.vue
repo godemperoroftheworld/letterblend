@@ -28,10 +28,10 @@
 </script>
 
 <template>
-  <div class="flex min-h-2/3 w-full flex-col items-center justify-center">
-    <div class="flex w-full items-center justify-center gap-4 lg:flex-col lg:gap-8">
+  <div class="flex flex-col gap-4">
+    <div class="flex items-center justify-center gap-4">
       <avatar-view
-        class="max-lg:max-h-32 max-lg:max-w-32 lg:w-36"
+        class="w-32 min-w-24 grow-0 max-sm:w-24 lg:w-36"
         :name="formName"
         fallback />
       <form-view
@@ -55,7 +55,7 @@
         :show-submit-button="false"
         :submitted="submitted" />
     </div>
-    <info-message class="my-6 w-full max-w-lg min-w-64 md:px-8">
+    <info-message class="mx-auto">
       Don't have an account? That's ok, make one
       <a
         class="font-bold underline"

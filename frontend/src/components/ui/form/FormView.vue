@@ -11,7 +11,6 @@
   } from '@/components/ui/form/types';
   import isEmpty from 'lodash/isEmpty';
   import FormArray from '@/components/ui/form/FormArray.vue';
-  import AccordionView from '@/components/ui/AccordionView.vue';
 
   export interface FormExpose<T> {
     valid: boolean;
@@ -24,6 +23,9 @@
     (e: 'submitted', values: T): void;
     (e: 'cancelled'): void;
   }
+  interface FormRef extends UnwrapNestedRefs<FormContext> {
+    $el: HTMLFormElement;
+  }
   const props = withDefaults(defineProps<FormProps<T>>(), {
     cancelButtonText: 'Cancel',
     submitButtonText: 'Submit',
@@ -31,12 +33,7 @@
   });
   const emits = defineEmits<FormEmits<T>>();
 
-  const keys = computed(
-    () => Object.keys(props.fields).filter((k) => !props.fields[k].advanced) as Array<keyof T>,
-  );
-  const advancedKeys = computed(
-    () => Object.keys(props.fields).filter((k) => !!props.fields[k].advanced) as Array<keyof T>,
-  );
+  const keys = computed(() => Object.keys(props.fields) as Array<keyof T>);
 
   const isSubmitting = ref(false);
   async function onSubmit(values: T) {
@@ -49,7 +46,7 @@
     emits('submitted', values);
   }
 
-  const formRef = ref<UnwrapNestedRefs<FormContext>>();
+  const formRef = ref<FormRef>();
   const values = computed(() => formRef.value?.values as T);
   const isValid = computed(() => isEmpty(formRef.value?.errors));
   const isValidating = computed(() => !!formRef.value?.isValidating);
@@ -76,11 +73,11 @@
     :initial-values="defaults"
     class="flex flex-col items-center justify-between"
     @submit="onSubmit as SubmissionHandler">
-    <div class="flex max-w-full shrink flex-grow flex-col items-center gap-5">
+    <div class="flex flex-col gap-5">
       <template
         v-for="key in keys"
         :key="key">
-        <template v-if="fields[key as keyof typeof fields].array">
+        <template v-if="getField(key).array">
           <form-array
             :array-key="key"
             :length="getField(key).length"
@@ -105,44 +102,21 @@
           </div>
         </template>
       </template>
-      <accordion-view
-        v-if="advancedKeys.length"
-        class="mt-4 w-96"
-        :name="`${name}-advanced`"
-        label="Advanced Fields">
-        <div class="flex flex-col gap-4">
-          <template
-            v-for="key in advancedKeys"
-            :key="key">
-            <template v-if="getField(key).array">
-              <form-array
-                :array-key="key"
-                :field-props="getField(key)"
-                :length="getField(key).length" />
-            </template>
-            <template v-else>
-              <form-control
-                :name="String(key)"
-                v-bind="getField(key)" />
-            </template>
-          </template>
-        </div>
-      </accordion-view>
     </div>
     <div
       v-if="showSubmitButton || showCancelButton"
-      class="mt-5 flex justify-between text-center"
+      class="mt-5 flex max-w-full justify-between text-center"
       :class="{ 'w-full': showCancelButton && showSubmitButton }">
       <text-button
         v-if="showCancelButton"
-        class="w-40"
+        class="w-64"
         button-style="danger"
         :text="cancelButtonText"
         :loading="loading"
         @click.prevent="emits('cancelled')" />
       <text-button
         v-if="showSubmitButton"
-        class="w-40"
+        class="w-64"
         :disabled="!isEmpty(errors)"
         :loading="loading || isSubmitting"
         button-style="submit"
