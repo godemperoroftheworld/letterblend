@@ -10,14 +10,23 @@
     showSubmitButton?: boolean;
     submitButtonText?: string;
     loading?: boolean;
+    values?: RoomSettings;
   }
-  withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<Props>(), {
     submitted: () => noop,
     showSubmitButton: false,
     submitButtonText: 'Submit',
+    values: () => ({ top: 10, threshold: 0.6 }),
   });
 
   const settingsForm = ref();
+  watch(
+    () => props.values,
+    (val) => {
+      settingsForm.value?.update(val);
+    },
+  );
+
   defineExpose({ data: settingsForm });
 </script>
 
@@ -45,7 +54,7 @@
         },
       },
     }"
-    :defaults="{ top: 10, threshold: 0.6 }"
+    :defaults="values"
     :show-submit-button="showSubmitButton"
     :submit-button-text="submitButtonText"
     :submitted="submitted" />

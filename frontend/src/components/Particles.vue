@@ -8,6 +8,7 @@
       enable: true,
       zIndex: -1,
     },
+    fpsLimit: 60,
     particles: {
       color: {
         value: '#fff',
@@ -38,17 +39,19 @@
         },
       },
       size: {
-        value: 10,
+        value: 12,
       },
     },
   };
 </script>
 
 <template>
-  <teleport to="body">
+  <client-only>
     <nuxt-particles
       v-if="particles"
       id="particles"
       :options="options" />
-  </teleport>
+  </client-only>
 </template>
+
+<style scoped lang="scss"></style>

@@ -11,7 +11,9 @@
   } from '@/components/ui/form/types';
   import isEmpty from 'lodash/isEmpty';
   import FormArray from '@/components/ui/form/FormArray.vue';
+  import type { PartialDeep } from 'type-fest';
 
+  // Setup
   export interface FormExpose<T> {
     valid: boolean;
     validating: boolean;
@@ -33,9 +35,22 @@
   });
   const emits = defineEmits<FormEmits<T>>();
 
+  // State
   const keys = computed(() => Object.keys(props.fields) as Array<keyof T>);
-
   const isSubmitting = ref(false);
+
+  // Form values
+  const formRef = ref<FormRef>();
+  const values = computed(() => formRef.value?.values as T);
+  const isValid = computed(() => {
+    return isEmpty(formRef.value?.errors);
+  });
+  const isValidating = computed(() => !!formRef.value?.isValidating);
+
+  // Helpers
+  function getField(key: keyof T) {
+    return props.fields[key] as Omit<FieldProps<T[keyof T]>, 'name'>;
+  }
   async function onSubmit(values: T) {
     isSubmitting.value = true;
     try {
@@ -46,21 +61,13 @@
     emits('submitted', values);
   }
 
-  const formRef = ref<FormRef>();
-  const values = computed(() => formRef.value?.values as T);
-  const isValid = computed(() => isEmpty(formRef.value?.errors));
-  const isValidating = computed(() => !!formRef.value?.isValidating);
-
-  // Helpers
-  function getField(key: keyof T) {
-    return props.fields[key] as Omit<FieldProps<T[keyof T]>, 'name'>;
-  }
-
+  // Expose
   defineExpose({
     valid: isValid,
     values,
     validating: isValidating,
     submitting: isSubmitting,
+    update: (values: PartialDeep<T>) => formRef.value?.setValues(values),
     submit: () => formRef.value?.$el.requestSubmit(),
   });
 </script>
@@ -71,9 +78,10 @@
     ref="formRef"
     :name="name"
     :initial-values="defaults"
-    class="flex flex-col items-center justify-between"
+    :validate-on-mount="true"
+    class="relative flex flex-col items-center justify-between"
     @submit="onSubmit as SubmissionHandler">
-    <div class="flex flex-col gap-5">
+    <div class="flex w-fit max-w-full flex-col gap-5">
       <template
         v-for="key in keys"
         :key="key">

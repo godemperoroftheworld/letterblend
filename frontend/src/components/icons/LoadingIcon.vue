@@ -1,6 +1,6 @@
 <template>
   <svg
-    class="fill-info animate-spin"
+    class="fill-info pointer-events-none animate-spin"
     aria-hidden="true"
     viewBox="0 0 100 101"
     fill="none"

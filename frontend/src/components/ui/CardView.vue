@@ -32,9 +32,9 @@
 
 <template>
   <div
-    class="bg-background transition-default relative overflow-hidden rounded-xl p-4 pb-8 lg:p-8"
+    class="bg-background transition-default relative flex flex-col gap-4 overflow-x-hidden rounded-xl p-4 !pt-4 pb-8 lg:p-8"
     :class="{ '!max-h-14': shouldCollapse }">
-    <h3 class="mb-4 text-center text-lg font-bold uppercase italic">
+    <h3 class="text-center text-lg font-bold uppercase italic">
       {{ title }}
     </h3>
     <template v-if="collapsable">
@@ -51,7 +51,7 @@
           class="h-7 w-7" />
       </div>
     </template>
-    <div>
+    <div class="grow">
       <slot />
     </div>
   </div>

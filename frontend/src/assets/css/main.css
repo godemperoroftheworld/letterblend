@@ -46,6 +46,37 @@ body {
     overflow-y: scroll;
 }
 
+.transition-default {
+    transition: all 300ms ease;
+}
+
+.absolute-center {
+    position: absolute;
+    margin: auto;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 250ms;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
+.scale-enter-active {
+    animation: scale 250ms;
+}
+.scale-leave-active {
+    animation: scale 250ms reverse;
+}
+
 @keyframes fade {
   0% {
     opacity: 0;

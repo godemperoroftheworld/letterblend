@@ -56,3 +56,27 @@ export function useUpdateSettings() {
     },
   });
 }
+
+interface UpdateUsersVars {
+  id: string;
+  users: string[];
+}
+export function useUpdateUsers() {
+  const mutationFn: MutationFunction<Room, UpdateUsersVars> = async ({ id, users }) => {
+    return LetterblendApi.instance.put(`/room/${id}/users`, { users });
+  };
+  const { emit } = useLoader();
+  return useMutation<Room, DefaultError, UpdateUsersVars>({
+    mutationKey: ['room', 'update-users'],
+    mutationFn,
+    onMutate() {
+      emit(true);
+    },
+    onSettled() {
+      emit(false);
+    },
+    onSuccess(room) {
+      queryClient.setQueryData(['room', room.code], room);
+    },
+  });
+}

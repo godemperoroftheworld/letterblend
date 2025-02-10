@@ -5,15 +5,16 @@
   import type { Movie } from '@/types/movie';
   import { breakpointsTailwind } from '@vueuse/core';
   import { useRoom } from '@/composables/query/room';
-  import { useUpdateSettings } from '@/composables/mutation/room';
+  import { useUpdateSettings, useUpdateUsers } from '@/composables/mutation/room';
   import type { RoomSettings } from '@/types/room';
   import GenericButton from '@/components/ui/button/GenericButton.vue';
-  import { IconShare } from '@tabler/icons-vue';
-  import { Tippy, useTippy, useTippyComponent } from 'vue-tippy';
+  import { IconShare, IconEdit } from '@tabler/icons-vue';
+  import { Tippy } from 'vue-tippy';
   import useUser from '@/composables/user';
   import AvatarView from '@/components/ui/AvatarView.vue';
+  import DialogView from '@/components/ui/DialogView.vue';
 
-  // Data
+  // Room info
   const route = useRoute();
   const { isSet: hasName } = useUser();
   const code = computed(() => route.params.code as string);
@@ -22,14 +23,25 @@
   });
   const results = computed(() => room.value?.movies);
 
-  // Visual
+  // State
   const breakpoints = useBreakpoints(breakpointsTailwind);
   const isSmall = breakpoints.smaller('md');
+  const showEditUsers = ref(false);
+  watch(showEditUsers, (val) => {
+    console.log(val);
+  });
 
   // Settings Update
   const { mutateAsync: updateSettings } = useUpdateSettings();
   async function settingsSubmitted(settings: RoomSettings) {
     await updateSettings({ id: room.value!.code, settings });
+  }
+
+  // Users update
+  const { mutateAsync: updateUsers } = useUpdateUsers();
+  async function usersSubmitted(users: string[]) {
+    await updateUsers({ id: room.value!.code, users });
+    showEditUsers.value = false;
   }
 
   // Share
@@ -53,6 +65,7 @@
       class="basis-2/3"
       title="Results">
       <carousel-view
+        class="mx-auto"
         :entries="results"
         :loading="isFetching">
         <template #placeholder>
@@ -95,7 +108,7 @@
             <div
               v-for="user in room?.users"
               :key="user"
-              class="flex w-full justify-between gap-2">
+              class="flex w-full gap-2">
               <avatar-view
                 class="h-6 w-6 grow-0"
                 :name="user" />
@@ -106,11 +119,20 @@
             <div
               v-for="idx in 2"
               :key="idx"
-              class="flex w-full justify-between gap-2">
+              class="flex w-full gap-2">
               <avatar-view class="h-6 w-6" />
               <span class="bg-paper h-6 w-32 animate-pulse rounded" />
             </div>
           </template>
+        </div>
+        <div class="absolute top-3.5 right-4">
+          <generic-button
+            class="!min-w-0 !p-1 !px-2 !text-sm"
+            button-style="hollow"
+            @click="showEditUsers = true">
+            <icon-edit class="h-5 w-5" />
+            <span class="max-sm:hidden">Edit</span>
+          </generic-button>
         </div>
       </card-view>
       <card-view
@@ -119,9 +141,20 @@
         <blend-settings
           :submitted="settingsSubmitted"
           :loading="isFetching"
+          :values="room?.settings"
           submit-button-text="Update"
           :show-submit-button="true" />
       </card-view>
     </div>
+    <dialog-view
+      v-if="room"
+      title="Edit Users"
+      :show="showEditUsers"
+      @close="showEditUsers = false">
+      <blend-users
+        :loading="isFetching"
+        :values="room.users"
+        :submitted="usersSubmitted" />
+    </dialog-view>
   </div>
 </template>

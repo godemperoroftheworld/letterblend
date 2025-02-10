@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import CardView from '@/components/ui/CardView.vue';
   import SlidesView from '@/components/ui/SlidesView.vue';
-  import NameForm from '@/components/name/NameForm.vue';
+  import NameForm from '@/components/user/NameForm.vue';
 
   const router = useRouter();
 </script>

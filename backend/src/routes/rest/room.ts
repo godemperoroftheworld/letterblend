@@ -7,7 +7,7 @@ const router = express.Router();
 const TOKEN_LENGTH = 8;
 
 router.post("/",
-    body("users").isArray({ min: 1 }),
+    body("users").isArray({ min: 1, max: 5 }),
     body("top").default(10).isInt({ min: 1, max: 30 }),
     body("threshold").default(0.5).isFloat({ min: 0, max: 1 }),
     validate,
@@ -26,17 +26,11 @@ router.put('/:id/settings',
     validate,
     roomHandlers.updateSettingsHandler,
 );
-router.post('/:id/user/:name',
+router.put('/:id/users',
     param("id").isString().isLength({ min: TOKEN_LENGTH, max: TOKEN_LENGTH }),
-    param('name').isString().notEmpty(),
+    body("users").isArray({ min: 1, max: 5 }),
     validate,
-    roomHandlers.addUserHandler,
-);
-router.delete('/:id/user/:name',
-    param("id").isString().isLength({ min: TOKEN_LENGTH, max: TOKEN_LENGTH }),
-    body('settings').isString().notEmpty(),
-    validate,
-    roomHandlers.removeUserHandler,
+    roomHandlers.updateUsersHandler,
 );
 router.post(
   "/:id/start",

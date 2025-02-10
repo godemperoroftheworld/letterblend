@@ -47,10 +47,3 @@ export interface FormProps<T extends FormObject> {
   defaults?: T;
   loading?: boolean;
 }
-
-// DATA FORM
-export type StrippedFormProps<V extends FormObject> = Omit<FormProps<V>, 'submitted'>;
-export type DataFormProps<T, V extends FormObject> = StrippedFormProps<V> & {
-  mutation: () => UseMutationReturnType<T, DefaultError, V, unknown, unknown>;
-  fields: FormFields<UnwrapRef<V>>;
-};

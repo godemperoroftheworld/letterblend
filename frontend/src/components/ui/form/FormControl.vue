@@ -16,47 +16,54 @@
   const touched = ref(false);
   const showValidation = ref(false);
   const model = defineModel<T>();
-  watch(model, async (val) => {
-    fieldRef.value?.setValue(val);
+  const fieldModel = computed({
+    get: () => model.value,
+    set(val) {
+      model.value = val;
+      fieldRef.value?.setValue(val);
+    },
   });
   onMounted(() => {
-    model.value = fieldRef.value?.value;
     showValidation.value = formProps.validateOnMount;
   });
+  watch(
+    () => fieldRef.value?.value,
+    (val) => {
+      model.value = val;
+    },
+    { immediate: true },
+  );
 </script>
 
 <template>
-  <div
-    class="relative"
+  <labeled-value
+    :name="name"
+    :label="label"
+    :label-size="labelSize"
+    :uppercase="uppercase"
+    :errored="touched && errored"
+    :success="(showValidation || touched) && !errored"
     @click="touched = true">
-    <labeled-value
+    <field
+      ref="fieldRef"
       :name="name"
-      :label="label"
-      :label-size="labelSize"
-      :uppercase="uppercase"
-      :errored="touched && errored"
-      :success="(showValidation || touched) && !errored">
-      <field
-        ref="fieldRef"
-        class="w-64 max-w-full"
+      :rules="rules">
+      <component
+        :is="as"
+        v-model="fieldModel"
         :name="name"
-        :rules="rules">
-        <component
-          :is="as"
-          v-model="model"
-          :name="name"
-          v-bind="props"
-          :class="{ 'bg-paper text-paper animate-pulse': loading }" />
-      </field>
-      <div
-        v-show="loadingValidation"
-        class="absolute top-0 right-2 bottom-0 my-auto h-6 w-6">
-        <loading-icon />
-      </div>
-    </labeled-value>
+        v-bind="props"
+        class="w-64 max-w-full"
+        :class="{ 'bg-paper text-paper animate-pulse': loading }" />
+    </field>
+    <div
+      v-show="loadingValidation"
+      class="absolute top-0 right-2 bottom-0 my-auto h-6 w-6">
+      <loading-icon />
+    </div>
     <error-message
       v-show="touched"
       class="absolute right-0 -bottom-0.5 translate-y-full text-right text-xs text-red-600"
       :name="name" />
-  </div>
+  </labeled-value>
 </template>

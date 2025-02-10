@@ -14,7 +14,7 @@
 
 <template>
   <div
-    class="flex flex-col"
+    class="flex max-w-full min-w-0 shrink flex-col"
     :class="{ 'gap-0.5': isSmallLabel, 'gap-2': !isSmallLabel }">
     <label
       v-show="label"
@@ -39,9 +39,3 @@
     </div>
   </div>
 </template>
-
-<style lang="scss">
-  .form-control > input {
-    width: 100%;
-  }
-</style>

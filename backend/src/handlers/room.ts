@@ -62,24 +62,17 @@ const updateSettingsHandler: RequestHandler = async (req, res) => {
 }
 
 interface UserParams extends RoomParams {
-  user: string;
+  users: string[];
 }
-const addUserHandler: RequestHandler = async (req, res) => {
-  const { id, user } = getData<UserParams>(req);
+const updateUsersHandler: RequestHandler = async (req, res) => {
+  const { id, users } = getData<UserParams>(req);
   const headerUser = req.header("X-Letterboxd-User") as string;
   const service = new RoomService(headerUser);
   const room = await service.getRoom(id);
-  const newUsers = [...room.users, user];
-  return service.updateRoomUsers(id, newUsers);
-}
-const removeUserHandler: RequestHandler = async (req, res) => {
-  const { id, user } = getData<UserParams>(req);
-  const headerUser = req.header("X-Letterboxd-User") as string;
-  const service = new RoomService(headerUser);
-  const room = await service.getRoom(id);
-  const userIdx = room.users.indexOf(user);
-  const newUsers = room.users.splice(userIdx, 1);
-  return service.updateRoomUsers(id, newUsers);
+  const newUsers = uniq([headerUser, ...users]);
+  const newMovies = await getBlendedList({ names: newUsers, ...room.settings });
+  const newRoom = await service.updateRoom(id, { users: newUsers, movies: newMovies });
+  res.status(HttpStatusCode.Ok).send(newRoom);
 }
 
 export default {
@@ -88,6 +81,5 @@ export default {
   deleteRoomHandler,
   startRoomHandler,
   updateSettingsHandler,
-  addUserHandler,
-  removeUserHandler
+  updateUsersHandler
 };

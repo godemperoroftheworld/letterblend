@@ -26,13 +26,9 @@ router.put(
   param('id').isString().notEmpty(),
   body('movies').isArray({ min: 1 }).optional(),
   body('settings').isObject().optional(),
-  validator,
-  restHandlers.onPutRoom,
-);
-router.put("/:id/users", param('id').isString().notEmpty(),
   body('users').isArray({ min: 1 }).optional(),
   validator,
-  restHandlers.onPutUsers,
+  restHandlers.onPutRoom,
 );
 router.post('/:id/start', param('id').isString().notEmpty(), validator, restHandlers.onStartRoom);
 router.delete('/:id', param('id').isString().notEmpty(), validator, restHandlers.onDeleteRoom);

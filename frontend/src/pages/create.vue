@@ -1,24 +1,19 @@
 <script setup lang="ts">
   import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
-  import FormView, { type FormExpose } from '@/components/ui/form/FormView.vue';
+  import type { FormExpose } from '@/components/ui/form/FormView.vue';
   import TextButton from '@/components/ui/button/TextButton.vue';
-  import NameField from '@/components/ui/NameField.vue';
   import CardView, { type CardExpose } from '@/components/ui/CardView.vue';
   import type { FormObject } from '@/components/ui/form/types';
   import { computedDeep } from '@/utils/computed';
-  import { useDataQuery } from '@/utils/query';
-  import { queryClient } from '@/plugins/query';
-  import { uniq } from 'lodash';
   import InfoMessage from '@/components/ui/InfoMessage.vue';
   import { useAddRoom } from '@/composables/mutation/room';
-  import useUser from '@/composables/user';
+  import BlendUsers from '@/components/blend/BlendUsers.vue';
 
   // Setup
   interface FormResult {
     name: string[];
   }
   const router = useRouter();
-  const { user: storageName } = useUser();
 
   // Constants
   const USER_COLLAPSE_COUNT = 3;
@@ -37,10 +32,10 @@
   const collapsableSettings = ref<CardExpose>();
 
   // Form Data
-  const userForm = ref<FormExpose<FormObject>>();
-  const settingsForm = ref<FormExpose<FormObject>>();
-  const userNames = computed<string[]>(() => userForm.value?.values?.name ?? []);
-  const userValid = computedDeep(() => !!userForm.value?.valid);
+  const userForm = ref<{ data: FormExpose<FormObject> }>();
+  const settingsForm = ref<{ data: FormExpose<FormObject> }>();
+  const userNames = computed<string[]>(() => userForm.value?.data.values?.name ?? []);
+  const userValid = computedDeep(() => !!userForm.value?.data.valid);
   const settingsValid = computedDeep(() => !!settingsForm.value?.data.valid);
   watch(userNames, (val, oldVal) => {
     if (val.length < oldVal.length) {
@@ -53,26 +48,6 @@
       }
     }
   });
-
-  // Autocomplete
-  const fixedNames = computed(() => {
-    return uniq([
-      storageName.value,
-      ...userNames.value
-        .filter((u) => !!u)
-        .filter((u) => {
-          const value = queryClient.getQueryData(['exists', u]);
-          return value ? value.exists : false;
-        }),
-    ]);
-  });
-  const { data: friends } = useDataQuery(['friends', storageName, fixedNames], '/user/friends', {
-    config: {
-      method: 'POST',
-      data: { names: fixedNames },
-    },
-    transform: (data) => Object.keys(data),
-  });
 </script>
 
 <template>
@@ -84,26 +59,10 @@
         <info-message class="mx-auto mb-4 w-full lg:mb-8">
           Enter your friend's usernames. There can be up to five of you.
         </info-message>
-        <form-view
+        <blend-users
           ref="userForm"
-          name="userForm"
-          :fields="{
-            name: {
-              as: NameField,
-              rules: validateLetterboxdName,
-              validateOnMount: true,
-              props: {
-                options: friends ?? [],
-                debounceMs: 200,
-              },
-              array: true,
-              length: { min: 2, max: 5 },
-            },
-          }"
-          :show-submit-button="false"
-          :defaults="{ name: [storageName, ''] }"
-          :submitted="submitted">
-        </form-view>
+          :submitted="submitted"
+          :show-submit-button="false" />
       </card-view>
       <card-view
         ref="collapsableSettings"
@@ -121,9 +80,9 @@
       text="Submit"
       button-style="submit"
       class="max-sm:w-full sm:w-64"
-      :loading="userForm?.submitting"
+      :loading="userForm?.data.submitting"
       :disabled="!userValid || !settingsValid"
-      @keyup.enter="userForm?.submit()"
-      @click.prevent="userForm?.submit()" />
+      @keyup.enter="userForm?.data.submit()"
+      @click.prevent="userForm?.data.submit()" />
   </div>
 </template>

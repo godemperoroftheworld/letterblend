@@ -17,12 +17,8 @@ export default class RoomService {
     return this.service.get(`/${id}`).then((r) => r.data);
   }
 
-  async updateRoom(id: string, params: { movies?: Movie[], settings?: Settings }): Promise<Room> {
+  async updateRoom(id: string, params: { movies?: Movie[], settings?: Settings, users?: string[] }): Promise<Room> {
     return await this.service.put(`/${id}`, params).then((r) => r.data);
-  }
-
-  async updateRoomUsers(id: string, users: string[]) {
-    return await this.service.put(`/${id}/users`, { users }).then((r) => r.data);
   }
 
   async deleteRoom(id: string) {

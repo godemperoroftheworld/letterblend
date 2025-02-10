@@ -81,22 +81,7 @@ export default class RoomsService {
     return null;
   }
 
-  async updateUsers(room: Room, usernames: string[]) {
-    if (room && !room.started) {
-      const users = usernames.map((username) => {
-        const user = room.users.find((u) => u.user === username);
-        if (user) return user;
-        return { user: username, swipes: [] }
-      });
-      await this.rooms.updateOne({ code: room.code }, {
-        $set: {
-          users
-        }
-      })
-    }
-  }
-
-  async updateRoom(partial: Partial<Pick<RoomStripped, 'code' | 'settings' | 'movies' | 'started'>>) {
+  async updateRoom(partial: Partial<Pick<RoomStripped, 'code' | 'settings' | 'movies' | 'started' | 'users'>>) {
     const { code, ...values } = partial;
     await this.rooms.updateOne({ code }, {
       $set: Object.entries(values)

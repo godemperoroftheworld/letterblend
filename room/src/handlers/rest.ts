@@ -54,16 +54,20 @@ const onDeleteRoom: RequestHandler = async (req, res) => {
 
 const onPutRoom: RequestHandler = async (req, res) => {
   const { id } = req.params;
-  const { movies, settings } = req.body;
-  const hasRoom = RoomsService.instance.hasRoom(id);
-  if (!hasRoom) {
+  const { movies, settings, users } = req.body;
+  const room = await RoomsService.instance.getRoom(id);
+  if (!room) {
     res.status(400).send({ errors: ['Room does not exist'] });
+    return;
+  } else if (room!.started) {
+    res.status(HttpStatusCode.BadRequest).send({ errors: ['Room is started, cannot update'] });
     return;
   }
   try {
     await RoomsService.instance.updateRoom({
       code: id,
-      movies: movies.map((movie: Movie) => ({ ...movie, likes: 0, dislikes: 0})),
+      movies: movies?.map((movie: Movie) => ({ ...movie, likes: 0, dislikes: 0})),
+      users: users?.map((user: string) => ({ user, swipes: [] })),
       settings
     })
     const room = await RoomsService.instance.getRoomStripped(id);
@@ -74,24 +78,6 @@ const onPutRoom: RequestHandler = async (req, res) => {
   }
 };
 
-const onPutUsers: RequestHandler = async (req, res) => {
-  const { id } = req.params;
-  const { users } = req.body;
-  if (!RoomsService.instance.hasRoom(id)) {
-    res.status(400).send({ errors: ['Room does not exist'] });
-    return;
-  }
-  const room = await RoomsService.instance.getRoom(id);
-  if (room!.started) {
-    res.status(HttpStatusCode.BadRequest).send({ errors: ['Room is started'] });
-  }
-  try {
-    await RoomsService.instance.updateUsers(room!, users);
-  } catch (e: any) {
-    const error = e as MongoServerError;
-    res.status(HttpStatusCode.InternalServerError).send({ errors: error.errInfo?.details?.schemaRulesNotSatisfied ?? error.message });
-  }
-}
 
 const onStartRoom: RequestHandler = async (req, res) => {
   const { id } = req.params;
@@ -132,6 +118,5 @@ export default {
   onPostRoom,
   onDeleteRoom,
   onPutRoom,
-  onPutUsers,
   onStartRoom,
 }

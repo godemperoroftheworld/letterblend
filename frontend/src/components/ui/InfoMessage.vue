@@ -2,7 +2,7 @@
   import { IconInfoCircle } from '@tabler/icons-vue';
 
   interface Props {
-    color: 'info' | 'primary' | 'secondary';
+    color?: 'info' | 'primary' | 'secondary';
   }
   const props = withDefaults(defineProps<Props>(), {
     color: 'info',

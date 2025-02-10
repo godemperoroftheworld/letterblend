@@ -1,7 +1,9 @@
 @use './variables';
+@use "sass:color";
 
 .button {
     cursor: pointer;
+    background-color: variables.$color-secondary;
 
     &.button-submit {
         background-color: variables.$color-primary;
@@ -25,19 +27,19 @@
     }
 
     &:hover,&:active {
-        background-color: darken(variables.$color-secondary, 5%);
+        background-color: color.adjust(variables.$color-secondary, $lightness: -5%);
 
         &.button-submit {
-            background-color: darken(variables.$color-primary, 5%);
+            background-color: color.adjust(variables.$color-primary, $lightness: -5%);
         }
         &.button-danger {
-            background-color: darken(red, 5%);
+            background-color: color.adjust(red, $lightness: -5%);
         }
         &.button-info {
-            background-color: darken(variables.$color-info, 5%);
+            background-color: color.adjust(variables.$color-info, $lightness: -5%);
         }
         &.button-disabled {
-            background-color: darken(gray, 5%);
+            background-color: color.adjust(gray, $lightness: -5%);
         }
         &.button-hollow {
             background-color: variables.$color-paper;
