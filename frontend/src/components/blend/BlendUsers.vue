@@ -78,6 +78,6 @@
     :loading="loading"
     :show-submit-button="showSubmitButton"
     :defaults="{ name: values }"
-    :submitted="({ name }) => props.submitted(name)">
+    :submitted="({ name }) => props.submitted({ name })">
   </form-view>
 </template>
