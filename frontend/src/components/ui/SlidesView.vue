@@ -2,7 +2,7 @@
   import { IconChevronLeft, IconChevronRight } from '@tabler/icons-vue';
   import { useCycleList } from '@vueuse/core';
   import LabeledImage, { type LabeledImageProps } from '@/components/ui/LabeledImage.vue';
-  import ProgressIcon from '@/components/icons/ProgressIcon.vue';
+  import ProgressIcon from '@/components/ui/icons/ProgressIcon.vue';
 
   interface Props {
     slides: LabeledImageProps[];

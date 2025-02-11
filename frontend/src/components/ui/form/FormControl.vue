@@ -2,7 +2,7 @@
   import { ErrorMessage, Field, type FieldContext } from 'vee-validate';
   import type { FieldProps } from './types';
   import LabeledValue from '../LabeledValue.vue';
-  import LoadingIcon from '@/components/icons/LoadingIcon.vue';
+  import LoadingIcon from '@/components/ui/icons/LoadingIcon.vue';
   import type { UnwrapNestedRefs } from 'vue';
 
   const formProps = withDefaults(defineProps<FieldProps<T> & { loading?: boolean }>(), {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import LoadingIcon from '@/components/icons/LoadingIcon.vue';
+  import LoadingIcon from '@/components/ui/icons/LoadingIcon.vue';
   import useLoader from '@/composables/load';
 
   const { loading } = useLoader();

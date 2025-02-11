@@ -32,6 +32,7 @@ export interface Room extends Document, Omit<RoomStripped, 'users' | 'movies'> {
     likes: number;
     dislikes: number;
   }>;
+  createdAt?: Date;
 }
 
 export default class RoomsService {
@@ -53,7 +54,7 @@ export default class RoomsService {
 
   async createRoom(partial: Omit<Room, 'code'>) {
     const code = this.generateCode();
-    const room = { ...partial, code } as Room;
+    const room = { ...partial, code, createdAt: new Date() } as Room;
     await this.rooms.insertOne(room);
     return this.getRoomStripped(code);
   }

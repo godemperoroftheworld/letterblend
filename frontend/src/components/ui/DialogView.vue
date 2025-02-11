@@ -5,11 +5,26 @@
   interface Props {
     show: boolean;
     title?: string;
+    width?: 'sm' | 'md' | 'lg' | 'xl';
   }
-  defineProps<Props>();
+  const props = defineProps<Props>();
   const emits = defineEmits(['close']);
 
   const contentRef = ref();
+  const maxWidth = computed(() => {
+    switch (props.width) {
+      case 'sm':
+        return 'w-sm';
+      case 'md':
+        return 'w-md';
+      case 'lg':
+        return 'w-lg';
+      case 'xl':
+        return 'w-xl';
+      default:
+        return 'w-fit';
+    }
+  });
 </script>
 
 <template>
@@ -22,14 +37,18 @@
           @click="emits('close')" />
       </transition>
       <transition name="scale">
-        <content-view
+        <div
           v-show="show"
           ref="contentRef"
-          class="absolute-center z-10 h-fit w-full max-w-lg p-2">
-          <card-view :title="title">
-            <slot v-bind="{ close: () => emits('close') }" />
-          </card-view>
-        </content-view>
+          class="absolute-center z-10 h-fit w-fit max-w-dvw p-4">
+          <content-view
+            :class="maxWidth"
+            class="max-w-full p-2">
+            <card-view :title="title">
+              <slot v-bind="{ close: () => emits('close') }" />
+            </card-view>
+          </content-view>
+        </div>
       </transition>
     </div>
   </teleport>

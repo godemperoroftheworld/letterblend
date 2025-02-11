@@ -13,6 +13,8 @@
   import useUser from '@/composables/user';
   import AvatarView from '@/components/ui/AvatarView.vue';
   import DialogView from '@/components/ui/DialogView.vue';
+  import InfoMessage from '@/components/ui/InfoMessage.vue';
+  import ConfirmDialog from '@/components/ui/ConfirmDialog.vue';
 
   // Room info
   const route = useRoute();
@@ -27,14 +29,17 @@
   const breakpoints = useBreakpoints(breakpointsTailwind);
   const isSmall = breakpoints.smaller('md');
   const showEditUsers = ref(false);
-  watch(showEditUsers, (val) => {
-    console.log(val);
-  });
+  const showConfirmDialog = ref(false);
 
   // Settings Update
+  const settingsValue = ref<RoomSettings>();
   const { mutateAsync: updateSettings } = useUpdateSettings();
-  async function settingsSubmitted(settings: RoomSettings) {
-    await updateSettings({ id: room.value!.code, settings });
+  function settingsClicked(settings: RoomSettings) {
+    settingsValue.value = settings;
+    showConfirmDialog.value = true;
+  }
+  async function settingsSubmitted() {
+    await updateSettings({ id: room.value!.code, settings: settingsValue.value });
   }
 
   // Users update
@@ -64,42 +69,44 @@
     <card-view
       class="basis-2/3"
       title="Results">
-      <carousel-view
-        class="mx-auto"
-        :entries="results"
-        :loading="isFetching">
-        <template #placeholder>
-          <movie-poster class="w-full" />
-        </template>
-        <template #default="data: Movie">
-          <movie-poster
-            class="w-full"
-            :data="data" />
-        </template>
-      </carousel-view>
-      <template v-if="isSmall">
-        <generic-button
-          class="mx-auto w-64"
-          button-style="info"
-          @click="share">
-          <icon-share />
-          Share
-        </generic-button>
-      </template>
-      <template v-else>
-        <tippy
-          class="mx-auto block w-fit"
-          content="Copied to clipboard."
-          trigger="click">
+      <div class="flex h-full flex-col items-center justify-between">
+        <carousel-view
+          class="mx-auto"
+          :entries="results"
+          :loading="isFetching">
+          <template #placeholder>
+            <movie-poster class="w-full" />
+          </template>
+          <template #default="data: Movie">
+            <movie-poster
+              class="w-full"
+              :data="data" />
+          </template>
+        </carousel-view>
+        <template v-if="isSmall">
           <generic-button
-            class="w-64"
+            class="mx-auto w-64"
             button-style="info"
             @click="share">
             <icon-share />
             Share
           </generic-button>
-        </tippy>
-      </template>
+        </template>
+        <template v-else>
+          <tippy
+            class="mx-auto block w-fit"
+            content="Copied to clipboard."
+            trigger="click">
+            <generic-button
+              class="w-64"
+              button-style="info"
+              @click="share">
+              <icon-share />
+              Share
+            </generic-button>
+          </tippy>
+        </template>
+      </div>
     </card-view>
     <div class="flex basis-1/3 flex-col gap-4">
       <card-view title="Users">
@@ -139,7 +146,7 @@
         :collapsable="isSmall"
         title="Settings">
         <blend-settings
-          :submitted="settingsSubmitted"
+          :submitted="settingsClicked"
           :loading="isFetching"
           :values="room?.settings"
           submit-button-text="Update"
@@ -149,12 +156,27 @@
     <dialog-view
       v-if="room"
       title="Edit Users"
+      width="xl"
       :show="showEditUsers"
       @close="showEditUsers = false">
+      <info-message class="mx-auto mb-4">
+        Updating the users for the room will re-compute the blend. This action is irreversible.
+      </info-message>
       <blend-users
         :loading="isFetching"
         :values="room.users"
         :submitted="usersSubmitted" />
     </dialog-view>
+    <confirm-dialog
+      :show="showConfirmDialog"
+      @close="showConfirmDialog = false"
+      @submit="settingsSubmitted">
+      <info-message class="mx-auto mb-2">
+        Updating the blend settings will re-compute the blend. This action is irreversible.
+      </info-message>
+      <div class="text-secondary mx-auto w-fit font-medium italic">
+        Are you sure you want to update this blend?
+      </div>
+    </confirm-dialog>
   </div>
 </template>

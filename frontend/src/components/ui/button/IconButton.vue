@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { Icon } from '@tabler/icons-vue';
   import { computed } from 'vue';
-  import LoadingIcon from '@/components/icons/LoadingIcon.vue';
+  import LoadingIcon from '@/components/ui/icons/LoadingIcon.vue';
 
   interface Props {
     icon: Icon;
