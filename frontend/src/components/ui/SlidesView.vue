@@ -105,7 +105,7 @@
       :description="nextState.description" />
     <div class="absolute top-1/2 right-0 max-h-11 max-w-11 -translate-y-1/2 cursor-pointer">
       <button
-        class="bg-content z-1 cursor-pointer rounded-full p-1.5"
+        class="bg-content z-1 cursor-pointer rounded-full p-1"
         @click.prevent="goNext"
         @keyup.enter="goNext">
         <icon-chevron-right class="h-8 w-8" />

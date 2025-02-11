@@ -41,7 +41,7 @@
             image: '/img/movie.svg',
           },
         ]"
-        :autoplay="0" />
+        :autoplay="5000" />
     </card-view>
   </div>
 </template>
