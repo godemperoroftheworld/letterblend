@@ -9,7 +9,7 @@
     autoplay?: number;
   }
   const props = defineProps<Props>();
-  const { state, next, prev, index } = useCycleList(props.slides);
+  const { state, next, prev, index, go } = useCycleList(props.slides);
 
   const steps = computed(() => props.slides.length);
   const prevIndex = computed(() => {
@@ -37,7 +37,10 @@
     }
   }
 
-  // Navigation animation
+  // Pagination
+  const count = computed(() => props.slides.length);
+
+  // Navigation
   const clicked = ref(false);
   const goingNext = ref(false);
   let nextTimer: ReturnType<typeof setTimeout>;
@@ -60,6 +63,7 @@
     }, 300);
   }
 
+  // Listeners
   onMounted(doAutoplay);
   watch(() => props.autoplay, doAutoplay);
   watch(clicked, (val) => {
@@ -85,18 +89,18 @@
       <icon-chevron-left class="h-8 w-8" />
     </button>
     <labeled-image
-      class="slider-prev absolute h-full w-full -translate-x-full px-11"
-      :title="`(${prevIndex + 1}) ${prevState.title}`"
+      class="slider-prev absolute h-[calc(100%-2rem)] w-full -translate-x-full px-11"
+      :title="`${prevState.title}`"
       :image="prevState.image"
       :description="prevState.description" />
     <labeled-image
-      class="slider-current h-full"
-      :title="`(${index + 1}) ${state.title}`"
+      class="slider-current h-[calc(100%-2rem)]"
+      :title="`${state.title}`"
       :image="state.image"
       :description="state.description" />
     <labeled-image
-      class="slider-next absolute h-full w-full translate-x-full px-11"
-      :title="`(${nextIndex + 1}) ${nextState.title}`"
+      class="slider-next absolute h-[calc(100%-2rem)] w-full translate-x-full px-11"
+      :title="`${nextState.title}`"
       :image="nextState.image"
       :description="nextState.description" />
     <div class="absolute top-1/2 right-0 max-h-11 max-w-11 -translate-y-1/2 cursor-pointer">
@@ -112,6 +116,14 @@
         :enable="!clicked"
         :time-ms="autoplay"
         loop />
+    </div>
+    <div class="absolute right-1/2 bottom-0 left-1/2 flex h-2.5 w-max -translate-x-1/2 gap-1">
+      <span
+        v-for="idx in count"
+        :key="idx"
+        :class="{ '!bg-white': idx === index + 1 }"
+        class="bg-paper inline-block h-2.5 w-2.5 cursor-pointer rounded-full"
+        @click="go(idx - 1)" />
     </div>
   </div>
 </template>
