@@ -2,12 +2,14 @@
   import InputField, { type InputProps } from '@/components/ui/InputField.vue';
   import { useFuse } from '@vueuse/integrations/useFuse';
 
+  // Setup
   export interface DropdownProps<T> extends InputProps<T> {
     options?: string[];
   }
   defineOptions({ inheritAttrs: false });
   const props = withDefaults(defineProps<DropdownProps<T>>(), { options: [] });
   const model = defineModel<T>();
+  const fieldRef = ref();
 
   // Internal value, no debounce
   const innerValue = ref<T>();
@@ -19,11 +21,14 @@
     resultLimit: 5,
   });
   const dropdownOptions = computed(() => {
-    return matchingOptions.results.value.sort((a, b) => a.score - b.score).map((v) => v.item);
+    return matchingOptions.results.value.toSorted((a, b) => a.score - b.score).map((v) => v.item);
+  });
+  const { width } = useElementSize(fieldRef);
+  const dropdownWidthStyle = computed(() => {
+    return { width: `${width.value}px` };
   });
 
   // Selection
-  const fieldRef = ref();
   const opened = ref(false);
   onClickOutside(fieldRef, () => {
     opened.value = false;
@@ -51,7 +56,8 @@
     <div
       v-show="opened"
       ref="dropdownRef"
-      class="bg-content absolute z-10 mt-1 w-full rounded-b text-sm">
+      :style="dropdownWidthStyle"
+      class="bg-content fixed z-10 mt-1 w-full rounded-b text-sm">
       <div class="flex flex-col">
         <a
           v-for="(entry, idx) in dropdownOptions"
