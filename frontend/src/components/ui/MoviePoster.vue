@@ -10,7 +10,7 @@
   <div class="relative">
     <template v-if="data">
       <a
-        v-tippy="data.name"
+        v-tippy="{ content: data.name, touch: 'hold' }"
         :href="`https://letterboxd.com/tmdb/${data.id}`"
         target="_blank"
         class="aspect-[2/3] w-full">
