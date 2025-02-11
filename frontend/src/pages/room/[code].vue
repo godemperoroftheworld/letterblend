@@ -39,8 +39,8 @@
 
   // Users update
   const { mutateAsync: updateUsers } = useUpdateUsers();
-  async function usersSubmitted(users: string[]) {
-    await updateUsers({ id: room.value!.code, users });
+  async function usersSubmitted(data: { name: string[] }) {
+    await updateUsers({ id: room.value!.code, users: data.name });
     showEditUsers.value = false;
   }
 
