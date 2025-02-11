@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from letterboxdpy import user, movie
 import re
 
@@ -19,10 +19,11 @@ def get_profile(name):
     return user_instance.avatar
 
 
-@users.route("/<name>/watchlist")
+@users.post("/<name>/watchlist")
 def get_watchlist(name):
+    filters = request.json
     user_instance = user.User(name)
-    watchlist = user.user_watchlist(user_instance)
+    watchlist = user.user_watchlist(user_instance, filters)
     return watchlist
 
 @users.route("/<name>/watched")
