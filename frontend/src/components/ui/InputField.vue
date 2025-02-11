@@ -34,7 +34,6 @@
 <template>
   <input
     v-model="innerValue"
-    :class="textClass"
     :type="type"
     :step="step"
     class="focus:outline-info bg-content box-border max-w-full rounded p-2 outline-offset-2 focus:outline-1" />

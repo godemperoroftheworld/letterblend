@@ -26,7 +26,7 @@
     :disabled="disabled || loading"
     :class="bgClass">
     <template v-if="loading">
-      <loading-icon class="mx-auto animate-spin" />
+      <loading-icon class="mx-auto h-6 w-6 animate-spin" />
     </template>
     <template v-else>
       <slot />

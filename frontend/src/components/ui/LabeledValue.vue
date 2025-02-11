@@ -32,7 +32,7 @@
       {{ label }}
       <icon-info-circle
         v-if="tooltip"
-        v-tippy="{ content: tooltip, allowHTML: true }"
+        v-tippy="tooltip"
         class="text-info absolute top-0 left-full h-5 w-5 translate-x-1 cursor-pointer" />
     </label>
     <div

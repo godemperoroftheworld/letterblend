@@ -132,5 +132,9 @@ export function useDataQuery<T, E = DefaultError, R = T>(
       Notifier.instance().error({ title: val.name, message: val.message });
     }
   });
-  return { data: newData, ...rest } as unknown as DataQueryReturnType<T, E, R>;
+  return {
+    data: newData,
+    error,
+    ...rest,
+  } as unknown as DataQueryReturnType<T, E, R>;
 }

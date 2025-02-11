@@ -37,7 +37,7 @@
     <h3 class="text-center text-lg font-bold uppercase italic">
       {{ title }}
     </h3>
-    <template v-if="collapsable">
+    <client-only v-if="collapsable">
       <input
         v-model="open"
         class="absolute top-0 left-0 h-16 w-full cursor-pointer opacity-0"
@@ -50,7 +50,7 @@
           v-else
           class="h-7 w-7" />
       </div>
-    </template>
+    </client-only>
     <div class="grow">
       <slot />
     </div>

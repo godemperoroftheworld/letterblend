@@ -23,6 +23,7 @@
   const { data: room, isFetching } = useRoom(code, {
     enabled: hasName,
   });
+  onServerPrefetch(() => {});
   const results = computed(() => room.value?.movies);
 
   // State
@@ -83,29 +84,15 @@
               :data="data" />
           </template>
         </carousel-view>
-        <template v-if="isSmall">
-          <generic-button
-            class="mx-auto w-64"
-            button-style="info"
-            @click="share">
-            <icon-share />
-            Share
-          </generic-button>
-        </template>
-        <template v-else>
-          <tippy
-            class="mx-auto block w-fit"
-            content="Copied to clipboard."
-            trigger="click">
-            <generic-button
-              class="w-64"
-              button-style="info"
-              @click="share">
-              <icon-share />
-              Share
-            </generic-button>
-          </tippy>
-        </template>
+        <generic-button
+          v-tippy="isSmall ? { content: 'Copied to clipboard.', trigger: 'click' } : undefined"
+          class="w-64"
+          button-style="info"
+          :loading="isFetching"
+          @click="share">
+          <icon-share />
+          Share
+        </generic-button>
       </div>
     </card-view>
     <div class="flex basis-1/3 flex-col gap-4">
@@ -170,7 +157,7 @@
     <confirm-dialog
       :show="showConfirmDialog"
       @close="showConfirmDialog = false"
-      @submit="settingsSubmitted">
+      @confirm="settingsSubmitted">
       <info-message class="mx-auto mb-2">
         Updating the blend settings will re-compute the blend. This action is irreversible.
       </info-message>
