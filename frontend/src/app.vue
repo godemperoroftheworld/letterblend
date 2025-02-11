@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Loader from '@/components/ui/Loader.vue';
   import Particles from '@/components/Particles.vue';
+  import { SpeedInsights } from '@vercel/speed-insights/nuxt';
 </script>
 
 <template>
@@ -18,6 +19,7 @@
   </nuxt-layout>
   <loader />
   <particles />
+  <speed-insights />
 </template>
 
 <style lang="scss">
