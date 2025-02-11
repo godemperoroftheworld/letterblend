@@ -13,7 +13,7 @@
 </script>
 
 <template>
-  <div class="relative flex min-h-full flex-col items-center justify-center p-4 lg:p-8">
+  <div class="relative flex min-h-full flex-col items-center justify-center p-4">
     <content-view class="mb-2 w-fit md:hidden">
       <nuxt-link to="/">
         <logo class="h-32 w-32" />
@@ -41,7 +41,7 @@
           <logo class="h-40 w-40" />
         </nuxt-link>
       </div>
-      <main class="p-4 lg:p-8">
+      <main class="p-4">
         <slot />
       </main>
     </content-view>

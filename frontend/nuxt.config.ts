@@ -13,7 +13,12 @@ export default defineNuxtConfig({
       url: process.env.URL,
     },
   },
-
+  app: {
+    pageTransition: {
+      name: 'page',
+      mode: 'default',
+    },
+  },
   image: {
     providers: {
       raw: {

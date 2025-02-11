@@ -7,7 +7,7 @@
 </script>
 
 <template>
-  <div class="relative flex items-stretch gap-4 max-md:flex-col lg:gap-8">
+  <div class="relative flex items-stretch gap-4 max-md:flex-col">
     <card-view
       title="Get Started"
       justify="center"
@@ -18,7 +18,7 @@
       title="How-To"
       class="basis-2/5">
       <slides-view
-        class="max-h-full max-lg:h-64"
+        class="max-h-full max-lg:h-64 lg:h-96"
         :slides="[
           {
             title: 'Grab Some Friends',

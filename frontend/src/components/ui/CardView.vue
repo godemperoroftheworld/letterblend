@@ -32,7 +32,7 @@
 
 <template>
   <div
-    class="bg-background transition-default relative flex max-h-screen flex-col gap-4 overflow-hidden rounded-xl p-4 !pt-4 lg:p-8"
+    class="bg-background transition-default relative flex max-h-screen flex-col gap-4 overflow-hidden rounded-xl p-4 !pt-4"
     :class="{ '!max-h-14': shouldCollapse }">
     <h3 class="text-center text-lg font-bold uppercase italic">
       {{ title }}

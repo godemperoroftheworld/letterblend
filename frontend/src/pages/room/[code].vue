@@ -65,7 +65,7 @@
 </script>
 
 <template>
-  <div class="relative flex items-stretch gap-4 max-md:flex-col lg:gap-8">
+  <div class="relative flex items-stretch gap-4 max-md:flex-col">
     <card-view
       class="basis-2/3"
       title="Results">

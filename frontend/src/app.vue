@@ -23,11 +23,17 @@
 <style lang="scss">
   .page-enter-active,
   .page-leave-active {
-    transition: all 0.4s;
+    transition: all 0.5s ease;
+    position: absolute;
+    width: calc(100% - 2rem);
   }
-  .page-enter-from,
-  .page-leave-to {
+
+  .page-enter-from {
+    transform: translateX(calc(100% + 1rem));
     opacity: 0;
-    filter: blur(1rem);
+  }
+  .page-leave-to {
+    transform: translateX(calc(-100% - 1rem));
+    opacity: 0;
   }
 </style>

@@ -51,8 +51,8 @@
 </script>
 
 <template>
-  <div class="flex flex-col items-center gap-4 lg:gap-8">
-    <div class="relative flex w-full items-stretch gap-4 max-md:flex-col lg:gap-8">
+  <div class="flex flex-col items-center gap-4">
+    <div class="relative flex w-full items-stretch gap-4 max-md:flex-col">
       <card-view
         title="Users"
         class="basis-2/3">
