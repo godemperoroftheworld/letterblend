@@ -85,17 +85,17 @@
       <icon-chevron-left class="h-8 w-8" />
     </button>
     <labeled-image
-      class="slider-prev absolute w-full -translate-x-full px-11"
+      class="slider-prev absolute h-full w-full -translate-x-full px-11"
       :title="`(${prevIndex + 1}) ${prevState.title}`"
       :image="prevState.image"
       :description="prevState.description" />
     <labeled-image
-      class="slider-current"
+      class="slider-current h-full"
       :title="`(${index + 1}) ${state.title}`"
       :image="state.image"
       :description="state.description" />
     <labeled-image
-      class="slider-next absolute w-full translate-x-full px-11"
+      class="slider-next absolute h-full w-full translate-x-full px-11"
       :title="`(${nextIndex + 1}) ${nextState.title}`"
       :image="nextState.image"
       :description="nextState.description" />
@@ -137,6 +137,10 @@
       transform: translateX(-100%);
       opacity: 0;
     }
+
+    & > .slider-prev {
+      display: none;
+    }
   }
 
   .slider-content.go-back {
@@ -151,6 +155,10 @@
         fade 300ms ease;
       transform: translateX(100%);
       opacity: 0;
+    }
+
+    & > .slider-next {
+      display: none;
     }
   }
 

@@ -8,9 +8,9 @@
 </script>
 
 <template>
-  <div>
+  <div class="flex flex-col">
     <nuxt-img
-      class="h-full min-h-0 w-full min-w-0"
+      class="mb-2 h-full min-h-0 w-full min-w-0"
       :src="image" />
     <h3 class="text-center text-lg font-bold text-white capitalize">{{ title }}</h3>
     <p class="text-secondary text-center text-sm font-medium italic">{{ description }}</p>

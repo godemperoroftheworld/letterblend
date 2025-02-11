@@ -18,7 +18,7 @@
       title="How-To"
       class="basis-2/5">
       <slides-view
-        class="h-full"
+        class="max-h-full max-lg:h-64"
         :slides="[
           {
             title: 'Grab Some Friends',
