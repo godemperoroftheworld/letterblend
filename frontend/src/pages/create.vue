@@ -8,6 +8,8 @@
   import InfoMessage from '@/components/ui/InfoMessage.vue';
   import { useAddRoom } from '@/composables/mutation/room';
   import BlendUsers from '@/components/blend/BlendUsers.vue';
+  import AccordionView from '@/components/ui/AccordionView.vue';
+  import type { RoomSettings } from '@/types/room';
 
   // Setup
   interface FormResult {
@@ -17,6 +19,14 @@
 
   // Constants
   const USER_COLLAPSE_COUNT = 3;
+  const JUST_PICK_SETTINGS: RoomSettings = {
+    top: 1,
+    threshold: 1,
+  };
+  const SOME_OPTIONS_SETTINGS: RoomSettings = {
+    top: 5,
+    threshold: 0.5,
+  };
 
   // Functions
   const { mutateAsync: addRoom } = useAddRoom();
@@ -30,6 +40,9 @@
   const breakpoints = useBreakpoints(breakpointsTailwind);
   const isSmall = breakpoints.smaller('md');
   const collapsableSettings = ref<CardExpose>();
+
+  // Settings presets
+  const presetSettings = ref<RoomSettings>();
 
   // Form Data
   const userForm = ref<{ data: FormExpose<FormObject> }>();
@@ -67,13 +80,28 @@
       <card-view
         ref="collapsableSettings"
         class="basis-1/3"
-        title="Settings"
+        title="Blend Type"
         :collapsable="isSmall"
         :collapsed-default="false">
-        <info-message class="mx-auto mb-4 w-full lg:mb-8">
-          Configure your blend as you'd like it.
-        </info-message>
-        <blend-settings ref="settingsForm" />
+        <div class="flex flex-col items-center gap-4">
+          <info-message class="w-full"> Configure your blend as you'd like it. </info-message>
+          <accordion-view
+            :expand-default="true"
+            name="presets"
+            label="Presets">
+            <text-button
+              class="mb-2 block w-full"
+              text="Just Pick"
+              @click.prevent="presetSettings = JUST_PICK_SETTINGS" />
+            <text-button
+              class="block w-full"
+              text="A Few Options"
+              @click.prevent="presetSettings = SOME_OPTIONS_SETTINGS" />
+          </accordion-view>
+          <blend-settings
+            ref="settingsForm"
+            :values="presetSettings" />
+        </div>
       </card-view>
     </div>
     <text-button
