@@ -2,7 +2,7 @@
   import NameField from '@/components/ui/NameField.vue';
   import FormView from '@/components/ui/form/FormView.vue';
   import { useDataQuery } from '@/utils/query';
-  import { uniq } from 'lodash';
+  import uniq from 'lodash/uniq';
   import { queryClient } from '@/plugins/query';
   import useUser from '@/composables/user';
   import Cookies from 'js-cookie';
