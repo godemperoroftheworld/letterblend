@@ -54,7 +54,6 @@
   function share() {
     const data: ShareData = {
       title: 'Check out my Letterblend!',
-      text: "It's really awesome.",
       url: window.location.href,
     };
     if ('canShare' in navigator && navigator.canShare(data)) {
@@ -85,7 +84,7 @@
           </template>
         </carousel-view>
         <generic-button
-          v-tippy="isSmall ? { content: 'Copied to clipboard.', trigger: 'click' } : undefined"
+          v-tippy="!isSmall ? { content: 'Copied to clipboard.', trigger: 'click' } : undefined"
           class="w-64"
           button-style="info"
           :loading="isFetching"

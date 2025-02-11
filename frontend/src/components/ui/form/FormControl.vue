@@ -4,6 +4,7 @@
   import LabeledValue from '../LabeledValue.vue';
   import LoadingIcon from '@/components/ui/icons/LoadingIcon.vue';
   import type { UnwrapNestedRefs } from 'vue';
+  import { useFocusWithin } from '@vueuse/core';
 
   const formProps = withDefaults(defineProps<FieldProps<T> & { loading?: boolean }>(), {
     labelSize: 'sm',
@@ -43,8 +44,7 @@
     :uppercase="uppercase"
     :errored="touched && errored"
     :tooltip="tooltip"
-    :success="(showValidation || touched) && !errored"
-    @click="touched = true">
+    :success="(showValidation || touched) && !errored">
     <field
       ref="fieldRef"
       :name="name"
@@ -55,7 +55,9 @@
         :name="name"
         v-bind="props"
         class="w-64 max-w-full"
-        :class="{ 'bg-paper text-paper animate-pulse': loading }" />
+        :class="{ 'bg-paper text-paper animate-pulse': loading }"
+        @focus="touched = true"
+        @click="touched = true" />
     </field>
     <div
       v-show="loadingValidation"

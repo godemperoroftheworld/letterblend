@@ -51,7 +51,7 @@
         label: 'Threshold',
         rules: number().required().min(0).max(1),
         props: {
-          format: '0,00%',
+          format: '0,00.00%',
           percent: true,
         },
         tooltip: 'Percentage of users that need the film in their watchlist.',

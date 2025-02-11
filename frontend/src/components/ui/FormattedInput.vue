@@ -9,6 +9,8 @@
   };
   interface Emits {
     (e: 'changed', val: number): void;
+    (e: 'focus'): void;
+    (e: 'blur'): void;
   }
   const props = defineProps<FormattedInputProps<T>>();
   const emits = defineEmits<Emits>();
@@ -22,14 +24,13 @@
   watch(
     () => model.value,
     (val) => {
-      value.value = props.percent ? val * 100 : val;
+      value.value = val;
     },
     { immediate: true },
   );
   watch(value, (val) => {
-    const fixedValue = props.percent ? val / 100 : val;
-    updateValue(fixedValue);
-    emits('changed', fixedValue);
+    updateValue(val);
+    emits('changed', val);
   });
 
   // Computed
@@ -48,6 +49,10 @@
   onClickOutside(inputRef, () => (focused.value = false));
   watch(inputFieldRef, (val) => {
     if (val) val.focus();
+  });
+  watch(focused, (val) => {
+    if (val) emits('focus');
+    else emits('blur');
   });
 </script>
 
