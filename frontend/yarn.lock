@@ -877,24 +877,6 @@
     pathe "^2.0.2"
     unimport "^4.0.0"
 
-"@nuxt/image-edge@^1.3.0-28493895.369b747":
-  version "1.3.0-28493895.369b747"
-  resolved "https://registry.yarnpkg.com/@nuxt/image-edge/-/image-edge-1.3.0-28493895.369b747.tgz#58053e2afc1e7cd1b12d1f235a7e6e7de9b6be42"
-  integrity sha512-WNUIXOjZp8dNWheYH5qxvQBz3bz2rhNvUan8GvQ5cuaG1N2i2uqgOYdxrXREELnfxPqsEW2h+n1n+UCybHDxKQ==
-  dependencies:
-    "@nuxt/kit" "^3.10.3"
-    consola "^3.2.3"
-    defu "^6.1.4"
-    h3 "^1.11.1"
-    image-meta "^0.2.0"
-    node-fetch-native "^1.6.2"
-    ohash "^1.1.3"
-    pathe "^1.1.2"
-    std-env "^3.7.0"
-    ufo "^1.4.0"
-  optionalDependencies:
-    ipx "^2.1.0"
-
 "@nuxt/image@1.9.0":
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@nuxt/image/-/image-1.9.0.tgz#3692cf6ab533e1b173a81bdefcdf5a9f5ceeda09"
@@ -912,7 +894,7 @@
   optionalDependencies:
     ipx "^2.1.0"
 
-"@nuxt/kit@3.15.4", "@nuxt/kit@^3.10.3", "@nuxt/kit@^3.11.1", "@nuxt/kit@^3.15.0", "@nuxt/kit@^3.15.1", "@nuxt/kit@^3.15.4":
+"@nuxt/kit@3.15.4", "@nuxt/kit@^3.11.1", "@nuxt/kit@^3.15.0", "@nuxt/kit@^3.15.1", "@nuxt/kit@^3.15.4":
   version "3.15.4"
   resolved "https://registry.yarnpkg.com/@nuxt/kit/-/kit-3.15.4.tgz#122f511e518573320a035b5e24adf0118d51485d"
   integrity sha512-dr7I7eZOoRLl4uxdxeL2dQsH0OrbEiVPIyBHnBpA4co24CBnoJoF+JINuP9l3PAM3IhUzc5JIVq3/YY3lEc3Hw==
@@ -2525,6 +2507,11 @@ base64-js@^1.3.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.5.1.tgz#1b1b440160a5bf7ad40b650f095963481903930a"
   integrity sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==
+
+"bignumber.js@^8 || ^9":
+  version "9.1.2"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.1.2.tgz#b7c4242259c008903b13707983b5f4bbd31eda0c"
+  integrity sha512-2/mKyZH9K85bzOEfhXDBFZTGd1CTs+5IHpeFQo9luiBG7hghdC851Pj2WAhb6E3R6b9tZj/XKhbg4fum+Kepug==
 
 binary-extensions@^2.0.0:
   version "2.3.0"
@@ -4349,7 +4336,7 @@ gzip-size@^7.0.0:
   dependencies:
     duplexer "^0.1.2"
 
-h3@^1.10.0, h3@^1.11.1, h3@^1.12.0, h3@^1.13.0, h3@^1.13.1, h3@^1.14.0:
+h3@^1.10.0, h3@^1.12.0, h3@^1.13.0, h3@^1.13.1, h3@^1.14.0:
   version "1.14.0"
   resolved "https://registry.yarnpkg.com/h3/-/h3-1.14.0.tgz#292bf0602444b36fd6b333b1d6872d685ecc9899"
   integrity sha512-ao22eiONdgelqcnknw0iD645qW0s9NnrJHr5OBz4WOMdBdycfSas1EQf1wXRsm+PcB2Yoj43pjBPwqIpJQTeWg==
@@ -5513,7 +5500,7 @@ node-addon-api@^7.0.0:
   resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-7.1.1.tgz#1aba6693b0f255258a049d621329329322aad558"
   integrity sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==
 
-node-fetch-native@^1.6.2, node-fetch-native@^1.6.4, node-fetch-native@^1.6.6:
+node-fetch-native@^1.6.4, node-fetch-native@^1.6.6:
   version "1.6.6"
   resolved "https://registry.yarnpkg.com/node-fetch-native/-/node-fetch-native-1.6.6.tgz#ae1d0e537af35c2c0b0de81cbff37eedd410aa37"
   integrity sha512-8Mc2HhqPdlIfedsuZoc3yioPuzp6b+L5jRCRY1QzuWZh2EGJVQrGppC6V6cF0bLdbW0+O2YpqCA25aF/1lvipQ==
@@ -5620,6 +5607,13 @@ nth-check@^2.0.1, nth-check@^2.1.1:
   integrity sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==
   dependencies:
     boolbase "^1.0.0"
+
+numbro@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/numbro/-/numbro-2.5.0.tgz#a16c6e65a692b96c1629a392be9a50984b194e73"
+  integrity sha512-xDcctDimhzko/e+y+Q2/8i3qNC9Svw1QgOkSkQoO0kIPI473tR9QRbo2KP88Ty9p8WbPy+3OpTaAIzehtuHq+A==
+  dependencies:
+    bignumber.js "^8 || ^9"
 
 nuxt-particles@^0.3.0:
   version "0.3.0"
@@ -5766,7 +5760,7 @@ ofetch@^1.3.3, ofetch@^1.4.1:
     node-fetch-native "^1.6.4"
     ufo "^1.5.4"
 
-ohash@^1.1.3, ohash@^1.1.4:
+ohash@^1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/ohash/-/ohash-1.1.4.tgz#ae8d83014ab81157d2c285abf7792e2995fadd72"
   integrity sha512-FlDryZAahJmEF3VR3w1KogSEdWX3WhA5GPakFx4J81kEAiHyLMpdLLElS8n8dfNadMgAne/MywcvmogzscVt4g==
@@ -7657,7 +7651,7 @@ typescript@^5.7.3:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.7.3.tgz#919b44a7dbb8583a9b856d162be24a54bf80073e"
   integrity sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==
 
-ufo@^1.1.2, ufo@^1.3.2, ufo@^1.4.0, ufo@^1.5.4:
+ufo@^1.1.2, ufo@^1.3.2, ufo@^1.5.4:
   version "1.5.4"
   resolved "https://registry.yarnpkg.com/ufo/-/ufo-1.5.4.tgz#16d6949674ca0c9e0fbbae1fa20a71d7b1ded754"
   integrity sha512-UsUk3byDzKd04EyoZ7U4DOlxQaD14JUKQl6/P7wiX4FNvUfm3XL246n9W5AmqwW5RSFJ27NAuM0iLscAOYUiGQ==
@@ -8096,7 +8090,7 @@ vue-router@^4.5.0, vue-router@latest:
   dependencies:
     "@vue/devtools-api" "^6.6.4"
 
-vue-tippy@v6:
+vue-tippy@^6.6.0:
   version "6.6.0"
   resolved "https://registry.yarnpkg.com/vue-tippy/-/vue-tippy-6.6.0.tgz#f833d222e33c1ce658dc8ee67cbb29daaf0a202b"
   integrity sha512-ISRIUQDlcEP05K1nCbvlVcd8yuWS6S3dI91qD0A2slgtwwWjih8Fn9Aymq4SNaHQsdiP5+MLRPZVDxFjKMPgKA==

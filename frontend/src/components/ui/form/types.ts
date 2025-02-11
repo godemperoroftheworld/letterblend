@@ -1,18 +1,20 @@
-import type { Component, UnwrapRef } from 'vue';
+import type { Component } from 'vue';
 import type { InputProps } from '@/components/ui/InputField.vue';
 import type { SelectProps } from '@/components/ui/SelectField.vue';
 import type { RuleExpression } from 'vee-validate';
-import type { DefaultError, UseMutationReturnType } from '@tanstack/vue-query';
 import type { DropdownProps } from '@/components/ui/AutocompleteField.vue';
+import type { FormattedInputProps } from '@/components/ui/FormattedInput.vue';
 
 // FIELD
 type FieldComponentProps<T extends PropertyKey> = Partial<
-  InputProps<T> & SelectProps<T> & DropdownProps<T>
+  InputProps<T> & SelectProps<T> & DropdownProps<T> & FormattedInputProps
 >;
 export type FieldProps<T extends PropertyKey> = {
   // Label
   label?: string;
   labelSize?: 'xs' | 'sm' | 'lg' | 'base';
+  // Tootlip
+  tooltip?: string;
   uppercase?: boolean;
   // Field
   name: string;

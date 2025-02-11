@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { IconInfoCircle } from '@tabler/icons-vue';
+
   interface Props {
     label?: string;
     name: string;
@@ -6,6 +8,7 @@
     errored?: boolean;
     success?: boolean;
     labelSize?: 'xs' | 'sm' | 'lg' | 'base';
+    tooltip?: string;
   }
   const props = defineProps<Props>();
 
@@ -18,7 +21,7 @@
     :class="{ 'gap-0.5': isSmallLabel, 'gap-2': !isSmallLabel }">
     <label
       v-show="label"
-      class="w-fit max-w-64 text-center font-semibold"
+      class="relative w-fit max-w-64 text-center font-semibold"
       :class="{
         uppercase,
         'text-sm': labelSize === 'sm',
@@ -27,6 +30,10 @@
       }"
       :for="name">
       {{ label }}
+      <icon-info-circle
+        v-if="tooltip"
+        v-tippy="{ content: tooltip, allowHTML: true }"
+        class="text-info absolute top-0 left-full h-5 w-5 translate-x-1 cursor-pointer" />
     </label>
     <div
       :id="name"

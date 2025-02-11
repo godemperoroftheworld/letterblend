@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import InputField from '@/components/ui/InputField.vue';
   import { number } from 'yup';
+  import FormattedInput from '@/components/ui/FormattedInput.vue';
   import FormView from '@/components/ui/form/FormView.vue';
   import noop from 'lodash/noop';
   import type { RoomSettings } from '@/types/room';
@@ -43,15 +44,17 @@
         props: {
           type: 'number',
         },
+        tooltip: 'The number of films in the blend.',
       },
       threshold: {
-        as: InputField,
+        as: FormattedInput,
         label: 'Threshold',
         rules: number().required().min(0).max(1),
         props: {
-          step: 0.1,
-          type: 'number',
+          format: '0,00%',
+          percent: true,
         },
+        tooltip: 'Percentage of users that need the film in their watchlist.',
       },
     }"
     :defaults="values"

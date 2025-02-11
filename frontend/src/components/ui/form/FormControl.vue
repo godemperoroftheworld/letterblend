@@ -42,6 +42,7 @@
     :label-size="labelSize"
     :uppercase="uppercase"
     :errored="touched && errored"
+    :tooltip="tooltip"
     :success="(showValidation || touched) && !errored"
     @click="touched = true">
     <field
