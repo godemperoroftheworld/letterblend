@@ -121,6 +121,7 @@
           <span class="bg-paper h-0.5 w-full shrink-0 grow rounded" />
           <blend-settings
             ref="settingsForm"
+            class="max-w-full"
             :values="presetSettings" />
         </div>
       </card-view>
