@@ -5,21 +5,17 @@ import getBlendedList from "@/utils/blend";
 import {Settings} from "@/types/room";
 import {HttpStatusCode} from "axios";
 import {uniq} from "lodash";
-import {fixGenreFilter} from "@/utils/filter";
 
 type RoomParams = { id: string };
 interface CreateRoomParams extends Settings {
   users: string[]
 }
 const createRoomHandler: RequestHandler = async (req, res) => {
-  const { users, genre, ...settings } = getData<CreateRoomParams>(req);
+  const { users, ...settings } = getData<CreateRoomParams>(req);
   const user = req.header("X-Letterboxd-User") as string;
-  // Fixup genre to be OR instead of AND
-  const fixedGenre = genre != null ? fixGenreFilter(genre) : genre;
   // Perform blend
   const movies = await getBlendedList({
     ...settings,
-    genre: fixedGenre,
     names: uniq([...users, user]),
   });
   // Create Room

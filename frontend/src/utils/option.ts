@@ -1,6 +1,7 @@
-export interface Option<T extends PropertyKey | boolean> {
+export interface Option<T extends PropertyKey | boolean, V = unknown> {
   label: string;
   id: T;
+  value?: V;
 }
 
 export function enumToOption<E extends object>(e: E) {

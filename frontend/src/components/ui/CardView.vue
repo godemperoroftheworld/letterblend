@@ -51,7 +51,7 @@
           class="h-7 w-7" />
       </div>
     </client-only>
-    <div class="relative grow">
+    <div class="grow">
       <slot />
     </div>
   </div>

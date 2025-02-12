@@ -12,11 +12,11 @@ router.post("/",
     body("threshold").default(0.5).isFloat({ min: 0, max: 1 }),
     oneOf([
         body('genre').optional().isString().notEmpty(),
-        body('genre').optional().isArray({ min : 1})
+        body('genre').optional().isArray()
     ]),
     oneOf([
         body('decade').optional().isString().notEmpty(),
-        body('decade').optional().isArray({ min: 1 })
+        body('decade').optional().isArray()
     ]),
     validate,
     roomHandlers.createRoomHandler,
@@ -31,6 +31,14 @@ router.put('/:id/settings',
     param("id").isString().isLength({ min: TOKEN_LENGTH, max: TOKEN_LENGTH }),
     body("top").default(10).isInt({ min: 1, max: 30 }),
     body("threshold").default(0.5).isFloat({ min: 0, max: 1 }),
+    oneOf([
+        body('genre').optional().isString().notEmpty(),
+        body('genre').optional().isArray()
+    ]),
+    oneOf([
+        body('decade').optional().isString().notEmpty(),
+        body('decade').optional().isArray()
+    ]),
     validate,
     roomHandlers.updateSettingsHandler,
 );

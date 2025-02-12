@@ -19,7 +19,7 @@
         <logo class="h-32 w-32" />
       </nuxt-link>
     </content-view>
-    <content-view class="min-h-[75dvh] w-full max-w-screen-lg">
+    <content-view class="min-h-[80dvh] w-full max-w-screen-lg">
       <generic-button
         v-show="!isHome"
         class="absolute top-4 left-4 z-1 max-md:fixed max-sm:min-w-fit sm:w-40 lg:top-8 lg:left-8"

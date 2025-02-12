@@ -22,9 +22,9 @@
     'music',
     'mystery',
     'romance',
-    'science fiction',
+    'science-fiction',
     'thriller',
-    'tv movie',
+    'tv-movie',
     'war',
     'western',
   ];
@@ -40,17 +40,9 @@
     submitted: () => noop,
     showSubmitButton: false,
     submitButtonText: 'Submit',
-    values: () => ({ top: 10, threshold: 0.6 }),
+    values: () => ({ top: 10, threshold: 0.6, genre: [] }),
   });
-
   const settingsForm = ref();
-  watch(
-    () => props.values,
-    (val) => {
-      settingsForm.value?.update(val);
-    },
-  );
-
   defineExpose({ data: settingsForm });
 </script>
 

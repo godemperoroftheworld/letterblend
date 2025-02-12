@@ -8,6 +8,7 @@
 <script setup lang="ts">
   import CardView from '@/components/ui/CardView.vue';
   import useUser from '@/composables/user';
+  import NameForm from '@/components/user/NameForm.vue';
 
   const route = useRoute();
   const router = useRouter();

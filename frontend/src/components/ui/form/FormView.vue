@@ -10,6 +10,7 @@
     FormValueType,
   } from '@/components/ui/form/types';
   import isEmpty from 'lodash/isEmpty';
+  import isEqual from 'lodash/isEqual';
   import FormArray from '@/components/ui/form/FormArray.vue';
   import type { PartialDeep } from 'type-fest';
 
@@ -61,6 +62,15 @@
     emits('submitted', values);
   }
 
+  watch(
+    () => props.defaults,
+    (val) => {
+      if (val && !isEmpty(val)) {
+        formRef.value?.setValues(val);
+      }
+    },
+  );
+
   // Expose
   defineExpose({
     valid: isValid,
@@ -78,10 +88,9 @@
     ref="formRef"
     :name="name"
     :initial-values="defaults"
-    :validate-on-mount="true"
     class="relative flex flex-col items-center justify-between"
     @submit="onSubmit as SubmissionHandler">
-    <div class="flex w-fit max-w-full flex-col gap-4">
+    <div class="flex w-fit max-w-full flex-col gap-5">
       <template
         v-for="key in keys"
         :key="key">

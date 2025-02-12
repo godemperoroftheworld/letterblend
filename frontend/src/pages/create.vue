@@ -12,6 +12,7 @@
   import type { RoomSettings } from '@/types/room';
   import LabeledValue from '@/components/ui/LabeledValue.vue';
   import MultiselectView from '@/components/ui/MultiselectView.vue';
+  import isEqual from 'lodash/isEqual';
 
   // Setup
   interface FormResult {
@@ -24,21 +25,28 @@
   const JUST_PICK_SETTINGS: RoomSettings = {
     top: 1,
     threshold: 1,
+    genre: [],
   };
   const SOME_OPTIONS_SETTINGS: RoomSettings = {
-    top: 5,
+    top: 15,
     threshold: 0.5,
+    genre: [],
+  };
+  const SOMETHING_COMFORTING: RoomSettings = {
+    top: 3,
+    threshold: 0.75,
+    genre: ['adventure', 'family'],
   };
   const PRESET_OPTIONS = [
-    { label: 'Just Pick One', id: JUST_PICK_SETTINGS },
-    { label: 'Give Me Some Options', id: SOME_OPTIONS_SETTINGS },
+    { label: 'Just Pick One', id: 'justpick', value: JUST_PICK_SETTINGS },
+    { label: 'Wide Open', id: 'wideopen', value: SOME_OPTIONS_SETTINGS },
+    { label: 'Family Adventure', id: 'comfort', value: SOMETHING_COMFORTING },
   ];
 
   // Functions
   const { mutateAsync: addRoom } = useAddRoom();
   async function submitted({ name }: FormResult) {
-    const settingsValues = settingsForm.value?.data.values;
-    const room = await addRoom({ users: name, settings: settingsValues });
+    const room = await addRoom({ users: name, settings: settingsValues.value });
     await router.push(`/room/${room.code}`);
   }
 
@@ -56,6 +64,7 @@
   const userNames = computed<string[]>(() => userForm.value?.data.values?.name ?? []);
   const userValid = computedDeep(() => !!userForm.value?.data.valid);
   const settingsValid = computedDeep(() => !!settingsForm.value?.data.valid);
+  const settingsValues = computedDeep(() => settingsForm.value?.data.values);
   watch(userNames, (val, oldVal) => {
     if (val.length < oldVal.length) {
       if (val.length < USER_COLLAPSE_COUNT) {
@@ -67,6 +76,15 @@
       }
     }
   });
+  watch(
+    settingsValues,
+    (val) => {
+      if (!isEqual(val, presetSettings.value)) {
+        presetSettings.value = {};
+      }
+    },
+    { deep: true },
+  );
 </script>
 
 <template>
@@ -98,10 +116,9 @@
             <multiselect-view
               v-model="presetSettings"
               class="!w-64 max-w-full"
-              track-by="value"
-              label="label"
               :options="PRESET_OPTIONS" />
           </labeled-value>
+          <span class="bg-paper h-0.5 w-full shrink-0 grow rounded" />
           <blend-settings
             ref="settingsForm"
             :values="presetSettings" />

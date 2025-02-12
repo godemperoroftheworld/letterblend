@@ -4,7 +4,7 @@
   import LabeledValue from '../LabeledValue.vue';
   import LoadingIcon from '@/components/ui/icons/LoadingIcon.vue';
   import type { UnwrapNestedRefs } from 'vue';
-  import { useFocusWithin } from '@vueuse/core';
+  import isEqual from 'lodash/isEqual';
 
   const formProps = withDefaults(defineProps<FieldProps<T> & { loading?: boolean }>(), {
     labelSize: 'sm',
@@ -17,23 +17,23 @@
   const touched = ref(false);
   const showValidation = ref(false);
   const model = defineModel<T>();
-  const fieldModel = computed({
-    get: () => model.value,
-    set(val) {
-      model.value = val;
+  watch(model, (val, old) => {
+    if (!isEqual(val, old)) {
       fieldRef.value?.setValue(val);
-    },
-  });
-  onMounted(() => {
-    showValidation.value = formProps.validateOnMount;
+    }
   });
   watch(
     () => fieldRef.value?.value,
-    (val) => {
-      model.value = val;
+    (val, old) => {
+      if (!isEqual(val, old)) {
+        model.value = val;
+      }
     },
-    { immediate: true },
   );
+  onMounted(() => {
+    model.value = fieldRef.value?.value;
+    showValidation.value = formProps.validateOnMount;
+  });
 </script>
 
 <template>
@@ -51,7 +51,7 @@
       :rules="rules">
       <component
         :is="as"
-        v-model="fieldModel"
+        v-model="model"
         :name="name"
         v-bind="props"
         class="!w-64 max-w-full"
