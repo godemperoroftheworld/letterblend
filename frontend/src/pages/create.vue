@@ -10,6 +10,8 @@
   import BlendUsers from '@/components/blend/BlendUsers.vue';
   import AccordionView from '@/components/ui/AccordionView.vue';
   import type { RoomSettings } from '@/types/room';
+  import LabeledValue from '@/components/ui/LabeledValue.vue';
+  import MultiselectView from '@/components/ui/MultiselectView.vue';
 
   // Setup
   interface FormResult {
@@ -27,6 +29,10 @@
     top: 5,
     threshold: 0.5,
   };
+  const PRESET_OPTIONS = [
+    { label: 'Just Pick One', id: JUST_PICK_SETTINGS },
+    { label: 'Give Me Some Options', id: SOME_OPTIONS_SETTINGS },
+  ];
 
   // Functions
   const { mutateAsync: addRoom } = useAddRoom();
@@ -85,19 +91,17 @@
         :collapsed-default="false">
         <div class="flex flex-col items-center gap-4">
           <info-message class="w-full"> Configure your blend as you'd like it. </info-message>
-          <accordion-view
-            :expand-default="true"
+          <labeled-value
+            label-size="sm"
             name="presets"
             label="Presets">
-            <text-button
-              class="mb-2 block w-full"
-              text="Just Pick"
-              @click.prevent="presetSettings = JUST_PICK_SETTINGS" />
-            <text-button
-              class="block w-full"
-              text="A Few Options"
-              @click.prevent="presetSettings = SOME_OPTIONS_SETTINGS" />
-          </accordion-view>
+            <multiselect-view
+              v-model="presetSettings"
+              class="!w-64 max-w-full"
+              track-by="value"
+              label="label"
+              :options="PRESET_OPTIONS" />
+          </labeled-value>
           <blend-settings
             ref="settingsForm"
             :values="presetSettings" />

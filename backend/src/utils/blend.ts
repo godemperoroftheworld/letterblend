@@ -11,11 +11,13 @@ async function getBlendedList({
   names = [],
   top = 10,
   threshold = 0.5,
+  genre,
+  decade
 }: BlendParams): Promise<Movie[]> {
   if (!names.length) return [];
   // Scrape watchlist entries from letterboxd and flatten
   const promises = names.map(async (name) => {
-    const watchlist = await Scraper.getInstance().watchlist(name);
+    const watchlist = await Scraper.getInstance().watchlist(name, { genre, decade });
     return Object.values(watchlist.data).map((r) => ({ entry: r, user: name }));
   });
   const allScrapedWatchlistEntries = await Promise.all(promises).then((r) =>

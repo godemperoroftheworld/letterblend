@@ -1,5 +1,5 @@
 import express from "express";
-import {body, param} from "express-validator";
+import {body, oneOf, param} from "express-validator";
 import validate from "@/middlewares/validate";
 import roomHandlers from "@/handlers/room";
 
@@ -10,6 +10,14 @@ router.post("/",
     body("users").isArray({ min: 1, max: 5 }),
     body("top").default(10).isInt({ min: 1, max: 30 }),
     body("threshold").default(0.5).isFloat({ min: 0, max: 1 }),
+    oneOf([
+        body('genre').optional().isString().notEmpty(),
+        body('genre').optional().isArray({ min : 1})
+    ]),
+    oneOf([
+        body('decade').optional().isString().notEmpty(),
+        body('decade').optional().isArray({ min: 1 })
+    ]),
     validate,
     roomHandlers.createRoomHandler,
 );

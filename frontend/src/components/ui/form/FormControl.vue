@@ -54,7 +54,7 @@
         v-model="fieldModel"
         :name="name"
         v-bind="props"
-        class="w-64 max-w-full"
+        class="!w-64 max-w-full"
         :class="{ 'bg-paper text-paper animate-pulse': loading }"
         @focus="touched = true"
         @click="touched = true" />

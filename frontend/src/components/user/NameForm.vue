@@ -28,10 +28,10 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex h-full flex-col justify-center gap-4">
     <div class="flex items-center justify-center gap-4">
       <avatar-view
-        class="w-32 min-w-24 grow-0 max-sm:w-24 lg:w-36"
+        class="w-32 min-w-24 grow-0 max-sm:w-20 lg:w-40"
         :name="formName"
         fallback />
       <form-view

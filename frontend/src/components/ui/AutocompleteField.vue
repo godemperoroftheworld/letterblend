@@ -3,7 +3,7 @@
   import { useFuse } from '@vueuse/integrations/useFuse';
 
   // Setup
-  export interface DropdownProps<T> extends InputProps<T> {
+  export interface DropdownProps extends InputProps {
     options?: string[];
   }
   defineOptions({ inheritAttrs: false });

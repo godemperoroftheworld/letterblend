@@ -5,6 +5,29 @@
   import FormView from '@/components/ui/form/FormView.vue';
   import noop from 'lodash/noop';
   import type { RoomSettings } from '@/types/room';
+  import MultiselectView from '@/components/ui/MultiselectView.vue';
+
+  const GENRE_OPTIONS = [
+    'action',
+    'adventure',
+    'animation',
+    'comedy',
+    'crime',
+    'documentary',
+    'drama',
+    'family',
+    'fantasy',
+    'history',
+    'horror',
+    'music',
+    'mystery',
+    'romance',
+    'science fiction',
+    'thriller',
+    'tv movie',
+    'war',
+    'western',
+  ];
 
   interface Props {
     submitted?: (data: RoomSettings) => Promise<void> | void;
@@ -55,6 +78,14 @@
           percent: true,
         },
         tooltip: 'Percentage of users that need the film in their watchlist.',
+      },
+      genre: {
+        as: MultiselectView,
+        label: 'Genre',
+        props: {
+          options: GENRE_OPTIONS,
+          multiple: true,
+        },
       },
     }"
     :defaults="values"

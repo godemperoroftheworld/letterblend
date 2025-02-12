@@ -34,6 +34,7 @@
     "vee-validate": "^4.15.0",
     "vite-svg-loader": "^5.1.0",
     "vue": "latest",
+    "vue-multiselect": "^3.2.0",
     "vue-router": "latest",
     "vue-tippy": "^6.6.0",
     "yarn": "^1.22.22",

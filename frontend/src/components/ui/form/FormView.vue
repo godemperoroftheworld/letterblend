@@ -81,7 +81,7 @@
     :validate-on-mount="true"
     class="relative flex flex-col items-center justify-between"
     @submit="onSubmit as SubmissionHandler">
-    <div class="flex w-fit max-w-full flex-col gap-5">
+    <div class="flex w-fit max-w-full flex-col gap-4">
       <template
         v-for="key in keys"
         :key="key">

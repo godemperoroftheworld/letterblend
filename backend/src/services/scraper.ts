@@ -2,6 +2,7 @@ import axios, { Axios } from "axios";
 import env from "@/constants/env";
 import List, {Users} from "@/types/scraper";
 import intersection from 'lodash/intersection';
+import {Filters, Settings} from "@/types/room";
 
 
 export default class Scraper {
@@ -27,16 +28,16 @@ export default class Scraper {
     return this.service.get(`/users/${user}/avatar`).then((r) => r.data);
   }
 
-  async watchlist(user: string) {
+  async watchlist(user: string, filters: Filters = {}) {
     return this.service
-      .get<any>(`/users/${user}/watchlist`)
-      .then((r) => r.data as List);
+      .post<List>(`/users/${user}/watchlist`, filters)
+      .then((r) => r.data);
   }
 
   async watched(user: string) {
     return this.service
-      .get<any>(`/users/${user}/watched`)
-      .then((r) => r.data as List);
+      .get<List>(`/users/${user}/watched`)
+      .then((r) => r.data);
   }
 
   async followers(user: string) {

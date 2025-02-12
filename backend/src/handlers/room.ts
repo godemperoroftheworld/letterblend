@@ -2,21 +2,25 @@ import { RequestHandler } from "express";
 import getData from "@/utils/data";
 import RoomService from "@/services/room";
 import getBlendedList from "@/utils/blend";
-import TMDB from "@/services/tmdb";
-import { RouteError } from "@/types";
-import { HttpStatusCodes } from "@/constants/http";
 import {Settings} from "@/types/room";
 import {HttpStatusCode} from "axios";
 import {uniq} from "lodash";
+import {fixGenreFilter} from "@/utils/filter";
 
 type RoomParams = { id: string };
+interface CreateRoomParams extends Settings {
+  users: string[]
+}
 const createRoomHandler: RequestHandler = async (req, res) => {
-  const { users, ...settings } = getData<{ users: string[] } & Settings>(req);
+  const { users, genre, ...settings } = getData<CreateRoomParams>(req);
   const user = req.header("X-Letterboxd-User") as string;
+  // Fixup genre to be OR instead of AND
+  const fixedGenre = genre != null ? fixGenreFilter(genre) : genre;
   // Perform blend
   const movies = await getBlendedList({
-    names: uniq([...users, user]),
     ...settings,
+    genre: fixedGenre,
+    names: uniq([...users, user]),
   });
   // Create Room
   const service = new RoomService(user);
