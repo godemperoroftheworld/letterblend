@@ -7,6 +7,7 @@
   import type { RoomSettings } from '@/types/room';
   import MultiselectView from '@/components/ui/MultiselectView.vue';
 
+  // Constant
   const GENRE_OPTIONS = [
     'action',
     'adventure',
@@ -29,6 +30,7 @@
     'western',
   ];
 
+  // Setup
   interface Props {
     submitted?: (data: RoomSettings) => Promise<void> | void;
     showSubmitButton?: boolean;
@@ -43,6 +45,14 @@
     values: () => ({ top: 10, threshold: 0.6, genre: [] }),
   });
   const settingsForm = ref();
+
+  watch(
+    () => props.values,
+    (val) => {
+      settingsForm.value?.update(val);
+    },
+  );
+
   defineExpose({ data: settingsForm });
 </script>
 
