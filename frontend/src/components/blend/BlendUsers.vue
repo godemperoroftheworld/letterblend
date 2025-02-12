@@ -13,6 +13,7 @@
     showSubmitButton?: boolean;
     loading?: boolean;
     values?: string[];
+    syncValues?: boolean;
   }
   const { user: storageName } = useUser();
   const props = withDefaults(defineProps<Props>(), {
@@ -43,14 +44,6 @@
     },
     transform: (data) => Object.keys(data),
   });
-
-  // Update defaults when they change
-  watch(
-    () => props.values,
-    (val) => {
-      userForm.value?.update(val);
-    },
-  );
 
   // Expose
   defineExpose({

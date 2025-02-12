@@ -14,7 +14,7 @@
 <template>
   <div class="relative">
     <div
-      class="absolute top-1/2 left-2 z-10 h-6 w-6 -translate-y-1/2 md:-left-3 md:h-10 md:w-10 md:-translate-x-full">
+      class="absolute top-1/2 left-2 z-1 h-6 w-6 -translate-y-1/2 md:-left-3 md:h-10 md:w-10 md:-translate-x-full">
       <avatar-view :name="model" />
     </div>
     <autocomplete-field

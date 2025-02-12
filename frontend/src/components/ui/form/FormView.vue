@@ -62,15 +62,6 @@
     emits('submitted', values);
   }
 
-  watch(
-    () => props.defaults,
-    (val) => {
-      if (val && !isEmpty(val)) {
-        formRef.value?.setValues(val);
-      }
-    },
-  );
-
   // Expose
   defineExpose({
     valid: isValid,

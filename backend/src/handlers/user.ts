@@ -4,6 +4,7 @@ import Scraper from "@/services/scraper";
 import { HttpStatusCodes } from "@/constants/http";
 import merge from 'lodash/merge';
 import {Users} from "@/types/scraper";
+import {omit} from "lodash";
 
 type UserParams = { name: string };
 const getUserHandler: RequestHandler = async (req, res) => {
@@ -56,8 +57,8 @@ const getFriendsHandler: RequestHandler = async (req, res) => {
   })).then((r) => r.filter((v) => v.exists).map((v) => v.name));
   // Friends
   const friends = await Promise.all(existingNames.map((name) => Scraper.getInstance().friends(name)));
-  const friendsMerged: Users = merge({}, ...friends);
-  res.status(HttpStatusCodes.OK).send(friendsMerged);
+  const friendsFixed: Users = omit(merge({}, ...friends), names); // merge into one object, excluded original names
+  res.status(HttpStatusCodes.OK).send(friendsFixed);
 };
 
 export default {
