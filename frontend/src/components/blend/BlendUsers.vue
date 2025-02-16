@@ -6,6 +6,7 @@
   import { queryClient } from '@/plugins/query';
   import useUser from '@/composables/user';
   import Cookies from 'js-cookie';
+  import type { GenericValidateFunction } from 'vee-validate';
 
   // Setup
   interface Props {
@@ -45,6 +46,16 @@
     transform: (data) => Object.keys(data),
   });
 
+  // Helper
+  const validateUserName: GenericValidateFunction<string> = async (name, ctx) => {
+    const letterboxdResult = await validateLetterboxdName(name, ctx);
+    if (letterboxdResult !== true) return letterboxdResult;
+    if (userNames.value.indexOf(name) !== userNames.value.lastIndexOf(name)) {
+      return 'User must be unique.';
+    }
+    return true;
+  };
+
   // Expose
   defineExpose({
     data: userForm,
@@ -58,7 +69,7 @@
     :fields="{
       name: {
         as: NameField,
-        rules: validateLetterboxdName,
+        rules: validateUserName,
         validateOnMount: true,
         props: {
           options: friends ?? [],

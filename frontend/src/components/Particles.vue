@@ -25,7 +25,7 @@
       },
       rotate: {
         value: { min: 0, max: 360 },
-        animation: { enable: true, speed: 10 },
+        animation: { enable: true, speed: 12 },
       },
       number: {
         value: 25,
