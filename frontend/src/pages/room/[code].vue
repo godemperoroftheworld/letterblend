@@ -9,7 +9,6 @@
   import type { RoomSettings } from '@/types/room';
   import GenericButton from '@/components/ui/button/GenericButton.vue';
   import { IconShare, IconEdit } from '@tabler/icons-vue';
-  import { Tippy } from 'vue-tippy';
   import useUser from '@/composables/user';
   import AvatarView from '@/components/ui/AvatarView.vue';
   import DialogView from '@/components/ui/DialogView.vue';
@@ -19,12 +18,17 @@
 
   // Room info
   const route = useRoute();
+  const router = useRouter();
   const { isSet: hasName } = useUser();
   const code = computed(() => route.params.code as string);
-  const { data: room, isFetching } = useRoom(code, {
+  const {
+    data: room,
+    isFetching,
+    error,
+  } = useRoom(code, {
     enabled: hasName,
+    retry: false,
   });
-  onServerPrefetch(() => {});
   const results = computed(() => room.value?.movies);
 
   // State
@@ -75,6 +79,17 @@
       });
     }
   }
+
+  // Error
+  watch(error, (val) => {
+    if (val) {
+      Notifier.instance().error({
+        title: 'Room Error',
+        message: 'Failed to find room. Did it expire?',
+      });
+      router.replace('/');
+    }
+  });
 </script>
 
 <template>
