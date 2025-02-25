@@ -65,7 +65,7 @@
       top: {
         as: InputField,
         label: 'Count',
-        rules: number().required().min(1).max(100),
+        rules: number().required().min(1).max(30),
         props: {
           type: 'number',
         },
