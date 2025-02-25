@@ -80,32 +80,32 @@ interface UseNotificationResponse {
   removeNotification: (notification: Notification) => void;
 }
 
-export function useNotifications(
-  callback?: (notification: Notification) => void,
-): UseNotificationResponse {
-  const notifier = Notifier.instance();
-  const notifications = ref<Notification[]>([]);
-  let listener: number;
+export const useNotifications = createSharedComposable(
+  (callback?: (notification: Notification) => void): UseNotificationResponse => {
+    const notifier = Notifier.instance();
+    const notifications = ref<Notification[]>([]);
+    let listener: number;
 
-  function removeNotification(notification: Notification) {
-    const idx = notifications.value.indexOf(notification);
-    if (idx >= 0) {
-      notifications.value.splice(idx, 1);
-    }
-  }
-
-  onMounted(() => {
-    listener = notifier.addListener((notification) => {
-      notifications.value.push(notification);
-      setTimeout(() => removeNotification(notification), 5000);
-      if (callback) {
-        callback(notification);
+    function removeNotification(notification: Notification) {
+      const idx = notifications.value.indexOf(notification);
+      if (idx >= 0) {
+        notifications.value.splice(idx, 1);
       }
-    });
-  });
-  onBeforeUnmount(() => {
-    notifier.removeListener(listener);
-  });
+    }
 
-  return { notifications, removeNotification };
-}
+    onMounted(() => {
+      listener = notifier.addListener((notification) => {
+        notifications.value.push(notification);
+        setTimeout(() => removeNotification(notification), 5000);
+        if (callback) {
+          callback(notification);
+        }
+      });
+    });
+    onBeforeUnmount(() => {
+      notifier.removeListener(listener);
+    });
+
+    return { notifications, removeNotification };
+  },
+);

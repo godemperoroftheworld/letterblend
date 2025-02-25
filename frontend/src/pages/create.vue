@@ -13,6 +13,7 @@
   import LabeledValue from '@/components/ui/LabeledValue.vue';
   import MultiselectView from '@/components/ui/MultiselectView.vue';
   import isEqual from 'lodash/isEqual';
+  import Notifier from '@/utils/notification';
 
   // Setup
   interface FormResult {
@@ -48,6 +49,10 @@
   async function submitted({ name }: FormResult) {
     const room = await addRoom({ users: name, settings: settingsValues.value });
     await router.push(`/room/${room.code}`);
+    Notifier.instance().success({
+      title: 'Room Created',
+      message: 'Successfully created blend',
+    });
   }
 
   // Collapsable settings

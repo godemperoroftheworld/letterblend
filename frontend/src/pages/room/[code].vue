@@ -15,6 +15,7 @@
   import DialogView from '@/components/ui/DialogView.vue';
   import InfoMessage from '@/components/ui/InfoMessage.vue';
   import ConfirmDialog from '@/components/ui/ConfirmDialog.vue';
+  import Notifier from '@/utils/notification';
 
   // Room info
   const route = useRoute();
@@ -41,6 +42,10 @@
   }
   async function settingsSubmitted() {
     await updateSettings({ id: room.value!.code, settings: settingsValue.value });
+    Notifier.instance().success({
+      title: 'Updated Room',
+      message: 'Room settings updated successfully.',
+    });
   }
 
   // Users update
@@ -48,6 +53,10 @@
   async function usersSubmitted(data: { name: string[] }) {
     await updateUsers({ id: room.value!.code, users: data.name });
     showEditUsers.value = false;
+    Notifier.instance().success({
+      title: 'Updated Room',
+      message: 'Room users updated successfully.',
+    });
   }
 
   // Share
@@ -60,6 +69,10 @@
       navigator.share(data);
     } else {
       navigator.clipboard.writeText(window.location.href);
+      Notifier.instance().normal({
+        title: 'Copied to clipboard',
+        message: 'Room code copied to clipboard.',
+      });
     }
   }
 </script>
