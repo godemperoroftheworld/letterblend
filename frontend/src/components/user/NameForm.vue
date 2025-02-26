@@ -16,15 +16,12 @@
   const userForm = ref();
   const formName = computed(() => userForm.value?.values['name']);
   const formValid = computed(() => !!userForm.value?.valid);
-  const { user: storedName, refresh } = useUser();
+  const { user: storedName } = useUser();
 
   async function submitted({ name }: NameForm) {
     storedName.value = name;
-    refresh();
     emits('submitted');
   }
-
-  defineExpose({ ...userForm });
 </script>
 
 <template>

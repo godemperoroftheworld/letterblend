@@ -19,7 +19,7 @@
   // Room info
   const route = useRoute();
   const router = useRouter();
-  const { isSet: hasName } = useUser();
+  const { exists: hasName } = useUser();
   const code = computed(() => route.params.code as string);
   const {
     data: room,

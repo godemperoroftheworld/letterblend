@@ -46,4 +46,7 @@ export default defineNuxtConfig({
       'api/**': { proxy: `${process.env.BFF_URL}/**` },
     },
   },
+  experimental: {
+    cookieStore: true,
+  },
 });

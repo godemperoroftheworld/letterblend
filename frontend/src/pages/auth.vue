@@ -5,6 +5,7 @@
     <name-form @submitted="submitted" />
   </card-view>
 </template>
+
 <script setup lang="ts">
   import CardView from '@/components/ui/CardView.vue';
   import useUser from '@/composables/user';
@@ -12,7 +13,7 @@
 
   const route = useRoute();
   const router = useRouter();
-  const { isSet } = useUser();
+  const { exists } = useUser();
   const redirect = computed<string>(() => {
     return (route.query.redirect as string) ?? route.redirectedFrom?.fullPath ?? '/';
   });
@@ -21,7 +22,7 @@
   }
 
   onMounted(() => {
-    if (isSet.value) {
+    if (exists.value) {
       router.replace(redirect.value);
     }
   });
