@@ -20,6 +20,7 @@
           :src="`api/poster/id/${data.id}`"
           provider="raw"
           loading="lazy"
+          :alt="data.name"
           @load="loaded = true" />
       </a>
       <div class="mx-auto mt-1 flex h-6 w-fit gap-1">

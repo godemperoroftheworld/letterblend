@@ -5,6 +5,7 @@
 
   interface Props {
     icon: Icon;
+    name: string;
     buttonStyle?: 'submit' | 'info' | 'danger';
     disabled?: boolean;
     loading?: boolean;
@@ -23,6 +24,7 @@
 
 <template>
   <button
+    :name="name"
     class="button flex cursor-pointer items-center rounded p-2"
     :disabled="disabled || loading"
     type="button"

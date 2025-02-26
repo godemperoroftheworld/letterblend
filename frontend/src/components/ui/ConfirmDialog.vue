@@ -10,11 +10,13 @@
       </div>
       <div class="flex w-full justify-between gap-4">
         <text-button
+          name="cancel"
           text="Cancel"
           class="w-64"
           button-style="hollow"
           @click="close" />
         <text-button
+          name="confirm"
           text="Confirm"
           class="w-64"
           button-style="submit"

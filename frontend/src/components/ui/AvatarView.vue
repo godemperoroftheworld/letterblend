@@ -32,6 +32,7 @@
     <template v-if="avatar">
       <nuxt-img
         class="h-full w-full"
+        alt="User Avatar"
         :src="avatar" />
     </template>
     <template v-else>

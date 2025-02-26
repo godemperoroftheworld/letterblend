@@ -117,6 +117,7 @@
       :class="{ 'w-full': showCancelButton && showSubmitButton }">
       <text-button
         v-if="showCancelButton"
+        name="cancel"
         class="w-64"
         button-style="danger"
         :text="cancelButtonText"
@@ -124,6 +125,7 @@
         @click.prevent="emits('cancelled')" />
       <text-button
         v-if="showSubmitButton"
+        name="submit"
         class="w-64"
         :disabled="!isEmpty(errors)"
         :loading="loading || isSubmitting"

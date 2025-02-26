@@ -113,6 +113,7 @@
         </carousel-view>
         <generic-button
           v-tippy="!isSmall ? { content: 'Copied to clipboard.', trigger: 'click' } : undefined"
+          name="share"
           class="w-64"
           button-style="info"
           :loading="isFetching"
@@ -148,6 +149,7 @@
         </div>
         <div class="absolute top-3.5 right-4">
           <generic-button
+            name="editUsers"
             class="!min-w-0 !p-1 !px-2 !text-sm"
             button-style="hollow"
             @click="showEditUsers = true">

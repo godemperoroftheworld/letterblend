@@ -3,6 +3,7 @@
   import LoadingIcon from '@/components/ui/icons/LoadingIcon.vue';
 
   interface Props {
+    name: string;
     buttonStyle?: 'submit' | 'info' | 'danger' | 'hollow';
     disabled?: boolean;
     loading?: boolean;
@@ -21,6 +22,7 @@
 <template>
   <button
     v-bind="$attrs"
+    :name="name"
     type="button"
     tabindex="0"
     class="button shadow-paper/50 flex max-w-full min-w-24 justify-center gap-2 rounded p-2 px-4 font-medium text-white uppercase shadow-2xs drop-shadow-none active:shadow-none disabled:cursor-not-allowed"

@@ -3,6 +3,12 @@
   import Particles from '@/components/Particles.vue';
   import { SpeedInsights } from '@vercel/speed-insights/nuxt';
   import Notifications from '@/components/ui/notification/Notifications.vue';
+
+  useHead({
+    htmlAttrs: {
+      lang: 'en',
+    },
+  });
 </script>
 
 <template>

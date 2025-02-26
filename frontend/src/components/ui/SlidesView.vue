@@ -84,6 +84,7 @@
     @keyup.enter="clicked = true">
     <button
       class="bg-content absolute top-1/2 left-0 z-10 -translate-y-1/2 cursor-pointer rounded-full p-1.5"
+      name="back"
       @click.prevent="goBack"
       @keyup.enter="goBack">
       <icon-chevron-left class="h-8 w-8" />
@@ -106,6 +107,7 @@
     <div class="absolute top-1/2 right-0 max-h-11 max-w-11 -translate-y-1/2 cursor-pointer">
       <button
         class="bg-content z-1 cursor-pointer rounded-full p-1"
+        name="next"
         @click.prevent="goNext"
         @keyup.enter="goNext">
         <icon-chevron-right class="h-8 w-8" />

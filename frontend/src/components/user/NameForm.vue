@@ -62,6 +62,7 @@
       </a>
     </info-message>
     <text-button
+      name="submit"
       class="mx-auto w-64"
       text="Submit"
       button-style="submit"

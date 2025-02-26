@@ -132,6 +132,7 @@
       </card-view>
     </div>
     <text-button
+      name="submit"
       text="Submit"
       button-style="submit"
       class="max-sm:w-full sm:w-64"
