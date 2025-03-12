@@ -7,7 +7,13 @@ movies = Blueprint('movies', __name__)
 @movies.route('/<slug>/id')
 def get_id(slug):
     film = movie.Movie(slug)
-    match = re.search(r'(movie|tv)/(\d+)', film.tmdb_link)
+    if film.tmdb_link is not None:
+        match = re.search(r'(movie|tv)/(\d+)', film.tmdb_link)
+    else:
+        dom = film.scraper.get_parsed_page(f'{film.DOMAIN}/film/{film.slug}')
+        a = dom.find("a", {"data-track-action": ["TMDB"]})
+        tmdb_link = a['href'] if a else ''
+        match = re.search(r'(movie|tv)/(\d+)', tmdb_link)
     return match.group(2)
 
 @movies.route('/id')
