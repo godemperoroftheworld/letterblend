@@ -31,7 +31,7 @@
     :class="{ 'animate-pulse': !avatarName || isLoadingName || isLoading }">
     <template v-if="avatar">
       <nuxt-img
-        class="h-full w-full"
+        class="h-full w-full text-[0px]"
         alt="User Avatar"
         :src="avatar" />
     </template>
