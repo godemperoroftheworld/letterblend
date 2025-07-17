@@ -10,7 +10,6 @@
     FormValueType,
   } from '@/components/ui/form/types';
   import isEmpty from 'lodash/isEmpty';
-  import isEqual from 'lodash/isEqual';
   import FormArray from '@/components/ui/form/FormArray.vue';
   import type { PartialDeep } from 'type-fest';
 

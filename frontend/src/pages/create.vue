@@ -8,7 +8,6 @@
   import InfoMessage from '@/components/ui/InfoMessage.vue';
   import { useAddRoom } from '@/composables/mutation/room';
   import BlendUsers from '@/components/blend/BlendUsers.vue';
-  import AccordionView from '@/components/ui/AccordionView.vue';
   import type { RoomSettings } from '@/types/room';
   import LabeledValue from '@/components/ui/LabeledValue.vue';
   import MultiselectView from '@/components/ui/MultiselectView.vue';
@@ -27,16 +26,19 @@
     top: 1,
     threshold: 1,
     genre: [],
+    decade: [],
   };
   const SOME_OPTIONS_SETTINGS: RoomSettings = {
     top: 15,
     threshold: 0.5,
     genre: [],
+    decade: [],
   };
   const SOMETHING_COMFORTING: RoomSettings = {
     top: 3,
     threshold: 0.75,
     genre: ['adventure', 'family'],
+    decade: [],
   };
   const PRESET_OPTIONS = [
     { label: 'Just Pick One', id: 'justpick', value: JUST_PICK_SETTINGS },

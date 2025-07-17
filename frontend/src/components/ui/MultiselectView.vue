@@ -1,10 +1,9 @@
 <script setup lang="ts" generic="T extends PropertyKey, R">
   import VueMultiselect from 'vue-multiselect';
   import type { Option } from '@/utils/option';
-  import type { MaybeArray } from 'vee-validate';
   import isEqual from 'lodash/isEqual';
 
-  export interface SelectProps<T, R> {
+  export interface SelectProps<T extends PropertyKey, R> {
     options: R[] | Required<Option<T, R>>[];
     multiple?: boolean;
     searchable?: boolean;
@@ -15,6 +14,7 @@
   const isOptionType = computed(() => {
     return (
       typeof props.options[0] === 'object' &&
+      props.options[0] != null &&
       'id' in props.options[0] &&
       'label' in props.options[0]
     );
