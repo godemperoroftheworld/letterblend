@@ -2,6 +2,7 @@
   import useAvatar from '@/composables/query/avatar';
   import useExists from '@/composables/query/exists';
   import useUser from '@/composables/user';
+  import AvatarIcon from '@/components/ui/icons/AvatarIcon.vue';
 
   interface Props {
     name?: string;
@@ -31,22 +32,17 @@
     :class="{ 'animate-pulse': !avatarName || isLoadingName || isLoading }">
     <template v-if="avatar">
       <nuxt-img
+        v-slot="{ src, isLoaded, imgAttrs }"
         class="h-full w-full text-[0px]"
-        alt="User Avatar"
-        :src="avatar" />
+        :src="avatar">
+        <img
+          v-if="isLoaded"
+          alt="User Avatar"
+          v-bind="imgAttrs"
+          :src="src" />
+        <avatar-icon v-else />
+      </nuxt-img>
     </template>
-    <template v-else>
-      <svg
-        class="h-full w-full text-white"
-        fill="currentColor"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg">
-        <path
-          class="translate-y-[10%]"
-          fill-rule="evenodd"
-          d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-          clip-rule="evenodd" />
-      </svg>
-    </template>
+    <avatar-icon v-else />
   </div>
 </template>
