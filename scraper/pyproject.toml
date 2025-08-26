@@ -8,10 +8,10 @@ authors = ["Tenzin Pelletier <pelletier@tenzin.live>"]
 python = "3.10.5"
 flask = "^3.1.0"
 flask-cors = "^5.0.0"
-letterboxdpy = {git = "https://github.com/nmcassa/letterboxdpy.git", rev = "9ac7d0c4c66822e10a9a18011cfe8156dcf7640e"}
+letterboxdpy = {git = "https://github.com/nmcassa/letterboxdpy.git", rev = "b904f2822bd3c443ddaf84b343e85ed9f10c1eb5"}
 gunicorn = "^23.0.0"
 eventlet = "^0.38.0"
-lxml = "^5.3.0"
+lxml = "^5.1.0"
 
 
 [build-system]
