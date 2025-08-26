@@ -1,6 +1,6 @@
 import express, { RequestHandler } from 'express';
 import restHandlers from '@/handlers/rest';
-import { body, checkSchema, header, oneOf, param, validationResult } from 'express-validator';
+import { body, header, param, validationResult } from 'express-validator';
 
 const router = express.Router();
 
@@ -14,7 +14,8 @@ const validator: RequestHandler = (req, res, next) => {
 };
 
 router.use(header('X-Letterboxd-User').isString().notEmpty(), validator);
-router.post('/',
+router.post(
+  '/',
   body('movies').isArray({ min: 1 }),
   body('users').isArray({ min: 1 }),
   body('settings').isObject(),

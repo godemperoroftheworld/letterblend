@@ -23,25 +23,25 @@ def get_profile(name):
 def get_watchlist(name):
     filters = request.json
     user_instance = user.User(name)
-    watchlist = user.user_watchlist(user_instance, filters)
+    watchlist = user_instance.get_watchlist(filters)
     return watchlist
 
 @users.route("/<name>/watched")
 def get_rated(name):
     user_instance = user.User(name)
-    rated = user.user_films(user_instance)
+    rated = user_instance.get_films()
     return rated
 
 
 @users.route("/<name>/followers")
 def get_followers(name):
     user_instance = user.User(name)
-    followers = user.user_followers(user_instance)
+    followers = user_instance.get_followers()
     return followers
 
 
 @users.route("/<name>/following")
 def get_following(name):
     user_instance = user.User(name)
-    following = user.user_following(user_instance)
+    following = user_instance.get_following()
     return following
