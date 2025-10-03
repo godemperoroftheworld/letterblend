@@ -42,6 +42,11 @@ export default defineNuxtConfig({
     },
   },
   nitro: {
+    vercel: {
+      functions: {
+        maxDuration: 60,
+      },
+    },
     routeRules: {
       'api/**': { proxy: `${process.env.BFF_URL}/**` },
     },
