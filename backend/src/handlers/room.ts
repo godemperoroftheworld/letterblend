@@ -1,10 +1,12 @@
 import { RequestHandler } from "express";
 import getData from "@/utils/data";
-import RoomService from "@/services/room";
+import RoomsService from "@/services/rooms";
 import getBlendedList from "@/utils/blend";
 import {Settings} from "@/types/room";
 import {HttpStatusCode} from "axios";
 import {uniq} from "lodash";
+import {RouteError} from "@/types";
+import {HttpStatusCodes} from "@/constants/http";
 
 type RoomParams = { id: string };
 interface CreateRoomParams extends Settings {
@@ -19,32 +21,25 @@ const createRoomHandler: RequestHandler = async (req, res) => {
     names: uniq([...users, user]),
   });
   // Create Room
-  const service = new RoomService(user);
-  const result = await service.createRoom(users, movies, settings);
-  res.status(200).send(result);
+  const room = await RoomsService.instance.createRoom({
+      movies,
+      settings,
+      users: users.map((u) => ({ user: u })),
+      owner: user
+  });
+  res.status(200).send(room);
 };
 
 const getRoomHandler: RequestHandler = async (req, res) => {
   const { id } = getData<RoomParams>(req);
-  const user = req.header("X-Letterboxd-User") as string;
-  const service = new RoomService(user);
-  const result = await service.getRoom(id);
+  const result = await RoomsService.instance.getRoom(id);
   res.status(HttpStatusCode.Ok).send(result);
 };
 
 const deleteRoomHandler: RequestHandler = async (req, res) => {
   const { id } = getData<RoomParams>(req);
-  const user = req.header("X-Letterboxd-User") as string;
-  const service = new RoomService(user);
-  await service.deleteRoom(id);
+  await RoomsService.instance.deleteRoom(id);
   res.sendStatus(HttpStatusCode.NoContent);
-};
-
-const startRoomHandler: RequestHandler = async (req, res) => {
-  const { id } = getData<RoomParams>(req);
-  const user = req.header("X-Letterboxd-User") as string;
-  const service = new RoomService(user);
-  await service.startRoom(id);
 };
 
 interface SettingsParams extends RoomParams {
@@ -52,12 +47,11 @@ interface SettingsParams extends RoomParams {
 }
 const updateSettingsHandler: RequestHandler = async (req, res) => {
   const { id , ...settings } = getData<SettingsParams>(req);
-  const user = req.header("X-Letterboxd-User") as string;
-  const service = new RoomService(user);
-  const room = await service.getRoom(id);
+  const room = await RoomsService.instance.getRoom(id);
+  if (!room) throw new RouteError(HttpStatusCodes.BAD_REQUEST, 'No room with id: ' + id);
   const newSettings = { ...room.settings, ...settings };
-  const newMovies = await getBlendedList({ names: room.users, ...newSettings });
-  const newRoom = await service.updateRoom(id, { settings: newSettings, movies: newMovies });
+  const newMovies = await getBlendedList({ names: room.users.flatMap((u) => u.user), ...newSettings });
+  const newRoom = await RoomsService.instance.updateRoom({ code: id, settings: newSettings, movies: newMovies });
   res.status(HttpStatusCode.Ok).send(newRoom);
 }
 
@@ -67,11 +61,11 @@ interface UserParams extends RoomParams {
 const updateUsersHandler: RequestHandler = async (req, res) => {
   const { id, users } = getData<UserParams>(req);
   const headerUser = req.header("X-Letterboxd-User") as string;
-  const service = new RoomService(headerUser);
-  const room = await service.getRoom(id);
+  const room = await RoomsService.instance.getRoom(id);
+  if (!room) throw new RouteError(HttpStatusCodes.BAD_REQUEST, 'No room with id: ' + id);
   const newUsers = uniq([headerUser, ...users]);
   const newMovies = await getBlendedList({ names: newUsers, ...room.settings });
-  const newRoom = await service.updateRoom(id, { users: newUsers, movies: newMovies });
+  const newRoom = await RoomsService.instance.updateRoom({ code: id, users: newUsers, movies: newMovies });
   res.status(HttpStatusCode.Ok).send(newRoom);
 }
 
@@ -79,7 +73,6 @@ export default {
   createRoomHandler,
   getRoomHandler,
   deleteRoomHandler,
-  startRoomHandler,
   updateSettingsHandler,
   updateUsersHandler
 };

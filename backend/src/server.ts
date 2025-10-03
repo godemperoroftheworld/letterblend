@@ -47,7 +47,7 @@ app.use(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _next: NextFunction,
   ) => {
-    logger.err(err, true);
+    logger.err(JSON.stringify(err), true);
     let status: number = HttpStatusCodes.INTERNAL_SERVER_ERROR;
     let stack: string | undefined = undefined;
     if (err instanceof RouteError) {
