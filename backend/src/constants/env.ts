@@ -32,9 +32,9 @@ const variables = {
   NodeEnv: process.env.NODE_ENV ?? "",
   Port: process.env.PORT ?? 0,
   ScrapeServiceURL: process.env.SCRAPE_SERVICE ?? "",
-  RoomServiceURL: process.env.ROOM_SERVICE ?? "",
   MovieAPI: process.env.MOVIE_API ?? "",
   PosterAPI: process.env.POSTER_API ?? "",
+  MongoPath: process.env.MONGO_PATH ?? '',
 } as const;
 
 export default variables;

@@ -50,12 +50,6 @@ router.put('/:id/users',
     validate,
     roomHandlers.updateUsersHandler,
 );
-router.post(
-  "/:id/start",
-  param("id").isString().isLength({ min: TOKEN_LENGTH, max: TOKEN_LENGTH }),
-  validate,
-  roomHandlers.startRoomHandler,
-);
 router.delete(
   "/:id",
   param("id").isString().isLength({ min: TOKEN_LENGTH, max: TOKEN_LENGTH }),

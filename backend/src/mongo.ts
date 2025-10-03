@@ -1,4 +1,4 @@
-import { Collection, Db, MongoClient, ServerApiVersion } from 'mongodb';
+import { Db, MongoClient, ServerApiVersion } from 'mongodb';
 import env from '@/constants/env';
 
 const client = new MongoClient(env.MongoPath, {
