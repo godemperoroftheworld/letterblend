@@ -51,7 +51,8 @@ const updateSettingsHandler: RequestHandler = async (req, res) => {
   if (!room) throw new RouteError(HttpStatusCodes.BAD_REQUEST, 'No room with id: ' + id);
   const newSettings = { ...room.settings, ...settings };
   const newMovies = await getBlendedList({ names: room.users.flatMap((u) => u.user), ...newSettings });
-  const newRoom = await RoomsService.instance.updateRoom({ code: id, settings: newSettings, movies: newMovies });
+  await RoomsService.instance.updateRoom({ code: id, settings: newSettings, movies: newMovies });
+  const newRoom = await RoomsService.instance.getRoomStripped(id);
   res.status(HttpStatusCode.Ok).send(newRoom);
 }
 
