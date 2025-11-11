@@ -32,7 +32,7 @@ const createRoomHandler: RequestHandler = async (req, res) => {
 
 const getRoomHandler: RequestHandler = async (req, res) => {
   const { id } = getData<RoomParams>(req);
-  const result = await RoomsService.instance.getRoom(id);
+  const result = await RoomsService.instance.getRoomStripped(id);
   res.status(HttpStatusCode.Ok).send(result);
 };
 

@@ -1,7 +1,5 @@
 import { RequestHandler } from "express";
 import { getData } from "@/utils/data";
-import { BlendParams, getBlendedList } from "@/utils/blend";
-import TMDB from "@/services/tmdb";
 import Scraper from "@/services/scraper";
 import {getPoster} from "@/services/rpdb";
 
