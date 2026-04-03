@@ -48,6 +48,7 @@ export default defineNuxtConfig({
       },
     },
     routeRules: {
+      '/**': { prerender: true },
       'api/**': { proxy: `${process.env.BFF_URL}/**` },
     },
   },

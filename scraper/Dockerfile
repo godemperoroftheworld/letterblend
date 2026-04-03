@@ -1,4 +1,4 @@
-FROM python:3.10.5-bullseye AS deploy-stage
+FROM python:3.12.10-alpine AS deploy-stage
 ARG PORT
 RUN pip install poetry
 COPY . .
