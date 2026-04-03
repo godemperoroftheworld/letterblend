@@ -36,7 +36,7 @@ function unrefObject<T extends object>(obj: {
 }): T {
   const deepUnref = {} as T;
   Object.entries(obj).forEach(([key, value]) => {
-    deepUnref[key as keyof T] = unrefDeep(value) as T[keyof T];
+    deepUnref[key as keyof T] = (value == null ? undefined : unrefDeep(value)) as T[keyof T];
   });
   return deepUnref;
 }
