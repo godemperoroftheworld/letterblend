@@ -24,7 +24,7 @@ def get_watchlist(name):
     filters = request.json
     user_instance = user.User(name)
     watchlist = user_instance.get_watchlist(filters)
-    return watchlist
+    return watchlist['data']
 
 @users.route("/<name>/watched")
 def get_rated(name):
