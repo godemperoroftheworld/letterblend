@@ -7,7 +7,7 @@ users = Blueprint('user', __name__)
 @users.route('/<name>/exists')
 def get_exists(name):
     try:
-        user.User(name)
+        user.user_profile.UserProfile(name)
         return jsonify({'exists': True})
     except Exception:
         return jsonify({'exists': False})
@@ -15,23 +15,16 @@ def get_exists(name):
 
 @users.route("/<name>/avatar")
 def get_profile(name):
-    user_instance = user.User(name)
-    return user_instance.avatar
+    user_profile = user.user_profile.UserProfile(name)
+    return user_profile.get_avatar()
 
 
 @users.post("/<name>/watchlist")
 def get_watchlist(name):
     filters = request.json
-    user_instance = user.User(name)
-    watchlist = user_instance.get_watchlist(filters)
+    user_watchlist = user.user_watchlist.UserWatchlist(name)
+    watchlist = user_watchlist.get_watchlist(filters)
     return watchlist['data']
-
-@users.route("/<name>/watched")
-def get_rated(name):
-    user_instance = user.User(name)
-    rated = user_instance.get_films()
-    return rated
-
 
 @users.route("/<name>/followers")
 def get_followers(name):
