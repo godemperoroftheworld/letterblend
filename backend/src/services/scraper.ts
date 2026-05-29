@@ -34,12 +34,6 @@ export default class Scraper {
       .then((r) => r.data);
   }
 
-  async watched(user: string) {
-    return this.service
-      .get<List>(`/users/${user}/watched`)
-      .then((r) => r.data);
-  }
-
   async followers(user: string) {
     return this.service.get(`/users/${user}/followers`).then((r) => r.data as Users);
   }
@@ -65,15 +59,5 @@ export default class Scraper {
 
   async id(slug: string) {
     return this.service.get(`movies/${slug}/id`).then(((r) => r.data as number));
-  }
-
-  async ids(slugs: string[]) {
-    return this.service
-      .get(`/movies/id`, {
-        params: {
-          slugs: slugs.join(","),
-        },
-      })
-      .then((r) => r.data as { slug: string; id: number }[]);
   }
 }

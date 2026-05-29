@@ -10,13 +10,3 @@ export interface Settings {
   genre?: string | string[];
 }
 export type Filters = Omit<Settings, 'top' | 'threshold'>;
-
-export interface Room {
-  code: string;
-  owner: string;
-  users: string[];
-  movies: Movie[];
-  settings: Settings;
-  started: boolean;
-  match?: number;
-}

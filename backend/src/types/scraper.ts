@@ -1,19 +1,12 @@
-export type Users = Record<string, { display_name: string }>
-
+export type Users = Record<string, { display_name: string }>;
 
 export interface ListEntry {
   name: string;
-  no: number;
-  page: number;
   slug: string;
   url: string;
+  year: number;
 }
 
-export default interface List {
-  available: boolean;
-  name: string;
-  count: number;
-  data: Record<number, ListEntry>;
-  data_count: number;
-  last_page: number;
-}
+type List = Record<number, ListEntry>;
+
+export default List;
