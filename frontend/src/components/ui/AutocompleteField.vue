@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T">
+<script setup lang="ts">
   import InputField, { type InputProps } from '@/components/ui/InputField.vue';
   import { useFuse } from '@vueuse/integrations/useFuse';
 
@@ -7,17 +7,19 @@
     options?: string[];
   }
   defineOptions({ inheritAttrs: false });
-  const props = withDefaults(defineProps<DropdownProps<T>>(), { options: [] });
-  const model = defineModel<T>();
+  const {
+    options = []
+  } = defineProps<DropdownProps>();
+  const model = defineModel<string>();
   const fieldRef = ref();
 
   // Internal value, no debounce
-  const innerValue = ref<T>();
+  const innerValue = ref<string>();
   watch(model, (val) => (innerValue.value = val), { immediate: true });
 
   // Search
   const valueStr = computed(() => (innerValue.value ? String(innerValue.value) : ''));
-  const matchingOptions = useFuse(valueStr, () => props.options, {
+  const matchingOptions = useFuse(valueStr, () => options, {
     resultLimit: 5,
   });
   const dropdownOptions = computed(() => {
@@ -33,7 +35,7 @@
   onClickOutside(fieldRef, () => {
     opened.value = false;
   });
-  function selectEntry(entry: T) {
+  function selectEntry(entry: string) {
     model.value = entry;
     opened.value = false;
   }
@@ -57,7 +59,7 @@
       v-show="opened"
       ref="dropdownRef"
       :style="dropdownWidthStyle"
-      class="bg-content fixed z-10 mt-1 w-full rounded-b text-sm">
+      class="bg-content absolute z-10 mt-1 w-full rounded-b text-sm">
       <div class="flex flex-col">
         <a
           v-for="(entry, idx) in dropdownOptions"
