@@ -1,8 +1,7 @@
 import Scraper from "@/services/scraper";
 import TMDB from "@/services/tmdb";
 import { Movie, Settings } from "@/types/room";
-import shuffle from "lodash/shuffle";
-import { groupBy, keys, map, mapValues, uniq, uniqBy, zipObject } from "lodash";
+import { groupBy, uniq } from "lodash";
 
 export type BlendParams = Settings & {
   names: string[];
