@@ -6,7 +6,7 @@
     "lint": "npx eslint --ext .ts --fix src/",
     "format": "npx prettier . --write",
     "clean": "npx rimraf dist",
-    "build": "npx tsc && tsc-alias && copyfiles env/*.env dist",
+    "build": "npx tsc --project ./tsconfig.prod.json && tsc-alias && copyfiles env/*.env dist",
     "start": "node dist/index.js --env=production",
     "dev": "nodemon",
     "prepare": "husky",

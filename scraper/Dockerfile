@@ -1,5 +1,6 @@
-FROM python:3.12.10-alpine AS deploy-stage
+FROM python:3.12.10-alpine
 ARG PORT
+ENV PORT=${PORT}
 RUN pip install poetry
 COPY . .
 RUN poetry config virtualenvs.create false

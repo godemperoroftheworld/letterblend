@@ -18,7 +18,6 @@
           class="bg-paper aspect-[2/3] w-full overflow-hidden rounded"
           :class="{ 'animate-pulse': !loaded }"
           :src="`api/poster/${data.id}`"
-          provider="raw"
           loading="lazy"
           :alt="data.name"
           @load="loaded = true" />

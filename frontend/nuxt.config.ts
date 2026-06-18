@@ -3,21 +3,19 @@ import svgLoader from 'vite-svg-loader';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: '2026-06-17',
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
-  modules: ['@nuxt/eslint', '@nuxt/image', '@vueuse/nuxt', 'nuxt-particles'],
+  modules: ['@nuxt/eslint', '@nuxt/image', '@vueuse/nuxt', '@tsparticles/nuxt4'],
   srcDir: 'src',
-  runtimeConfig: {
-    public: {
-      url: process.env.URL,
-    },
-  },
   app: {
     pageTransition: {
       name: 'page',
       mode: 'default',
     },
+  },
+  runtimeConfig: {
+    bffUrl: '',
   },
   image: {
     providers: {
@@ -27,29 +25,12 @@ export default defineNuxtConfig({
       },
     },
   },
-  particles: {
-    mode: 'slim',
-  },
   vite: {
     plugins: [tailwindcss(), svgLoader(), nodePolyfills()],
-    server: {
-      proxy: {
-        '/api': {
-          target: process.env.BFF_URL,
-          changeOrigin: true,
-        },
-      },
-    },
   },
   nitro: {
-    vercel: {
-      functions: {
-        maxDuration: 60,
-      },
-    },
     routeRules: {
-      '/**': { prerender: true },
-      'api/**': { proxy: `${process.env.BFF_URL}/**` },
+      '/api/**': { proxy: `${process.env.NUXT_BFF_URL}/api/**` },
     },
   },
   experimental: {

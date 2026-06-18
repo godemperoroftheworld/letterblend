@@ -1,7 +1,5 @@
 <script setup lang="ts">
   import Loader from '@/components/ui/Loader.vue';
-  import Particles from '@/components/Particles.vue';
-  import { SpeedInsights } from '@vercel/speed-insights/nuxt';
   import Notifications from '@/components/ui/notification/Notifications.vue';
 
   useHead({
@@ -27,7 +25,6 @@
   <loader />
   <particles />
   <notifications />
-  <speed-insights />
 </template>
 
 <style lang="scss">

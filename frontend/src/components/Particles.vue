@@ -47,7 +47,7 @@
 
 <template>
   <client-only>
-    <nuxt-particles
+    <vue-particles
       v-if="particles"
       id="particles"
       :options="options" />

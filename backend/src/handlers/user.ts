@@ -37,6 +37,7 @@ const getAvatarHandler: RequestHandler = async (req, res) => {
 
 const checkUserHandler: RequestHandler = async (req, res) => {
   const { name } = getData<UserParams>(req);
+  console.log('check')
   const { data } = await Scraper.getInstance().exists(name);
   res.status(HttpStatusCodes.OK).send(data);
 };
