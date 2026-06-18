@@ -5,11 +5,11 @@ ARG PORT
 ENV PORT=${PORT}
 ARG BFF_URL
 ENV NUXT_BFF_URL=${BFF_URL}
-ENV NODE_ENV=production
 
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock .yarnrc.yml ./
 
-RUN yarn install --frozen-lockfile
+RUN corepack enable
+RUN yarn install --immutable
 
 COPY . .
 
