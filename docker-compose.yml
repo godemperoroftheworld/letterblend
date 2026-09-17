@@ -29,12 +29,12 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        PORT: 8080
+        PORT: ${PORT:-8080}
         BFF_URL: http://letterblend-api:2000
     environment:
       NUXT_BFF_URL: http://letterblend-api:2000
     ports:
-      - "8080:8080"
+      - "${PORT:-8080}:${PORT:-8080}"
     networks:
       - letterblend-network
 networks:
