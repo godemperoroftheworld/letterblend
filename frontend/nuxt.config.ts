@@ -1,6 +1,5 @@
 import tailwindcss from '@tailwindcss/vite';
 import svgLoader from 'vite-svg-loader';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 export default defineNuxtConfig({
   compatibilityDate: '2026-06-17',
@@ -26,7 +25,7 @@ export default defineNuxtConfig({
     },
   },
   vite: {
-    plugins: [tailwindcss(), svgLoader(), nodePolyfills()],
+    plugins: [tailwindcss(), svgLoader()],
   },
   nitro: {
     routeRules: {

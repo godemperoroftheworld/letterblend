@@ -14,12 +14,13 @@
 
 <template>
   <div class="relative flex min-h-full flex-col items-center justify-center p-4">
+    <!-- Logo shows separately on mobile -->
     <content-view class="mb-2 w-fit md:hidden">
       <nuxt-link to="/">
         <logo class="h-32 w-32" />
       </nuxt-link>
     </content-view>
-    <content-view class="min-h-[80dvh] w-full max-w-screen-lg">
+    <content-view class="min-h-[80dvh] w-full max-w-5xl">
       <generic-button
         v-show="!isHome"
         name="back"

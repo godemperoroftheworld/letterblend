@@ -23,7 +23,7 @@
     <nuxt-page />
   </nuxt-layout>
   <loader />
-  <particles />
+  <ParticlesBackground />
   <notifications />
 </template>
 

@@ -66,7 +66,7 @@
         r="16"
         fill="none"
         class="stroke-current text-inherit"
-        stroke-width="2"></circle>
+        stroke-width="2" />
       <!-- Progress Circle -->
       <circle
         cx="18"
@@ -77,7 +77,7 @@
         stroke-width="2.1"
         stroke-dasharray="100"
         :stroke-dashoffset="100 - progress"
-        stroke-linecap="round"></circle>
+        stroke-linecap="round" />
     </svg>
   </div>
 </template>

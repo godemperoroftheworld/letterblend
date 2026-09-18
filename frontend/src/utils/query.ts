@@ -26,10 +26,9 @@ export type DataQueryReturnType<T, E = DefaultError, R = T> = Omit<
 };
 
 export type DataQueryOptions<T, E = DefaultError> = MaybeRef<{
-  [Property in keyof Omit<
-    QueryObserverOptions<T, E, T, T, Array<unknown>>,
-    'queryFn' | 'queryKey'
-  >]: Property extends 'enabled'
+  [
+    Property in keyof Omit<QueryObserverOptions<T, E, T, T, Array<unknown>>, 'queryFn' | 'queryKey'>
+  ]: Property extends 'enabled'
     ? MaybeRefOrGetter<QueryObserverOptions<T, E, T, T, Array<unknown>>[Property]>
     : MaybeDeepRef<QueryObserverOptions<T, E, T, T, Array<unknown>>[Property]>;
 }>;

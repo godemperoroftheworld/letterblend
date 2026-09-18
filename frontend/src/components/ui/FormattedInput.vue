@@ -9,8 +9,7 @@
   };
   interface Emits {
     (e: 'changed', val: number): void;
-    (e: 'focus'): void;
-    (e: 'blur'): void;
+    (e: 'focus' | 'blur'): void;
   }
   const props = defineProps<FormattedInputProps<T>>();
   const emits = defineEmits<Emits>();

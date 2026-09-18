@@ -16,6 +16,8 @@
         return 'border-primary text-primary';
       case 'secondary':
         return 'border-secondary text-secondary';
+      default:
+        return 'border-info text-info';
     }
   });
 </script>

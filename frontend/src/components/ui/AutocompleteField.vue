@@ -7,9 +7,7 @@
     options?: string[];
   }
   defineOptions({ inheritAttrs: false });
-  const {
-    options = []
-  } = defineProps<DropdownProps>();
+  const { options = [] } = defineProps<DropdownProps>();
   const model = defineModel<string>();
   const fieldRef = ref();
 
