@@ -1,7 +1,7 @@
 import Scraper from "@/services/scraper";
 import TMDB from "@/services/tmdb";
 import { Movie, Settings } from "@/types/room";
-import { fromPairs, groupBy, uniq } from "lodash";
+import { fromPairs, groupBy, shuffle, uniq } from "lodash";
 
 export type BlendParams = Settings & {
   names: string[];
@@ -39,10 +39,10 @@ async function getBlendedList({
   const groupedEntries = groupBy(watchlistEntries, "slug");
 
   const minCount = Math.ceil(names.length * Number(threshold));
-  const pickedEntries = fromPairs(Object.entries(groupedEntries)
+  const sortedEntries = shuffle(Object.entries(groupedEntries))
     .filter(([, entries]) => entries.length >= minCount)
-    .sort(([, a], [, b]) => a.length - b.length)
-    .slice(0, top));
+    .sort(([, a], [, b]) => a.length - b.length);
+  const pickedEntries = fromPairs(sortedEntries.slice(0, top));
 
   // Get TMDB and group for users
   const promises: Promise<Movie>[] = Object.values(pickedEntries).map(
