@@ -40,7 +40,7 @@
 
 <template>
   <label
-    class="transition-default bg-content outline-paper hover:bg-paper active:bg-paper focus-within:ring-info relative mx-[2px] my-[2px] flex h-7 w-16 cursor-pointer items-center rounded-full outline-2 outline-offset-2 select-none focus-within:ring-2 focus-within:ring-offset-4">
+    class="transition-default bg-content outline-paper hover:bg-paper active:bg-paper focus-within:ring-info relative m-[2px] flex h-7 w-16 cursor-pointer items-center rounded-full outline-2 outline-offset-2 select-none focus-within:ring-2 focus-within:ring-offset-4">
     <input
       type="checkbox"
       class="sr-only"
@@ -49,11 +49,11 @@
       @keyup.enter="onToggle"
       @change="onToggle" />
     <span
-      class="transition-default absolute h-7 w-7 flex-shrink-0 rounded-full bg-white"
+      class="transition-default absolute size-7 shrink-0 rounded-full bg-white"
       :class="{ 'left-[calc(100%-1.75rem)]': isChecked, 'left-0': !isChecked }" />
     <template v-if="icon">
       <div
-        class="relative h-6 w-6"
+        class="relative size-6"
         :class="labelIconClass">
         <icon-slash
           v-if="!isChecked"

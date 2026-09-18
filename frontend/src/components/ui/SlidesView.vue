@@ -87,7 +87,7 @@
       name="back"
       @click.prevent="goBack"
       @keyup.enter="goBack">
-      <icon-chevron-left class="h-8 w-8" />
+      <icon-chevron-left class="size-8" />
     </button>
     <labeled-image
       class="slider-prev absolute h-[calc(100%-2rem)] w-full -translate-x-full px-11"
@@ -110,21 +110,21 @@
         name="next"
         @click.prevent="goNext"
         @keyup.enter="goNext">
-        <icon-chevron-right class="h-8 w-8" />
+        <icon-chevron-right class="size-8" />
       </button>
       <progress-icon
         v-if="autoplay"
-        class="text-content absolute top-0.5 -left-1 -z-10 h-12 w-12 -translate-y-full"
+        class="text-content absolute top-0.5 -left-1 -z-10 size-12 -translate-y-full"
         :enable="!clicked"
         :time-ms="autoplay"
         loop />
     </div>
-    <div class="absolute right-1/2 bottom-0 left-1/2 flex h-2.5 w-max -translate-x-1/2 gap-1">
+    <div class="absolute inset-x-1/2 bottom-0 flex h-2.5 w-max -translate-x-1/2 gap-1">
       <span
         v-for="idx in count"
         :key="idx"
-        :class="{ '!bg-white': idx === index + 1 }"
-        class="bg-paper inline-block h-2.5 w-2.5 cursor-pointer rounded-full"
+        :class="{ 'bg-white!': idx === index + 1 }"
+        class="bg-paper inline-block size-2.5 cursor-pointer rounded-full"
         @click="go(idx - 1)" />
     </div>
   </div>

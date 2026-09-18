@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex h-fit w-fit max-w-full snap-x snap-proximity gap-4 overflow-x-auto p-4 pb-6">
+    class="relative flex size-fit max-w-full snap-x snap-proximity gap-4 overflow-x-auto p-4 pb-6">
     <template v-if="loading || !entries">
       <template
         v-for="idx in 10"

@@ -122,10 +122,10 @@
             label="Presets">
             <multiselect-view
               v-model="presetSettings"
-              class="!w-64 max-w-full"
+              class="w-64! max-w-full"
               :options="PRESET_OPTIONS" />
           </labeled-value>
-          <span class="bg-paper h-0.5 w-full shrink-0 grow rounded" />
+          <span class="bg-paper h-0.5 w-full shrink-0 grow rounded-sm" />
           <blend-settings
             ref="settingsForm"
             class="max-w-full"

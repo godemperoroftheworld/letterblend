@@ -54,14 +54,14 @@
         v-model="model"
         :name="name"
         v-bind="props"
-        class="!w-64 max-w-full"
+        class="w-64! max-w-full"
         :class="{ 'bg-paper text-paper animate-pulse': loading }"
         @focus="touched = true"
         @click="touched = true" />
     </field>
     <div
       v-show="loadingValidation"
-      class="absolute top-0 right-2 bottom-0 my-auto h-6 w-6">
+      class="absolute inset-y-0 right-2 my-auto size-6">
       <loading-icon />
     </div>
     <error-message

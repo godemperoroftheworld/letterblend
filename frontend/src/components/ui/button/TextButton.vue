@@ -25,11 +25,11 @@
     v-bind="$attrs"
     :name="name"
     type="button"
-    class="button shadow-paper/50 max-w-full min-w-24 rounded p-2 px-4 font-medium text-white uppercase shadow-2xs drop-shadow-none active:shadow-none disabled:cursor-not-allowed"
+    class="button shadow-paper/50 max-w-full min-w-24 rounded-sm p-2 px-4 font-medium text-white uppercase shadow-2xs drop-shadow-none active:shadow-none disabled:cursor-not-allowed"
     :disabled="disabled || loading"
     :class="bgClass">
     <template v-if="loading">
-      <loading-icon class="mx-auto h-6 w-6 animate-spin" />
+      <loading-icon class="mx-auto size-6 animate-spin" />
     </template>
     <template v-else>
       {{ text }}

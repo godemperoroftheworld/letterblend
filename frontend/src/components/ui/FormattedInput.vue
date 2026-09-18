@@ -57,19 +57,19 @@
 
 <template>
   <div
-    class="focus-within:outline-info bg-content box-border max-w-full rounded outline-offset-2 focus-within:outline-1">
+    class="focus-within:outline-info bg-content box-border max-w-full rounded-sm outline-offset-2 focus-within:outline-1">
     <input
       v-if="focused"
       ref="inputFieldRef"
       v-model="value"
       type="number"
-      class="h-full w-full p-2 outline-none"
+      class="size-full p-2 outline-none"
       v-bind="{ ...propsToPass }"
       @focus="focused = true"
       @blur="focused = false" />
     <input
       v-else
-      class="h-full w-full p-2 outline-none"
+      class="size-full p-2 outline-none"
       :value="modelFormatted"
       @focus="focused = true" />
   </div>

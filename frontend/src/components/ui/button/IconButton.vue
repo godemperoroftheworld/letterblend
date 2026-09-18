@@ -25,7 +25,7 @@
 <template>
   <button
     :name="name"
-    class="button flex cursor-pointer items-center rounded p-2"
+    class="button flex cursor-pointer items-center rounded-sm p-2"
     :disabled="disabled || loading"
     type="button"
     :class="bgClass">

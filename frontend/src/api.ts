@@ -1,6 +1,5 @@
 import type { AxiosInstance, AxiosRequestConfig } from 'axios';
 import axios from 'axios';
-import cookie from 'js-cookie';
 
 export default class LetterblendApi {
   private static _instance: LetterblendApi;
@@ -12,7 +11,8 @@ export default class LetterblendApi {
       baseURL: '/api/',
     });
     this.axiosInstance.interceptors.request.use((config) => {
-      config.headers['X-Letterboxd-User'] = cookie.get('user');
+      // TODO FIX
+      // config.headers['X-Letterboxd-User'] = cookie.get('user');
       return config;
     });
   }

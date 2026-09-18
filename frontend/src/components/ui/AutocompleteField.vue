@@ -47,7 +47,7 @@
     <input-field
       v-model="model"
       autocomplete="off"
-      class="h-full w-full"
+      class="size-full"
       v-bind="{ ...$props, ...$attrs }"
       @focusin="opened = true"
       @changed="(val) => (innerValue = val)"

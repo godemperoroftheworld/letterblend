@@ -40,7 +40,7 @@
         <div
           v-show="show"
           ref="contentRef"
-          class="absolute-center z-10 h-fit w-fit max-w-dvw p-4">
+          class="absolute-center z-10 size-fit max-w-dvw p-4">
           <content-view
             :class="maxWidth"
             class="max-w-full p-2">

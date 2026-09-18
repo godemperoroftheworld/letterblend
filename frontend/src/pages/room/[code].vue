@@ -132,7 +132,7 @@
               :key="user"
               class="flex w-full gap-2">
               <avatar-view
-                class="h-6 w-6 grow-0"
+                class="size-6 grow-0"
                 :name="user" />
               <span class="text-info">{{ user }}</span>
             </div>
@@ -142,18 +142,18 @@
               v-for="idx in 2"
               :key="idx"
               class="flex w-full gap-2">
-              <avatar-view class="h-6 w-6" />
-              <span class="bg-paper h-6 w-32 animate-pulse rounded" />
+              <avatar-view class="size-6" />
+              <span class="bg-paper h-6 w-32 animate-pulse rounded-sm" />
             </div>
           </template>
         </div>
         <div class="absolute top-3.5 right-4">
           <generic-button
             name="editUsers"
-            class="!min-w-0 !p-1 !px-2 !text-sm"
+            class="min-w-0! p-1! px-2! text-sm!"
             button-style="hollow"
             @click="showEditUsers = true">
-            <icon-edit class="h-5 w-5" />
+            <icon-edit class="size-5" />
             <span class="max-sm:hidden">Edit</span>
           </generic-button>
         </div>

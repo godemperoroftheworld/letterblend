@@ -10,16 +10,14 @@
 <template>
   <div
     role="alert"
-    class="popup-notification transition-default z-50 my-1 min-h-4 w-full min-w-32 rounded-md p-4 shadow"
+    class="popup-notification transition-default z-50 my-1 min-h-4 w-full min-w-32 rounded-md p-4 shadow-sm"
     :class="[notification.type]">
     <div class="mb-1 text-lg font-medium">{{ notification.title }}</div>
     <div class="text-sm">{{ notification.message }}</div>
   </div>
 </template>
 
-<style scoped lang="scss">
-  @use '@/assets/css/variables.scss';
-
+<style scoped>
   .popup-notification.error {
     background-color: red;
   }

@@ -34,7 +34,7 @@
   <div class="relative">
     <select
       v-model="selected"
-      class="w-full max-w-sm rounded border bg-white bg-none p-2 text-sm font-normal">
+      class="w-full max-w-sm rounded-sm border bg-white bg-none p-2 text-sm font-normal">
       <option
         :selected="!selectFirst"
         value>
@@ -49,7 +49,7 @@
     </select>
     <span
       v-if="selected === undefined"
-      class="pointer-events-none absolute top-0 bottom-0 left-2 my-auto h-fit font-light select-none">
+      class="pointer-events-none absolute inset-y-0 left-2 my-auto h-fit font-light select-none">
       select an option
     </span>
   </div>

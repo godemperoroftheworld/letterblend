@@ -17,7 +17,7 @@
         <transition name="scale">
           <loading-icon
             v-show="loading"
-            class="absolute-center text-background z-20 h-24 w-24" />
+            class="absolute-center text-background z-20 size-24" />
         </transition>
       </div>
     </teleport>

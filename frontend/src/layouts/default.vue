@@ -17,7 +17,7 @@
     <!-- Logo shows separately on mobile -->
     <content-view class="mb-2 w-fit md:hidden">
       <nuxt-link to="/">
-        <logo class="h-32 w-32" />
+        <logo class="size-32" />
       </nuxt-link>
     </content-view>
     <content-view class="min-h-[80dvh] w-full max-w-5xl">
@@ -40,7 +40,7 @@
         <nuxt-link
           to="/"
           class="max-md:hidden">
-          <logo class="h-40 w-40" />
+          <logo class="size-40" />
         </nuxt-link>
       </div>
       <main class="p-4">

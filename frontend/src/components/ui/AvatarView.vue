@@ -33,7 +33,7 @@
     <template v-if="avatar">
       <nuxt-img
         v-slot="{ src, isLoaded, imgAttrs }"
-        class="h-full w-full text-[0px]"
+        class="size-full text-[0px]"
         :src="avatar">
         <img
           v-if="isLoaded"

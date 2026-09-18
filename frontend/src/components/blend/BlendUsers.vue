@@ -5,7 +5,6 @@
   import uniq from 'lodash/uniq';
   import { queryClient } from '@/plugins/query';
   import useUser from '@/composables/user';
-  import Cookies from 'js-cookie';
   import type { GenericValidateFunction } from 'vee-validate';
 
   // Setup
@@ -18,7 +17,7 @@
   }
   const { user: storageName } = useUser();
   const props = withDefaults(defineProps<Props>(), {
-    values: () => [Cookies.get('user') as string, ''],
+    values: () => [],
     showSubmitButton: true,
   });
 

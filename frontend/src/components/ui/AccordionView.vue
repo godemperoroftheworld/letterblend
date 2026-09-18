@@ -13,7 +13,7 @@
 
 <template>
   <div
-    class="transition-default accordion bg-content transition-default relative max-h-10 min-w-64 overflow-hidden rounded"
+    class="transition-default accordion bg-content relative max-h-10 min-w-64 overflow-hidden rounded-sm"
     :class="{ 'max-h-96': open }">
     <input
       v-model="open"
@@ -25,7 +25,7 @@
       <icon-chevron-up v-if="open" />
       <icon-chevron-down v-else />
     </div>
-    <div class="bg-background border-content rounded border-4 p-2">
+    <div class="bg-background border-content rounded-sm border-4 p-2">
       <slot />
     </div>
   </div>

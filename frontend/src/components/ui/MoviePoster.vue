@@ -13,9 +13,9 @@
         v-tippy="{ content: data.name, touch: 'hold' }"
         :href="`https://letterboxd.com/tmdb/${data.id}`"
         target="_blank"
-        class="aspect-[2/3] w-full">
+        class="aspect-2/3 w-full">
         <nuxt-img
-          class="bg-paper aspect-[2/3] w-full overflow-hidden rounded"
+          class="bg-paper aspect-2/3 w-full overflow-hidden rounded-sm"
           :class="{ 'animate-pulse': !loaded }"
           :src="`api/poster/${data.id}`"
           provider="raw"
@@ -28,17 +28,17 @@
           v-for="user in data.users"
           :key="user"
           v-tippy="user"
-          class="transition-default h-6 w-6 hover:scale-125"
+          class="transition-default size-6 hover:scale-125"
           :name="user" />
       </div>
     </template>
     <template v-else>
-      <div class="bg-paper aspect-[2/3] w-full animate-pulse rounded" />
+      <div class="bg-paper aspect-2/3 w-full animate-pulse rounded-sm" />
       <div class="mx-auto mt-1 flex h-6 w-fit gap-1">
         <avatar-view
           v-for="idx in 2"
           :key="idx"
-          class="transition-default h-6 w-6 hover:scale-125" />
+          class="transition-default size-6 hover:scale-125" />
       </div>
     </template>
   </div>

@@ -32,8 +32,8 @@
 
 <template>
   <div
-    class="bg-background transition-default relative flex max-h-screen flex-col gap-4 overflow-hidden rounded-xl p-4 !pt-4"
-    :class="{ '!max-h-14': shouldCollapse }">
+    class="bg-background transition-default relative flex max-h-screen flex-col gap-4 overflow-hidden rounded-xl p-4 pt-4!"
+    :class="{ 'max-h-14!': shouldCollapse }">
     <h3 class="text-center text-lg font-bold uppercase italic">
       {{ title }}
     </h3>
@@ -45,10 +45,10 @@
       <div class="absolute top-4 right-4 lg:top-8 lg:right-8">
         <icon-chevron-down
           v-if="shouldCollapse"
-          class="h-7 w-7" />
+          class="size-7" />
         <icon-chevron-up
           v-else
-          class="h-7 w-7" />
+          class="size-7" />
       </div>
     </client-only>
     <div class="grow">

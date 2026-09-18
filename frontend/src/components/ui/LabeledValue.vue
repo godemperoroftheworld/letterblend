@@ -33,14 +33,14 @@
       <icon-info-circle
         v-if="tooltip"
         v-tippy="tooltip"
-        class="text-info absolute top-0 left-full h-5 w-5 translate-x-1 cursor-pointer" />
+        class="text-info absolute top-0 left-full size-5 translate-x-1 cursor-pointer" />
     </label>
     <div
       :id="name"
-      class="form-control relative flex-grow"
+      class="form-control relative grow"
       :class="{
-        'outline-primary rounded outline-2': success,
-        'rounded outline-2 outline-red-600': errored,
+        'outline-primary rounded-sm outline-2': success,
+        'rounded-sm outline-2 outline-red-600': errored,
       }">
       <slot />
     </div>

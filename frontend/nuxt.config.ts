@@ -13,9 +13,6 @@ export default defineNuxtConfig({
       mode: 'default',
     },
   },
-  runtimeConfig: {
-    bffUrl: '',
-  },
   image: {
     providers: {
       raw: {
@@ -31,8 +28,5 @@ export default defineNuxtConfig({
     routeRules: {
       '/api/**': { proxy: `${process.env.NUXT_BFF_URL}/api/**` },
     },
-  },
-  experimental: {
-    cookieStore: true,
   },
 });
