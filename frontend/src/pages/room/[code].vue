@@ -1,20 +1,14 @@
 <script setup lang="ts">
   import MoviePoster from '@/components/ui/MoviePoster.vue';
-  import CardView from '@/components/ui/CardView.vue';
-  import CarouselView from '@/components/ui/CarouselView.vue';
-  import type { Movie } from '@/types/movie';
   import { breakpointsTailwind } from '@vueuse/core';
   import { useRoom } from '@/composables/query/room';
   import { useUpdateSettings, useUpdateUsers } from '@/composables/mutation/room';
   import type { RoomSettings } from '@/types/room';
-  import GenericButton from '@/components/ui/button/GenericButton.vue';
-  import { IconShare, IconEdit } from '@tabler/icons-vue';
+  import { IconInfoCircle, IconShare } from '@tabler/icons-vue';
   import useUser from '@/composables/user';
-  import AvatarView from '@/components/ui/AvatarView.vue';
-  import DialogView from '@/components/ui/DialogView.vue';
-  import InfoMessage from '@/components/ui/InfoMessage.vue';
+  import LetterboxdAvatar from '@/components/ui/LetterboxdAvatar.vue';
   import ConfirmDialog from '@/components/ui/ConfirmDialog.vue';
-  import Notifier from '@/utils/notification';
+  import BlendUsersModal from '@/components/blend/BlendUsersModal.vue';
 
   // Room info
   const route = useRoute();
@@ -29,6 +23,8 @@
     enabled: hasName,
     retry: false,
   });
+  const { success, normal, error: showError } = useNotify();
+  
   const results = computed(() => room.value?.movies);
 
   // State
@@ -46,7 +42,7 @@
   }
   async function settingsSubmitted() {
     await updateSettings({ id: room.value!.code, settings: settingsValue.value });
-    Notifier.instance().success({
+    success({
       title: 'Updated Room',
       message: 'Room settings updated successfully.',
     });
@@ -57,7 +53,7 @@
   async function usersSubmitted(data: { name: string[] }) {
     await updateUsers({ id: room.value!.code, users: data.name });
     showEditUsers.value = false;
-    Notifier.instance().success({
+    success({
       title: 'Updated Room',
       message: 'Room users updated successfully.',
     });
@@ -73,7 +69,7 @@
       navigator.share(data);
     } else {
       navigator.clipboard.writeText(window.location.href);
-      Notifier.instance().normal({
+      normal({
         title: 'Copied to clipboard',
         message: 'Room code copied to clipboard.',
       });
@@ -83,7 +79,7 @@
   // Error
   watch(error, (val) => {
     if (val) {
-      Notifier.instance().error({
+      showError({
         title: 'Room Error',
         message: 'Failed to find room. Did it expire?',
       });
@@ -94,24 +90,19 @@
 
 <template>
   <div class="relative flex items-stretch gap-4 max-md:flex-col">
-    <card-view
+    <UCard
       class="basis-2/3"
       title="Results">
       <div class="flex h-full flex-col items-center justify-between">
-        <carousel-view
+        <UCarousel
+          v-slot="{ item }"
           class="mx-auto"
-          :entries="results"
-          :loading="isFetching">
-          <template #placeholder>
-            <movie-poster class="w-full" />
-          </template>
-          <template #default="data: Movie">
-            <movie-poster
-              class="w-full"
-              :data="data" />
-          </template>
-        </carousel-view>
-        <generic-button
+          :items="results">
+          <movie-poster
+            class="w-full"
+            :data="item" />
+        </UCarousel>
+        <UButton
           v-tippy="!isSmall ? { content: 'Copied to clipboard.', trigger: 'click' } : undefined"
           name="share"
           class="w-64"
@@ -120,18 +111,18 @@
           @click="share">
           <icon-share />
           Share
-        </generic-button>
+        </UButton>
       </div>
-    </card-view>
+    </UCard>
     <div class="flex basis-1/3 flex-col gap-4">
-      <card-view title="Users">
+      <UCard title="Users">
         <div class="relative mx-auto flex w-fit flex-col items-center gap-2">
           <template v-if="room">
             <div
               v-for="user in room?.users"
               :key="user"
               class="flex w-full gap-2">
-              <avatar-view
+              <letterboxd-avatar
                 class="size-6 grow-0"
                 :name="user" />
               <span class="text-info">{{ user }}</span>
@@ -142,23 +133,14 @@
               v-for="idx in 2"
               :key="idx"
               class="flex w-full gap-2">
-              <avatar-view class="size-6" />
+              <letterboxd-avatar class="size-6" />
               <span class="bg-paper h-6 w-32 animate-pulse rounded-sm" />
             </div>
           </template>
         </div>
-        <div class="absolute top-3.5 right-4">
-          <generic-button
-            name="editUsers"
-            class="min-w-0! p-1! px-2! text-sm!"
-            button-style="hollow"
-            @click="showEditUsers = true">
-            <icon-edit class="size-5" />
-            <span class="max-sm:hidden">Edit</span>
-          </generic-button>
-        </div>
-      </card-view>
-      <card-view
+        <BlendUsersModal v-model:open="showEditUsers" :loading="isFetching" :users="room.users" @submitted="usersSubmitted" />
+      </UCard>
+      <UCard
         :collapsable="isSmall"
         title="Settings">
         <blend-settings
@@ -167,29 +149,14 @@
           :values="room?.settings"
           submit-button-text="Update"
           :show-submit-button="true" />
-      </card-view>
+      </UCard>
     </div>
-    <dialog-view
-      v-if="room"
-      title="Edit Users"
-      width="xl"
-      :show="showEditUsers"
-      @close="showEditUsers = false">
-      <info-message class="mx-auto mb-4">
-        Updating the users for the room will re-compute the blend. This action is irreversible.
-      </info-message>
-      <blend-users
-        :loading="isFetching"
-        :values="room.users"
-        :submitted="usersSubmitted" />
-    </dialog-view>
     <confirm-dialog
-      :show="showConfirmDialog"
-      @close="showConfirmDialog = false"
+      v-model:open="showConfirmDialog"
       @confirm="settingsSubmitted">
-      <info-message class="mx-auto mb-2">
+      <UAlert class="mx-auto mb-2" color="info" :icon="IconInfoCircle">
         Updating the blend settings will re-compute the blend. This action is irreversible.
-      </info-message>
+      </UAlert>
       <div class="text-secondary mx-auto w-fit font-medium italic">
         Are you sure you want to update this blend?
       </div>

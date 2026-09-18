@@ -1,11 +1,9 @@
 <script setup lang="ts">
-  import InputField from '@/components/ui/InputField.vue';
   import { number } from 'yup';
-  import FormattedInput from '@/components/ui/FormattedInput.vue';
   import FormView from '@/components/ui/form/FormView.vue';
   import noop from 'lodash/noop';
   import type { RoomSettings } from '@/types/room';
-  import MultiselectView from '@/components/ui/MultiselectView.vue';
+  import { UInput, UInputNumber, USelect, USlider } from '#components';
 
   // Constant
   const GENRE_OPTIONS = [
@@ -63,29 +61,28 @@
     :loading="loading"
     :fields="{
       top: {
-        as: InputField,
+        as: UInputNumber,
         label: 'Count',
         rules: number().required().min(1).max(30),
-        props: {
-          type: 'number',
-        },
         tooltip: 'The number of films in the blend.',
       },
       threshold: {
-        as: FormattedInput,
+        as: UInputNumber,
         label: 'Threshold',
         rules: number().required().min(0).max(1),
         props: {
-          format: '0,00.00%',
-          percent: true,
+          step: 0.01,
+          formatOptions: {
+            style: 'percent'
+          }
         },
         tooltip: 'Percentage of users that need the film in their watchlist.',
       },
       genre: {
-        as: MultiselectView,
+        as: USelect,
         label: 'Genre',
         props: {
-          options: GENRE_OPTIONS,
+          items: GENRE_OPTIONS,
           multiple: true,
         },
       },

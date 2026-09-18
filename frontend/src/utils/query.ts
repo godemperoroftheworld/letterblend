@@ -12,10 +12,9 @@ import LetterblendAPI from '@/api';
 import type { MaybeRefOrGetter, Ref } from 'vue';
 import { computed, unref, watch } from 'vue';
 import type { MaybeDeepRef } from '@/utils/unref';
-import type { MaybeRef } from '@vueuse/core';
-import Notifier from '@/utils/notification';
 import useLoader from '@/composables/load';
 import { queryClient } from '@/plugins/query';
+import { until } from '@vueuse/core';
 
 export type DataQueryReturnType<T, E = DefaultError, R = T> = Omit<
   UseQueryReturnType<T, E>,
@@ -91,7 +90,7 @@ export async function fetchDataQuery<T, E = DefaultError, R = T>(
     const queryFn = buildQueryFn<T>(url, config, showLoader);
     await queryClient.fetchQuery(buildOptions(key, queryFn, options ?? {}));
   } else if (state.status !== 'success') {
-    await waitUntil(() => {
+    await until(() => {
       const state = queryClient.getQueryState(key);
       return state?.status === 'success';
     });
@@ -115,6 +114,7 @@ export function useDataQuery<T, E = DefaultError, R = T>(
   { options, config, transform, showLoader }: UseDataQueryParams<T, E, R>,
 ): DataQueryReturnType<T, E, R> {
   const queryFn = buildQueryFn(url, config, showLoader);
+  const { error: showError } = useNotify();
 
   const queryOptions = computed(() => buildOptions(key, queryFn, options));
 
@@ -128,7 +128,7 @@ export function useDataQuery<T, E = DefaultError, R = T>(
 
   watch(error, (val) => {
     if (val instanceof AxiosError) {
-      Notifier.instance().error({ title: val.name, message: val.message });
+      showError({ title: val.name, message: val.message });
     }
   });
   return {

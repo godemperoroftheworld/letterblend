@@ -9243,6 +9243,7 @@ __metadata:
     vite: "npm:^8.3.0"
     vite-svg-loader: "npm:^5.1.3"
     vue: "npm:^3.5.43"
+    vue-component-type-helpers: "npm:^3.3.11"
     vue-multiselect: "npm:^3.5.0"
     vue-tippy: "npm:^6.8.0"
     yup: "npm:^1.7.1"

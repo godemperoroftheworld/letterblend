@@ -4,7 +4,6 @@
   import FormControl from '@/components/ui/form/FormControl.vue';
   import { FieldArray, type FieldArrayContext, useFormContext } from 'vee-validate';
   import IconButton from '@/components/ui/button/IconButton.vue';
-  import GenericButton from '@/components/ui/button/GenericButton.vue';
 
   interface Props {
     fieldProps: Omit<FieldProps<T>, 'name'>;
@@ -51,39 +50,42 @@
           :name="`${String(arrayKey)}[${idx}]`"
           v-bind="fieldProps"
           :loading="loading" />
-        <icon-button
+        <UButton
           class="sm:hidden"
           button-style="danger"
           :disabled="disableRemove"
           :icon="IconTrash"
           name="removeEntry"
-          @click="remove(idx)" />
+          @click="remove(idx)">
+          <IconTrash class="mx-auto aspect-square" />
+        </UButton>
         <div
           class="absolute -right-2 bottom-0 hidden w-fit translate-x-full items-center gap-2 sm:flex">
-          <icon-button
+          <UButton
             button-style="danger"
             :disabled="disableRemove"
-            :icon="IconTrash"
             name="removeEntry"
-            @click="remove(idx)" />
-          <icon-button
+            @click="remove(idx)">
+            <IconTrash class="mx-auto aspect-square" />
+          </UButton>
+          <UButton
             v-if="idx + 1 === arrayFields.length"
             :disabled="disableAdd"
             button-style="submit"
-            :icon="IconPlus"
-            :size="12"
             name="addEntry"
-            @click="push('')" />
+            @click="push('')">
+            <IconPlus class="mx-auto aspect-square" />
+          </UButton>
         </div>
       </div>
     </template>
   </field-array>
-  <generic-button
+  <UButton
     name="addEntry"
     class="mx-auto w-64 sm:hidden"
     :disabled="disableAdd"
     @click="fieldArrayRef?.push('')">
     <icon-plus />
     Add Entry
-  </generic-button>
+  </UButton>
 </template>

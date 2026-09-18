@@ -114,7 +114,7 @@
       v-if="showSubmitButton || showCancelButton"
       class="mt-5 flex max-w-full justify-between text-center"
       :class="{ 'w-full': showCancelButton && showSubmitButton }">
-      <text-button
+      <UButton
         v-if="showCancelButton"
         name="cancel"
         class="w-64"
@@ -122,7 +122,7 @@
         :text="cancelButtonText"
         :loading="loading"
         @click.prevent="emits('cancelled')" />
-      <text-button
+      <UButton
         v-if="showSubmitButton"
         name="submit"
         class="w-64"

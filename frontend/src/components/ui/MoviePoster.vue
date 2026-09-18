@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import type { Movie } from '@/types/movie';
-  import AvatarView from '@/components/ui/AvatarView.vue';
+  import LetterboxdAvatar from '@/components/ui/LetterboxdAvatar.vue';
   defineProps<{ data?: Movie }>();
 
   const loaded = ref(false);
@@ -24,10 +24,9 @@
           @load="loaded = true" />
       </a>
       <div class="mx-auto mt-1 flex h-6 w-fit gap-1">
-        <avatar-view
+        <letterboxd-avatar
           v-for="user in data.users"
           :key="user"
-          v-tippy="user"
           class="transition-default size-6 hover:scale-125"
           :name="user" />
       </div>
@@ -35,7 +34,7 @@
     <template v-else>
       <div class="bg-paper aspect-2/3 w-full animate-pulse rounded-sm" />
       <div class="mx-auto mt-1 flex h-6 w-fit gap-1">
-        <avatar-view
+        <letterboxd-avatar
           v-for="idx in 2"
           :key="idx"
           class="transition-default size-6 hover:scale-125" />

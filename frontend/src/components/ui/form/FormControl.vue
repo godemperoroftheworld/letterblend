@@ -1,8 +1,6 @@
 <script setup lang="ts" generic="T extends PropertyKey">
-  import { ErrorMessage, Field, type FieldContext } from 'vee-validate';
+  import {  Field, type FieldContext } from 'vee-validate';
   import type { FieldProps } from './types';
-  import LabeledValue from '../LabeledValue.vue';
-  import LoadingIcon from '@/components/ui/icons/LoadingIcon.vue';
   import type { UnwrapNestedRefs } from 'vue';
   import isEqual from 'lodash/isEqual';
 
@@ -11,8 +9,7 @@
   });
 
   const fieldRef = ref<UnwrapNestedRefs<FieldContext>>();
-  const loadingValidation = computed(() => fieldRef.value?.meta.pending);
-  const errored = computed(() => !!fieldRef.value?.errorMessage);
+  const errorMessage = computed(() => fieldRef.value?.errorMessage);
 
   const touched = ref(false);
   const showValidation = ref(false);
@@ -37,36 +34,28 @@
 </script>
 
 <template>
-  <labeled-value
-    :name="name"
-    :label="label"
-    :label-size="labelSize"
-    :uppercase="uppercase"
-    :errored="touched && errored"
-    :tooltip="tooltip"
-    :success="(showValidation || touched) && !errored">
-    <field
-      ref="fieldRef"
+  <UTooltip :text="tooltip">
+    <UFormField
       :name="name"
-      :rules="rules">
-      <component
-        :is="as"
-        v-model="model"
+      :label="label"
+      :label-size="labelSize"
+      :uppercase="uppercase"
+      :error="errorMessage"
+      :success="(showValidation || touched) && !errorMessage">
+      <field
+        ref="fieldRef"
         :name="name"
-        v-bind="props"
-        class="w-64! max-w-full"
-        :class="{ 'bg-paper text-paper animate-pulse': loading }"
-        @focus="touched = true"
-        @click="touched = true" />
-    </field>
-    <div
-      v-show="loadingValidation"
-      class="absolute inset-y-0 right-2 my-auto size-6">
-      <loading-icon />
-    </div>
-    <error-message
-      v-show="touched"
-      class="absolute right-0 -bottom-0.5 translate-y-full text-right text-xs text-red-600"
-      :name="name" />
-  </labeled-value>
+        :rules="rules">
+        <component
+          :is="as"
+          v-model="model"
+          :name="name"
+          v-bind="props"
+          class="w-64! max-w-full"
+          :class="{ 'bg-paper text-paper animate-pulse': loading }"
+          @focus="touched = true"
+          @click="touched = true" />
+      </field>
+    </UFormField>
+  </UTooltip>
 </template>

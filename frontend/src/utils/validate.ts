@@ -8,7 +8,10 @@ export const validateLetterboxdName: GenericValidateFunction<string> = async (va
   try {
     await string().required().validate(value);
   } catch (e) {
-    return e.errors as string[];
+    if (typeof e === 'object' && e != null && 'errors' in e) {
+      return e.errors as string[];
+    }
+    return [];
   }
 
   const exists = await fetchDataQuery<ExistsResponse, DefaultError, boolean>(

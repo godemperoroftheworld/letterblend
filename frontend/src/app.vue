@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import Loader from '@/components/ui/Loader.vue';
-  import Notifications from '@/components/ui/notification/Notifications.vue';
 
   useHead({
     htmlAttrs: {
@@ -19,10 +18,11 @@
       name="theme-color"
       content="#2c3440" />
   </Head>
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+  <UApp>
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+  </UApp>
   <Loader />
   <ParticlesBackground />
-  <Notifications />
 </template>

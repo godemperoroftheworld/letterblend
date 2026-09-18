@@ -1,24 +1,20 @@
 <script setup lang="ts">
   import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
   import type { FormExpose } from '@/components/ui/form/FormView.vue';
-  import TextButton from '@/components/ui/button/TextButton.vue';
-  import CardView, { type CardExpose } from '@/components/ui/CardView.vue';
   import type { FormObject } from '@/components/ui/form/types';
   import { computedDeep } from '@/utils/computed';
-  import InfoMessage from '@/components/ui/InfoMessage.vue';
   import { useAddRoom } from '@/composables/mutation/room';
   import BlendUsers from '@/components/blend/BlendUsers.vue';
   import type { RoomSettings } from '@/types/room';
-  import LabeledValue from '@/components/ui/LabeledValue.vue';
-  import MultiselectView from '@/components/ui/MultiselectView.vue';
   import isEqual from 'lodash/isEqual';
-  import Notifier from '@/utils/notification';
+  import { IconArrowUp, IconArrowDown, IconInfoCircle } from '@tabler/icons-vue';
 
   // Setup
   interface FormResult {
     name: string[];
   }
   const router = useRouter();
+  const { success } = useNotify();
 
   // Constants
   const USER_COLLAPSE_COUNT = 3;
@@ -51,7 +47,7 @@
   async function submitted({ name }: FormResult) {
     const room = await addRoom({ users: name, settings: settingsValues.value });
     await router.push(`/room/${room.code}`);
-    Notifier.instance().success({
+    success({
       title: 'Room Created',
       message: 'Successfully created blend',
     });
@@ -60,10 +56,10 @@
   // Collapsable settings
   const breakpoints = useBreakpoints(breakpointsTailwind);
   const isSmall = breakpoints.smaller('md');
-  const collapsableSettings = ref<CardExpose>();
 
   // Settings presets
   const presetSettings = ref<RoomSettings>();
+  const settingsCollapsed = ref(false);
 
   // Form Data
   const userForm = ref<{ data: FormExpose<FormObject> }>();
@@ -72,14 +68,15 @@
   const userValid = computedDeep(() => !!userForm.value?.data.valid);
   const settingsValid = computedDeep(() => !!settingsForm.value?.data.valid);
   const settingsValues = computedDeep(() => settingsForm.value?.data.values);
+
   watch(userNames, (val, oldVal) => {
     if (val.length < oldVal.length) {
       if (val.length < USER_COLLAPSE_COUNT) {
-        collapsableSettings.value?.setCollapsed(false);
+        settingsCollapsed.value = false;
       }
     } else {
       if (val.length >= USER_COLLAPSE_COUNT) {
-        collapsableSettings.value?.setCollapsed(true);
+        settingsCollapsed.value = true;
       }
     }
   });
@@ -97,43 +94,47 @@
 <template>
   <div class="flex flex-col items-center gap-4">
     <div class="relative flex w-full items-stretch gap-4 max-md:flex-col">
-      <card-view
+      <UCard
         title="Users"
         class="basis-2/3">
-        <info-message class="mx-auto mb-4 w-full lg:mb-8">
+        <UAlert class="mx-auto mb-4 w-full lg:mb-8" :icon="IconInfoCircle">
           Enter your friend's usernames. There can be up to five of you.
-        </info-message>
+        </UAlert>
         <blend-users
           ref="userForm"
           :submitted="submitted"
           :show-submit-button="false" />
-      </card-view>
-      <card-view
-        ref="collapsableSettings"
+      </UCard>
+      <UCard
         class="basis-1/3"
-        title="Blend Type"
-        :collapsable="isSmall"
-        :collapsed-default="false">
-        <div class="flex flex-col items-center gap-4">
-          <info-message class="w-full"> Configure your blend as you'd like it. </info-message>
-          <labeled-value
-            label-size="sm"
-            name="presets"
-            label="Presets">
-            <multiselect-view
-              v-model="presetSettings"
-              class="w-64! max-w-full"
-              :options="PRESET_OPTIONS" />
-          </labeled-value>
-          <span class="bg-paper h-0.5 w-full shrink-0 grow rounded-sm" />
-          <blend-settings
-            ref="settingsForm"
-            class="max-w-full"
-            :values="presetSettings" />
-        </div>
-      </card-view>
+        title="Blend Type">
+        <template #header v-if="isSmall">
+            <Component
+              @click="settingsCollapsed = !settingsCollapsed"
+              :is="settingsCollapsed ? IconArrowDown : IconArrowUp"
+              class="cursor-pointer aspect-square" />
+        </template>
+        <template #body v-if="!settingsCollapsed">
+          <div class="flex flex-col items-center gap-4">
+            <info-message class="w-full"> Configure your blend as you'd like it. </info-message>
+            <UFormField label="Presets">
+              <USelect
+                v-model="presetSettings"
+                class="w-64! max-w-full"
+                value-key="id"
+                label-key="label"
+                :items="PRESET_OPTIONS" />
+            </UFormField>
+            <span class="bg-paper h-0.5 w-full shrink-0 grow rounded-sm" />
+            <blend-settings
+              ref="settingsForm"
+              class="max-w-full"
+              :values="presetSettings" />
+          </div>
+        </template>
+      </UCard>
     </div>
-    <text-button
+    <UButton
       name="submit"
       text="Submit"
       button-style="submit"

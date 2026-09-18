@@ -1,46 +1,31 @@
-<template>
-  <dialog-view
-    :show="show"
-    title="Confirm"
-    width="md"
-    @close="emits('close')">
-    <template #default="{ close }">
-      <div class="mb-8">
-        <slot v-bind="{ close }" />
-      </div>
-      <div class="flex w-full justify-between gap-4">
-        <text-button
-          name="cancel"
-          text="Cancel"
-          class="w-64"
-          button-style="hollow"
-          @click="close" />
-        <text-button
-          name="confirm"
-          text="Confirm"
-          class="w-64"
-          button-style="submit"
-          @click="submit" />
-      </div>
-    </template>
-  </dialog-view>
-</template>
 <script setup lang="ts">
-  import DialogView from '@/components/ui/DialogView.vue';
-  import TextButton from '@/components/ui/button/TextButton.vue';
+  type Emits = {
+    confirm: [];
+  }
 
-  interface Props {
-    show: boolean;
-  }
-  interface Emits {
-    close: () => void;
-    confirm: () => void;
-  }
-  defineProps<Props>();
   const emits = defineEmits<Emits>();
+  const open = defineModel<boolean>('open', { default: false });
 
-  function submit() {
+  function close() {
+    open.value = false;
+  }
+  function confirm() {
+    open.value = false;
     emits('confirm');
-    emits('close');
   }
 </script>
+
+<template>
+  <UModal
+    v-model:open="open"
+    :dismissible="false"
+    :ui="{ footer: 'justify-end' }">
+    <template #body>
+      <slot />
+    </template>
+    <template #footer>
+      <UButton label="Cancel" color="neutral" variant="outline" @click="close" />
+      <UButton label="Confirm" color="neutral" @click="confirm" />
+    </template>
+  </UModal>
+</template>

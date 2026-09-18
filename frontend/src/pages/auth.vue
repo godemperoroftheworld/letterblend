@@ -1,13 +1,12 @@
 <template>
-  <card-view
+  <UCard
     class="h-fit"
     title="Sign In">
     <name-form @submitted="submitted" />
-  </card-view>
+  </UCard>
 </template>
 
 <script setup lang="ts">
-  import CardView from '@/components/ui/CardView.vue';
   import useUser from '@/composables/user';
   import NameForm from '@/components/user/NameForm.vue';
 

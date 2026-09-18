@@ -1,12 +1,11 @@
 <script setup lang="ts">
-  import InputField from '@/components/ui/InputField.vue';
   import { validateLetterboxdName } from '@/utils/validate';
   import FormView from '@/components/ui/form/FormView.vue';
-  import InfoMessage from '@/components/ui/InfoMessage.vue';
-  import AvatarView from '@/components/ui/AvatarView.vue';
+  import LetterboxdAvatar from '@/components/ui/LetterboxdAvatar.vue';
   import { ref } from 'vue';
-  import TextButton from '@/components/ui/button/TextButton.vue';
   import useUser from '@/composables/user';
+  import { IconInfoCircle } from '@tabler/icons-vue';
+  import { UInput } from '#components';
 
   interface NameForm {
     name: string;
@@ -27,7 +26,7 @@
 <template>
   <div class="flex h-full flex-col justify-center gap-4">
     <div class="flex items-center justify-center gap-4">
-      <avatar-view
+      <letterboxd-avatar
         class="w-32 min-w-24 grow-0 max-sm:w-20 lg:w-40"
         :name="formName"
         fallback />
@@ -40,19 +39,16 @@
             label: 'Enter your Letterboxd Username',
             labelSize: 'base',
             uppercase: true,
-            as: InputField,
+            as: UInput,
             validateOnMount: true,
             rules: validateLetterboxdName,
-            props: {
-              debounceMs: 200,
-            },
           },
         }"
         :defaults="{ name: storedName }"
         :show-submit-button="false"
         :submitted="submitted" />
     </div>
-    <info-message class="mx-auto">
+    <UAlert class="mx-auto" :icon="IconInfoCircle">
       Don't have an account? That's ok, make one
       <a
         class="font-bold underline"
@@ -60,8 +56,8 @@
         target="_blank">
         here
       </a>
-    </info-message>
-    <text-button
+    </UAlert>
+    <UButton
       name="submit"
       class="mx-auto w-64"
       text="Submit"

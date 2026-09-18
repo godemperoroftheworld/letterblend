@@ -1,4 +1,3 @@
-import type { MaybeRef } from '@vueuse/core';
 import { isRef, unref } from 'vue';
 
 type MaybeDeepRefObject<T extends object> = {

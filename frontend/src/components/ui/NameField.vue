@@ -1,13 +1,8 @@
 <script setup lang="ts">
-  import type { InputProps } from '@/components/ui/InputField.vue';
-  import AvatarView from '@/components/ui/AvatarView.vue';
-  import AutocompleteField from '@/components/ui/AutocompleteField.vue';
+  import LetterboxdAvatar from '@/components/ui/LetterboxdAvatar.vue';
+  import type { InputMenuProps } from '@nuxt/ui'
 
-  interface Props extends InputProps<string> {
-    options: string[];
-  }
-  defineProps<Props>();
-
+  defineProps<InputMenuProps>();
   const model = defineModel<string>();
 </script>
 
@@ -15,12 +10,12 @@
   <div class="relative">
     <div
       class="absolute top-1/2 left-2 z-1 size-6 -translate-y-1/2 md:-left-3 md:size-10 md:-translate-x-full">
-      <avatar-view :name="model" />
+      <letterboxd-avatar :name="model" />
     </div>
-    <autocomplete-field
+    <UInputMenu
       v-model="model"
-      v-bind="{ ...$props, ...$attrs }"
-      :options="options"
+      :items="items"
+      autocomplete="on"
       class="box-border pl-10 md:pl-2" />
   </div>
 </template>
