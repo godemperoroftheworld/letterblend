@@ -19,28 +19,10 @@
       name="theme-color"
       content="#2c3440" />
   </Head>
-  <nuxt-layout>
-    <nuxt-page />
-  </nuxt-layout>
-  <loader />
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
+  <Loader />
   <ParticlesBackground />
-  <notifications />
+  <Notifications />
 </template>
-
-<style lang="scss">
-  .page-enter-active,
-  .page-leave-active {
-    transition: all 0.5s ease;
-    position: absolute;
-    width: calc(100% - 2rem);
-  }
-
-  .page-enter-from {
-    transform: translateX(calc(100% + 1rem));
-    opacity: 0;
-  }
-  .page-leave-to {
-    transform: translateX(calc(-100% - 1rem));
-    opacity: 0;
-  }
-</style>

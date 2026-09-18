@@ -47,11 +47,9 @@
 
 <template>
   <client-only>
-    <vue-particles
+    <VueParticles
       v-if="particles"
       id="particles"
       :options="options" />
   </client-only>
 </template>
-
-<style scoped lang="scss"></style>

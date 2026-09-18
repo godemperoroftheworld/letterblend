@@ -39,7 +39,3 @@
     </template>
   </button>
 </template>
-
-<style scoped lang="scss">
-  @use '@/assets/css/button';
-</style>

@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2026-06-17',
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
-  modules: ['@nuxt/eslint', '@nuxt/image', '@vueuse/nuxt', '@tsparticles/nuxt4'],
+  modules: ['@nuxt/eslint', '@nuxt/image', '@vueuse/nuxt', '@tsparticles/nuxt4', '@nuxt/ui'],
   srcDir: 'src',
   app: {
     pageTransition: {
