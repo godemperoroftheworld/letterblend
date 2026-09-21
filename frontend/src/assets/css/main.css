@@ -1,41 +1,97 @@
 @import 'tailwindcss';
-@import 'tippy.js/dist/tippy.css';
+@import '@nuxt/ui';
 
 @theme {
-  --color-primary: #00b021;
-  --color-secondary: #f27405;
-  --color-info: #40bcf4;
-  --color-dark: #14181c;
-  --color-background: #2c3440;
-  --color-paper: #556678;
-  --color-content: #202830;
+  --font-heading: 'Montserrat', 'Century Gothic', 'Apple Gothic';
+  --font-mono: 'IBM Plex Mono', Arial;
+  --font-body: 'Geist', Arial;
+  --font-sans: var(--font-body);
+
+  --color-*: initial;
+  --color-white: #fff;
+  --color-slate-50: hsl(211.2 22.9% 78.6%);
+  --color-slate-100: hsl(210 23.5% 73.3%);
+  --color-slate-200: hsl(209.2 20% 63.7%);
+  --color-slate-300: hsl(210 13.4% 53.3%);
+  --color-slate-400: hsl(210 11.5% 44.3%);
+  --color-slate-500: hsl(211.4 11.9% 34.7%);
+  --color-slate-600: hsl(208.2 13.2% 25.3%);
+  --color-slate-700: hsl(210 13.3% 17.6%);
+  --color-slate-750: hsl(210 14% 14.5%);
+  --color-slate-800: hsl(210 16.7% 9.4%);
+  --color-slate-900: hsl(210 21.4% 5.5%);
+  --color-slate-950: hsl(210 25% 3.1%);
+  --color-primary-50: hsl(122.7 100% 91.2%);
+  --color-primary-100: hsl(122.8 100% 83.1%);
+  --color-primary-200: hsl(132.2 100% 48.2%);
+  --color-primary-300: hsl(132.1 100% 43.7%);
+  --color-primary-400: hsl(131.8 100% 38.8%);
+  --color-primary-500: hsl(131.3 100% 34.5%);
+  --color-primary: var(--color-primary-500);
+  --color-primary-600: hsl(130.4 100% 27.3%);
+  --color-primary-700: hsl(128.6 100% 20.6%);
+  --color-primary-800: hsl(126 100% 13.7%);
+  --color-primary-900: hsl(124.4 100% 8%);
+  --color-primary-950: hsl(122.5 100% 4.7%);
+  --color-secondary-50: hsl(13.3 100% 96.5%);
+  --color-secondary-100: hsl(13.1 100% 93.7%);
+  --color-secondary-200: hsl(14.2 100% 85.9%);
+  --color-secondary-300: hsl(15.7 100% 78.2%);
+  --color-secondary-400: hsl(20.2 100% 66.3%);
+  --color-secondary-500: hsl(28.1 96% 48.4%);
+  --color-secondary: var(--color-secondary-500);
+  --color-secondary-600: hsl(27.8 96.9% 38%);
+  --color-secondary-700: hsl(27.1 97.3% 29%);
+  --color-secondary-800: hsl(25.7 98% 19.6%);
+  --color-secondary-900: hsl(23.4 100% 11.6%);
+  --color-secondary-950: hsl(19.5 100% 7.3%);
+  --color-info-50: hsl(210 87.5% 96.9%);
+  --color-info-100: hsl(206.9 87.9% 93.5%);
+  --color-info-200: hsl(205.7 90.3% 87.8%);
+  --color-info-300: hsl(203.7 90.1% 80.2%);
+  --color-info-400: hsl(202 91.4% 72.5%);
+  --color-info-500: hsl(198.7 89.1% 60.4%);
+  --color-info: var(--color-info-500);
+  --color-info-600: hsl(198.6 59.7% 47.6%);
+  --color-info-700: hsl(198.5 62.5% 34.5%);
+  --color-info-800: hsl(199.2 66.1% 23.1%);
+  --color-info-900: hsl(198.3 76.7% 11.8%);
+  --color-info-950: hsl(199.4 83.8% 7.3%);
+  --color-danger-50: hsl(3.2 100% 96.3%);
+  --color-danger-100: hsl(1.6 100% 92.5%);
+  --color-danger-200: hsl(0.8 100% 84.9%);
+  --color-danger-300: hsl(0.5 100% 76.5%);
+  --color-danger-400: hsl(1.4 100% 65.7%);
+  --color-danger-500: hsl(4.6 100% 46.3%);
+  --color-danger: var(--color-danger-500);
+  --color-danger-600: hsl(3.8 100% 37.3%);
+  --color-danger-700: hsl(2.9 100% 28.6%);
+  --color-danger-800: hsl(1.7 100% 20.4%);
+  --color-danger-900: hsl(0.9 100% 12.5%);
+  --color-danger-950: hsl(1.4 100% 8.6%);
+  --color-bulb-50: hsl(38.8 100% 96.7%);
+  --color-bulb-100: hsl(37.1 100% 93.3%);
+  --color-bulb-200: hsl(38.4 100% 87.5%);
+  --color-bulb-300: hsl(41.3 100% 78%);
+  --color-bulb-400: hsl(45.4 99% 61.8%);
+  --color-bulb-500: hsl(47 91.7% 52.7%);
+  --color-bulb: var(--color-bulb-500);
+  --color-bulb-600: hsl(47 84.5% 40.6%);
+  --color-bulb-700: hsl(46.9 88.1% 29.6%);
+  --color-bulb-800: hsl(46.3 92% 19.6%);
+  --color-bulb-900: hsl(45.3 96.1% 10%);
+  --color-bulb-950: hsl(44.5 100% 6.1%);
+  --color-dark: var(--color-slate-900);
+  --color-content: var(--color-slate-800);
+  --color-background: var(--color-slate-700);
+  --color-paper: var(--color-slate-600);
 }
 
-@utility no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-@layer utilities {
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  /* Hide scrollbar for IE, Edge and Firefox */
-  .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-  }
-}
 
 html {
-  background-image: linear-gradient(to top, var(--color-dark), var(--color-background));
   width: 100dvw;
   height: 100dvh;
+  font-family: var(--font-body) sans-serif;
 }
 body {
   width: 100%;
@@ -43,18 +99,22 @@ body {
   color: white;
   overflow: hidden;
 }
-
 #__nuxt {
   width: 100%;
   height: 100%;
   overflow-y: scroll;
+  background-image: linear-gradient(to top, var(--color-dark), var(--color-background));
 }
 
-.transition-default {
+h1,h2,h3,h4,h5,h6 {
+  font-family: var(--font-heading) sans-serif;
+}
+
+@utility transition-default {
   transition: all 300ms ease;
 }
 
-.absolute-center {
+@utility absolute-center {
   position: absolute;
   margin: auto;
   left: 0;
@@ -63,46 +123,10 @@ body {
   bottom: 0;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 250ms;
+@utility drop-shadow-round {
+  filter: drop-shadow(0 0 3px var(--tw-drop-shadow-color));
 }
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.scale-enter-active {
-  animation: scale 250ms;
-}
-.scale-leave-active {
-  animation: scale 250ms reverse;
-}
-
-@keyframes fade {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes scale {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes slide {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(0%);
-  }
+@utility drop-shadow-round-lg {
+  filter: drop-shadow(0 0 6px var(--tw-drop-shadow-color));
 }

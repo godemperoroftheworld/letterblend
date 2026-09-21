@@ -88,7 +88,7 @@ export async function fetchDataQuery<T, E = DefaultError, R = T>(
   const state = queryClient.getQueryState(key);
   if (state == null) {
     const queryFn = buildQueryFn<T>(url, config, showLoader);
-    await queryClient.fetchQuery(buildOptions(key, queryFn, options ?? {}));
+    await queryClient.query(buildOptions(key, queryFn, options ?? {}));
   } else if (state.status !== 'success') {
     await until(() => {
       const state = queryClient.getQueryState(key);
