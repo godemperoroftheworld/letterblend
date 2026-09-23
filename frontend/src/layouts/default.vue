@@ -12,7 +12,7 @@
 
 <template>
     <NowPlayingHeader class="mb-2 w-full h-64" />
-    <UContainer class="h-[calc(100%-18rem)] py-2 sm:py-4 lg:py-6 flex flex-col">
+    <UContainer class="max-h-[calc(100%-18rem)] h-fit my-auto py-2 sm:py-4 lg:py-6 flex flex-col">
       <UCard class="grow" variant="solid">
         <UButton
           v-show="!isHome"
@@ -26,13 +26,13 @@
         </UButton>
         <div class="absolute top-4 right-4 z-1 w-fit max-md:fixed lg:top-8 lg:right-8">
           <USwitch
-            color="dark"
             v-model="particlesEnabled"
+            color="dark"
             size="2xl"
             :checked-icon="IconSparkles"
             :unchecked-icon="NoSparklesIcon" />
         </div>
-        <main>
+        <main class="pt-8">
           <slot />
         </main>
       </UCard>

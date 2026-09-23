@@ -19,7 +19,7 @@ export default defineAppConfig({
       variants: {
         variant: {
           solid: {
-            root: 'bg-content shadow-paper/50 inset-shadow-paper/50 border-dark/50 border-2 inset-shadow-xs shadow-xs'
+            root: 'bg-content shadow-paper/50 inset-shadow-paper/50 border-dark/50 border-3 inset-shadow-md shadow-sm'
           }
         }
       },
@@ -53,6 +53,6 @@ export default defineAppConfig({
           }
         }
       }
-    }
+    },
   }
 });

@@ -9,6 +9,7 @@
 
   --color-*: initial;
   --color-white: #fff;
+  --color-black: #000;
   --color-slate-50: hsl(211.2 22.9% 78.6%);
   --color-slate-100: hsl(210 23.5% 73.3%);
   --color-slate-200: hsl(209.2 20% 63.7%);
@@ -69,6 +70,7 @@
   --color-danger-800: hsl(1.7 100% 20.4%);
   --color-danger-900: hsl(0.9 100% 12.5%);
   --color-danger-950: hsl(1.4 100% 8.6%);
+  --color-error: var(--color-danger-600);
   --color-bulb-50: hsl(38.8 100% 96.7%);
   --color-bulb-100: hsl(37.1 100% 93.3%);
   --color-bulb-200: hsl(38.4 100% 87.5%);
@@ -85,8 +87,9 @@
   --color-content: var(--color-slate-800);
   --color-background: var(--color-slate-700);
   --color-paper: var(--color-slate-600);
-}
 
+  --inset-shadow-md: inset 0 2px 3px rgba(0, 0, 0, 0.25);
+}
 
 html {
   width: 100dvw;
@@ -108,6 +111,10 @@ body {
 
 h1,h2,h3,h4,h5,h6 {
   font-family: var(--font-heading) sans-serif;
+}
+
+button:hover {
+  cursor: pointer;
 }
 
 @utility transition-default {

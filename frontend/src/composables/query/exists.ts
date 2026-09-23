@@ -1,5 +1,6 @@
 import type { MaybeRefOrGetter } from 'vue';
 import type { DataQueryOptions } from '@/utils/query';
+import { useDataQuery } from '@/utils/query';
 
 export interface ExistsResponse {
   exists: boolean;

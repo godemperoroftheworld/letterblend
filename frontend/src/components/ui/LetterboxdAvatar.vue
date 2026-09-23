@@ -5,15 +5,16 @@
   import AvatarIcon from '~/components/ui/icons/AvatarIcon.vue';
 
   interface Props {
-    name?: string;
+    name: string;
     fallback?: boolean;
+    icon?: string | Component;
   }
-  const props = defineProps<Props>();
+  const { name, fallback = true, icon = AvatarIcon } = defineProps<Props>();
 
   const { user: storageName } = useUser();
   const avatarName = computed(() => {
-    if (props.name) return props.name;
-    if (props.fallback) {
+    if (name) return name;
+    if (fallback) {
       return storageName.value;
     }
     return '';
@@ -30,9 +31,8 @@
 
 <template>
   <UTooltip :text="avatarName" as="div">
-    <div class="relative aspect-square">
-      <UAvatar v-if="avatar" :alt="avatarName" :src="avatar" loading="lazy" size="unbound" />
-      <AvatarIcon v-else :class="{ 'animate-pulse': isLoading }" class="size-full bg-paper rounded-full" />
+    <div class="relative aspect-square" :class="{ 'animate-pulse': isLoading }">
+      <UAvatar :alt="avatarName" :src="name ? avatar : undefined" class="size-full bg-slate-700" loading="lazy" size="unbound" :icon="icon" :ui="{ icon: 'text-white!' }" />
     </div>
   </UTooltip>
 </template>

@@ -3,20 +3,20 @@
         <rect x="0" y="0" width="700" height="260" rx="8" ry="8" fill="white" />
         <circle cx="0" cy="130.0" r="24" fill="black" />
         <circle cx="700" cy="130.0" r="24" fill="black" />
-        <circle cx="200" cy="12" r="3.5" fill="black" />
-        <circle cx="200" cy="30" r="3.5" fill="black" />
-        <circle cx="200" cy="48" r="3.5" fill="black" />
-        <circle cx="200" cy="66" r="3.5" fill="black" />
-        <circle cx="200" cy="84" r="3.5" fill="black" />
-        <circle cx="200" cy="102" r="3.5" fill="black" />
-        <circle cx="200" cy="120" r="3.5" fill="black" />
-        <circle cx="200" cy="138" r="3.5" fill="black" />
-        <circle cx="200" cy="156" r="3.5" fill="black" />
-        <circle cx="200" cy="174" r="3.5" fill="black" />
-        <circle cx="200" cy="192" r="3.5" fill="black" />
-        <circle cx="200" cy="210" r="3.5" fill="black" />
-        <circle cx="200" cy="228" r="3.5" fill="black" />
-        <circle cx="200" cy="246" r="3.5" fill="black" />
+        <circle cx="175" cy="12" r="3.5" fill="black" />
+        <circle cx="175" cy="30" r="3.5" fill="black" />
+        <circle cx="175" cy="48" r="3.5" fill="black" />
+        <circle cx="175" cy="66" r="3.5" fill="black" />
+        <circle cx="175" cy="84" r="3.5" fill="black" />
+        <circle cx="175" cy="102" r="3.5" fill="black" />
+        <circle cx="175" cy="120" r="3.5" fill="black" />
+        <circle cx="175" cy="138" r="3.5" fill="black" />
+        <circle cx="175" cy="156" r="3.5" fill="black" />
+        <circle cx="175" cy="174" r="3.5" fill="black" />
+        <circle cx="175" cy="192" r="3.5" fill="black" />
+        <circle cx="175" cy="210" r="3.5" fill="black" />
+        <circle cx="175" cy="228" r="3.5" fill="black" />
+        <circle cx="175" cy="246" r="3.5" fill="black" />
     </mask>
     <rect x="0" y="0" width="700" height="260" mask="url(#ticket)" />
 </svg>

@@ -93,7 +93,7 @@ export async function fetchDataQuery<T, E = DefaultError, R = T>(
     await until(() => {
       const state = queryClient.getQueryState(key);
       return state?.status === 'success';
-    });
+    }).toBeTruthy();
   }
   const result = queryClient.getQueryData<T>(key);
 
