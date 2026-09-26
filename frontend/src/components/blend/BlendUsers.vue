@@ -15,6 +15,9 @@
     submitted: [names: string[]]
   }
 
+  const MAX_NAMES = 5;
+  const MIN_NAMES = 1;
+
   // Setup
   const { nested = false } = defineProps<Props>();
   const emits = defineEmits<Emits>();
@@ -32,8 +35,16 @@
     names: z.array(z.string().nonempty()),
   });
 
+  const canAdd = computed(() => names.value.length < MAX_NAMES);
+  const canRemove = computed(() => names.value.length > MIN_NAMES);
+
   // Helper
   async function validateForm(state: Partial<Fields>): Promise<FormError[]> {
+    const schemaResult = schema.safeParse(state);
+    if (!schemaResult.success) {
+      return schemaResult.error.issues;
+    }
+
     const errors: FormError[] = [];
     const validity = await Promise.all(
       state.names!.map((n) => validateLetterboxdName(n)),
@@ -70,11 +81,11 @@
 </script>
 
 <template>
-  <UForm class="flex flex-col gap-2" :validate="validateForm" :schema="schema" :on-submit="submit" :nested="nested" :validate-on="['blur', 'focus']">
+  <UForm name="users" class="flex flex-col gap-2" :validate="validateForm" :on-submit="submit">
     <UFormField v-for="(_, idx) in names" :key="idx" :error-pattern="RegExp(`^names.${idx}$`)">
-      <NameField v-model="names[idx]" :items="friends" :show-add-button="md" @remove="removeName(idx)" @add="addName" />
+      <NameField v-model="names[idx]" :items="friends" :disabled="idx === 0" :show-add-button="md" :can-add="canAdd" :can-remove="idx > 0 && canRemove" @remove="removeName(idx)" @add="addName" />
     </UFormField>
-    <UButton v-if="!md" :icon="IconPlus" @click="addName" />
+    <UButton v-if="!md" :icon="IconPlus" :disabled="!canAdd" label="Add" class="justify-center font-bold" size="lg" @click="addName" />
     <UButton v-if="!nested">
       Submit
     </UButton>

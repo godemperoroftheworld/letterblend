@@ -81,6 +81,10 @@
     </div>
     <UButton
       label="Submit"
-      class="max-sm:w-full sm:w-64" />
+      class="max-sm:w-full sm:w-64 uppercase font-bold"
+      :ui="{
+        label: 'mx-auto'
+      }"
+      size="xl" />
   </UForm>
 </template>

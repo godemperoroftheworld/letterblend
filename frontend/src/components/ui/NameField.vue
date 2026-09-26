@@ -6,13 +6,16 @@
     items: string[];
     showAddButton?: boolean;
     showRemoveButton?: boolean;
+    canAdd?: boolean;
+    canRemove?: boolean;
+    disabled?: boolean;
   }
   type Emits = {
     remove: [];
     add: [];
   }
 
-  const { showAddButton = false, showRemoveButton = true, items } = defineProps<Props>();
+  const { showAddButton = false, showRemoveButton = true, canAdd = true, canRemove = true, items } = defineProps<Props>();
   const model = defineModel<string>({ default: '' });
   const emits = defineEmits<Emits>();
 </script>
@@ -25,12 +28,13 @@
       :content="{ hideWhenEmpty: true }"
       mode="autocomplete"
       size="lg"
-      class="box-border pl-10 md:pl-2">
+      :disabled="disabled"
+      leading>
       <template #leading>
         <letterboxd-avatar class="size-6" :name="model" />
       </template>
     </UInputMenu>
-    <UButton v-if="showRemoveButton" color="error" :icon="IconTrash" @click="emits('remove')" />
-    <UButton v-if="showAddButton" color="primary" :icon="IconPlus" @click="emits('add')" />
+    <UButton v-if="showRemoveButton" color="error" :disabled="!canRemove" :icon="IconTrash" @click="emits('remove')" />
+    <UButton v-if="showAddButton" color="primary" :disabled="!canAdd" :icon="IconPlus" @click="emits('add')" />
   </div>
 </template>
