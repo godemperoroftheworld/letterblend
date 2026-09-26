@@ -1,86 +1,82 @@
 <script setup lang="ts">
-  import NameField from '@/components/ui/NameField.vue';
-  import FormView from '@/components/ui/form/FormView.vue';
-  import { useDataQuery } from '@/utils/query';
-  import uniq from 'lodash/uniq';
-  import { queryClient } from '@/plugins/query';
-  import useUser from '@/composables/user';
-  import type { GenericValidateFunction } from 'vee-validate';
+  import z from 'zod';
+  import type { FormError } from '#ui/types';
+  import { IconPlus } from '@tabler/icons-vue';
+  import useFriends from '~/composables/query/friends.ts';
+  import NameField from '~/components/ui/NameField.vue';
+  import { breakpointsTailwind } from '@vueuse/core';
+  import useUser from '~/composables/user.ts';
 
-  // Setup
   interface Props {
     submitted: (data: string[]) => Promise<void> | void;
-    showSubmitButton?: boolean;
-    loading?: boolean;
-    values?: string[];
-    syncValues?: boolean;
+    nested?: boolean;
   }
-  const { user: storageName } = useUser();
-  const props = withDefaults(defineProps<Props>(), {
-    values: () => [],
-    showSubmitButton: true,
-  });
+  type Emits = {
+    submitted: [names: string[]]
+  }
+
+  // Setup
+  const { nested = false } = defineProps<Props>();
+  const emits = defineEmits<Emits>();
+  const { user } = useUser();
+  const names = defineModel<string[]>({ default: () => [] })
+  const { data: friends } = useFriends(names);
+  const { greaterOrEqual } = useBreakpoints(breakpointsTailwind);
+  const md = greaterOrEqual('md');
 
   // Form data
-  const userForm = ref();
-  const userNames = computed<string[]>(() => userForm.value?.values?.name ?? []);
-  const fixedNames = computed(() => {
-    return uniq([
-      storageName.value,
-      ...userNames.value
-        .filter((u) => !!u)
-        .filter((u) => {
-          const value = queryClient.getQueryData(['exists', u]);
-          return value ? value.exists : false;
-        }),
-    ]);
-  });
-
-  // Autocomplete
-  const { data: friends } = useDataQuery(['friends', storageName, fixedNames], '/user/friends', {
-    config: {
-      method: 'POST',
-      data: { names: fixedNames },
-    },
-    transform: (data) => Object.keys(data),
+  interface Fields {
+    names: string[];
+  }
+  const schema = z.object({
+    names: z.array(z.string().nonempty()),
   });
 
   // Helper
-  const validateUserName: GenericValidateFunction<string> = async (name, ctx) => {
-    const letterboxdResult = await validateLetterboxdName(name, ctx);
-    if (letterboxdResult !== true) return letterboxdResult;
-    if (userNames.value.indexOf(name) !== userNames.value.lastIndexOf(name)) {
-      return 'User must be unique.';
-    }
-    return true;
-  };
+  async function validateForm(state: Partial<Fields>): Promise<FormError[]> {
+    const errors: FormError[] = [];
+    const validity = await Promise.all(
+      state.names!.map((n) => validateLetterboxdName(n)),
+    );
+    state.names!.forEach((name, idx) => {
+      if (!validity[idx]) {
+        errors.push({
+          name: `names.${idx}`,
+          message: 'User must be valid Letterboxd name.'
+        })
+      }
+      if (state.names!.indexOf(name) !== state.names!.lastIndexOf(name)) {
+        errors.push({
+          name: `names.${idx}`,
+          message: 'User must be unique.'
+        })
+      }
+    });
+    return errors;
+  }
+  function removeName(idx: number) {
+    names.value = [...names.value.slice(0, idx), ...names.value.slice(idx + 1)];
+  }
+  function addName() {
+    names.value.push('');
+  }
+  function submit() {
+    emits('submitted', names.value);
+  }
 
-  // Expose
-  defineExpose({
-    data: userForm,
-  });
+  onBeforeMount(() => {
+    names.value = [user.value ?? ''];
+  })
 </script>
 
 <template>
-  <form-view
-    ref="userForm"
-    name="userForm"
-    :fields="{
-      name: {
-        as: NameField,
-        rules: validateUserName,
-        validateOnMount: true,
-        props: {
-          options: friends ?? [],
-          debounceMs: 200,
-        },
-        array: true,
-        length: { min: 2, max: 5 },
-      },
-    }"
-    :loading="loading"
-    :show-submit-button="showSubmitButton"
-    :defaults="{ name: values }"
-    :submitted="({ name }) => props.submitted({ name })">
-  </form-view>
+  <UForm class="flex flex-col gap-2" :validate="validateForm" :schema="schema" :on-submit="submit" :nested="nested">
+    <UFormField v-for="(_, idx) in names" :key="idx" :error-pattern="RegExp(`^names.${idx}$`)">
+      <NameField v-model="names[idx]" :items="friends" :show-add-button="md" @remove="removeName(idx)" @add="addName" />
+    </UFormField>
+    <UButton v-if="!md" :icon="IconPlus" @click="addName" />
+    <UButton v-if="!nested">
+      Submit
+    </UButton>
+  </UForm>
 </template>

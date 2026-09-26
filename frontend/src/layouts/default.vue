@@ -16,11 +16,10 @@
       <UCard class="grow" variant="solid">
         <UButton
           v-show="!isHome"
-          name="back"
-          class="absolute top-4 left-4 z-1 max-md:fixed max-sm:min-w-fit sm:w-40 lg:top-8 lg:left-8"
-          button-style="hollow"
-          @click.prevent="router.back"
-          @keyup.enter="router.back">
+          class="absolute uppercase top-4 left-4 z-1 max-md:fixed max-sm:min-w-fit sm:w-40 lg:top-8 lg:left-8"
+          variant="outline"
+          color="dark"
+          @click="router.back">
           <icon-arrow-back />
           <span class="max-sm:hidden">Back</span>
         </UButton>

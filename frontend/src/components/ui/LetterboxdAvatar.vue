@@ -32,7 +32,7 @@
 <template>
   <UTooltip :text="avatarName" as="div">
     <div class="relative aspect-square" :class="{ 'animate-pulse': isLoading }">
-      <UAvatar :alt="avatarName" :src="name ? avatar : undefined" class="size-full bg-slate-700" loading="lazy" size="unbound" :icon="icon" :ui="{ icon: 'text-white!' }" />
+      <UAvatar :alt="avatarName" :src="name ? avatar : undefined" class="size-full bg-slate-700 overflow-clip" loading="lazy" size="unbound" :icon="icon" :ui="{ icon: 'text-white!' }" />
     </div>
   </UTooltip>
 </template>

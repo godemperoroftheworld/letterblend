@@ -33,7 +33,7 @@ export type DataQueryOptions<T, E = DefaultError> = MaybeRef<{
 }>;
 export interface UseDataQueryParams<T, E = DefaultError, R = T> {
   options?: DataQueryOptions<T, E>;
-  config?: Omit<AxiosRequestConfig<T>, 'url' | 'baseURL'>;
+  config?: MaybeDeepRef<Omit<AxiosRequestConfig<T>, 'url' | 'baseURL'>>;
   transform?: (data: T | undefined) => R | undefined;
   showLoader?: boolean;
 }
@@ -83,8 +83,9 @@ function buildOptions<T, E = DefaultError>(
 export async function fetchDataQuery<T, E = DefaultError, R = T>(
   key: MaybeDeepRef<Array<unknown>>,
   url: MaybeRefOrGetter<string>,
-  { config = {}, showLoader = false, options = {}, transform }: UseDataQueryParams<T, E, R>,
+  params: UseDataQueryParams<T, E, R>,
 ) {
+  const { config = {}, showLoader = false, options = {}, transform } = toRefs(params);
   const state = queryClient.getQueryState(key);
   if (state == null) {
     const queryFn = buildQueryFn<T>(url, config, showLoader);

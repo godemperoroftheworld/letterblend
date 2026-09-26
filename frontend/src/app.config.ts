@@ -26,6 +26,8 @@ export default defineAppConfig({
       slots: {
         root: 'rounded-3xl',
         body: 'relative',
+        header: 'pb-0!',
+        title: 'text-xl font-heading font-black',
       }
     },
     switch: {
@@ -38,9 +40,18 @@ export default defineAppConfig({
         },
         color: {
           dark: {
-            base: 'data-[state=checked]:bg-dark outline outline-2 outline-white/25',
+            base: 'bg-slate-800 data-[state=checked]:bg-dark outline outline-2 outline-white/25 hover:bg-slate-750!',
             icon: 'text-slate-700! group-data-[state=checked]:text-dark!',
             thumb: 'bg-slate-100 group-data[state=checked]:bg-white'
+          }
+        }
+      }
+    },
+    button: {
+      variants: {
+        color: {
+          dark: {
+            base: 'bg-dark outline outline-2 outline-white/25 text-white hover:bg-slate-750 focus:outline-3',
           }
         }
       }

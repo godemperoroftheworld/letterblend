@@ -1,21 +1,36 @@
 <script setup lang="ts">
   import LetterboxdAvatar from '@/components/ui/LetterboxdAvatar.vue';
-  import type { InputMenuProps } from '@nuxt/ui'
+  import { IconPlus, IconTrash } from '@tabler/icons-vue';
 
-  defineProps<InputMenuProps>();
-  const model = defineModel<string>();
+  interface Props {
+    items: string[];
+    showAddButton?: boolean;
+    showRemoveButton?: boolean;
+  }
+  type Emits = {
+    remove: [];
+    add: [];
+  }
+
+  const { showAddButton = false, showRemoveButton = true, items } = defineProps<Props>();
+  const model = defineModel<string>({ default: '' });
+  const emits = defineEmits<Emits>();
 </script>
 
 <template>
-  <div class="relative">
-    <div
-      class="absolute top-1/2 left-2 z-1 size-6 -translate-y-1/2 md:-left-3 md:size-10 md:-translate-x-full">
-      <letterboxd-avatar :name="model" />
-    </div>
+  <div class="flex gap-2">
     <UInputMenu
       v-model="model"
       :items="items"
-      autocomplete="on"
-      class="box-border pl-10 md:pl-2" />
+      :content="{ hideWhenEmpty: true }"
+      mode="autocomplete"
+      size="lg"
+      class="box-border pl-10 md:pl-2">
+      <template #leading>
+        <letterboxd-avatar class="size-6" :name="model" />
+      </template>
+    </UInputMenu>
+    <UButton v-if="showRemoveButton" color="error" :icon="IconTrash" @click="emits('remove')" />
+    <UButton v-if="showAddButton" color="primary" :icon="IconPlus" @click="emits('add')" />
   </div>
 </template>

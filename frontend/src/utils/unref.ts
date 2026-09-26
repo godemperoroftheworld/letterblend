@@ -4,7 +4,7 @@ type MaybeDeepRefObject<T extends object> = {
   [Property in keyof T]: MaybeDeepRef<T[Property]>;
 };
 type MaybeDeepRefArray<T extends Array<unknown>> = Array<MaybeDeepRef<T[number]>>;
-export type MaybeDeepRef<T> = MaybeRef<
+export type MaybeDeepRef<T> = MaybeRefOrGetter<
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   T extends Function
     ? T

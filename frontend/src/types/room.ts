@@ -3,8 +3,8 @@ import type { Movie } from '@/types/movie';
 export interface RoomSettings {
   top: number;
   threshold: number;
-  genre: string | string[];
-  decade: string | string[];
+  genre?: string[];
+  decade?: string[];
 }
 export interface Room {
   code: string;

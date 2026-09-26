@@ -49,8 +49,8 @@
       </div>
     </template>
     <template #right>
-      <form class="size-full flex flex-col pr-2 pb-2" @submit="submitted">
-        <UFormField class="" label="Enter your Letterboxd Username" :ui="{ label: 'text-background uppercase font-mono', error: 'select-none italic text-xs mt-0! font-light' }" name="name" :error="error">
+      <UForm class="size-full flex flex-col pr-2 pb-2" @submit="submitted">
+        <UFormField label="Enter your Letterboxd Username" :ui="{ label: 'text-background uppercase font-mono', error: 'select-none italic text-xs mt-0! font-light' }" name="name" :error="error">
           <input v-model="name" class="border-b-2 border-dotted outline-0 ring-0 focus:border-dashed" :class="{ 'text-error border-b-black': !!error, 'pl-6': isFetching }" />
           <IconLoader v-if="isFetching" class="size-4 absolute top-0 animate-spin" />
         </UFormField>
@@ -75,7 +75,7 @@
             Next — Add Friends
           </span>
         </div>
-      </form>
+      </UForm>
       <div class="w-full border-b-3 border-b-background border-dotted mt-auto mb-2" />
       <div class="flex items-end justify-between font-mono text-sm font-semibold text-background">
         <span>No. {{ (count ?? 0) + 1 }}</span>
