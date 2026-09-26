@@ -47,7 +47,7 @@
 </script>
 
 <template>
-  <UForm :schema="settingsSchema" :state="nested ? undefined : settings" :nested="nested" @submit="submitted">
+  <UForm class="flex flex-col gap-2" :schema="settingsSchema" :state="nested ? undefined : settings" :nested="nested" @submit="submitted">
     <UFormField label="Presets">
       <USelect
         v-model="presetSetting"
@@ -65,7 +65,17 @@
     </UTooltip>
     <UTooltip text="How many users need the film in their watchlist">
       <UFormField name="threshold" label="Threshold">
-        <UInputNumber v-model="settings.threshold" size="lg" :step="0.01" :format-options="{ style: 'percent' }" :min="0" :max="1" />
+        <div>
+          <USlider v-model="settings.threshold" size="lg" :min="0" :max="1" :step="0.01" :format-options="{ style: 'percent' }" />
+          <div class="absolute text-white right-0 -top-1 -translate-y-full">
+            {{
+              settings.threshold?.toLocaleString('en-CA', {
+                style: 'percent',
+                maximumFractionDigits: 1,
+              })
+            }}
+          </div>
+        </div>
       </UFormField>
     </UTooltip>
     <UFormField name="genre" label="Genre">
