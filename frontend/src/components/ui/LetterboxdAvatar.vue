@@ -5,15 +5,15 @@
   import AvatarIcon from '~/components/ui/icons/AvatarIcon.vue';
 
   interface Props {
-    name: string;
+    name?: string;
     fallback?: boolean;
     icon?: string | Component;
   }
-  const { name, fallback = true, icon = AvatarIcon } = defineProps<Props>();
+  const { name = '', fallback = true, icon = AvatarIcon } = defineProps<Props>();
 
   const { user: storageName } = useUser();
   const avatarName = useDebounce(computed(() => {
-    if (name) return name;
+    if (name.length) return name;
     if (fallback) {
       return storageName.value;
     }

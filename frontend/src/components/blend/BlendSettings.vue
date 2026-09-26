@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import noop from 'lodash/noop';
   import  { type RoomSettings, settingsSchema } from '@/types/room';
   import { DEFAULT_SETTINGS, ROOM_SETTINGS, ROOM_SETTINGS_MAP, type RoomSettingsKey } from '~/constants/room-settings.ts';
   import { assign } from 'lodash';
+  import type { FormSubmitEvent } from '#ui/types';
 
   // Constant
   const GENRE_OPTIONS = [
@@ -29,16 +29,25 @@
 
   // Setup
   interface Props {
-    submitted?: (data: RoomSettings) => Promise<void> | void;
     nested?: boolean;
     submitButtonText?: string;
+    presets?: boolean;
+    initialValue?: RoomSettings;
+  }
+  type Emits = {
+    submitted: [settings: RoomSettings]
   }
   const {
-    submitted = noop,
     nested = false,
     submitButtonText = 'Submit',
+    presets = true,
   } = defineProps<Props>();
+  const emits = defineEmits<Emits>();
   const settings = defineModel<Partial<RoomSettings>>({ default: () => DEFAULT_SETTINGS });
+
+  function submitted(event: FormSubmitEvent<RoomSettings>) {
+    emits('submitted', event.data)
+  }
 
   const presetSetting = ref<RoomSettingsKey>('default');
   watch(presetSetting, (val) => {
@@ -48,16 +57,18 @@
 
 <template>
   <UForm class="flex flex-col gap-2" :schema="settingsSchema" :state="nested ? undefined : settings" :nested="nested" @submit="submitted">
-    <UFormField label="Presets">
-      <USelect
-        v-model="presetSetting"
-        class="w-full"
-        value-key="id"
-        label-key="label"
-        size="lg"
-        :items="ROOM_SETTINGS" />
-    </UFormField>
-    <span class="bg-paper h-0.5 w-full shrink-0 grow rounded-sm" />
+    <template v-if="presets">
+      <UFormField label="Presets">
+        <USelect
+          v-model="presetSetting"
+          class="w-full"
+          value-key="id"
+          label-key="label"
+          size="lg"
+          :items="ROOM_SETTINGS" />
+      </UFormField>
+      <span class="bg-paper h-0.5 w-full shrink-0 grow rounded-sm" />
+    </template>
     <UTooltip text="The number of films in the blend.">
       <UFormField name="top" label="Top">
         <UInputNumber v-model="settings.top" size="lg" />
@@ -81,6 +92,6 @@
     <UFormField name="genre" label="Genre">
       <USelect v-model="settings.genre" size="lg" class="w-full" :items="GENRE_OPTIONS" multiple />
     </UFormField>
-    <UButton v-if="!nested" type="submit" :label="submitButtonText" />
+    <UButton v-if="!nested" type="submit" :label="submitButtonText" color="secondary" class="font-bold uppercase justify-center" size="lg" />
   </UForm>
 </template>

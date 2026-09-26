@@ -38,7 +38,7 @@
 </script>
 
 <template>
-  <UForm class="flex flex-col items-center gap-4 mt-12" :schema="schema" :state="state" @submit="submitted">
+  <UForm class="flex flex-col items-center gap-4 mt-8" :schema="schema" :state="state" @submit="submitted">
     <div class="relative flex w-full items-stretch gap-4 max-md:flex-col">
       <UCard
         title="Users"

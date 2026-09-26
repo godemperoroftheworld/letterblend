@@ -73,7 +73,7 @@
       <NameField v-model="state.users![idx]" :items="friends ?? []" :show-add-button="md && idx === state.users.length - 1" :can-add="canAdd" :can-remove="canRemove" @remove="removeName(idx)" @add="addName" />
     </UFormField>
     <UButton v-if="!md" :icon="IconPlus" :disabled="!canAdd" label="Add" class="justify-center font-bold" size="lg" @click="addName" />
-    <UButton v-if="!nested">
+    <UButton v-if="!nested" class="justify-center font-bold uppercase" size="xl">
       Submit
     </UButton>
   </UForm>

@@ -41,7 +41,7 @@
     showConfirmDialog.value = true;
   }
   async function settingsSubmitted() {
-    await updateSettings({ id: room.value!.code, settings: settingsValue.value });
+    await updateSettings({ id: room.value!.code, settings: settingsValue.value! });
     success({
       title: 'Updated Room',
       message: 'Room settings updated successfully.',
@@ -49,6 +49,7 @@
   }
 
   // Users update
+  const usersValue = ref<string[]>([]);
   const { mutateAsync: updateUsers } = useUpdateUsers();
   async function usersSubmitted(data: { name: string[] }) {
     await updateUsers({ id: room.value!.code, users: data.name });
@@ -86,80 +87,87 @@
       router.replace('/');
     }
   });
+  whenever(room, (roomValue) => {
+    settingsValue.value = { ...roomValue.settings };
+    usersValue.value = [...roomValue.users];
+  })
 </script>
 
 <template>
-  <div class="relative flex items-stretch gap-4 max-md:flex-col">
+  <div class="relative flex items-stretch gap-4 max-md:flex-col mt-8">
     <UCard
       class="basis-2/3"
       title="Results">
-      <div class="flex h-full flex-col items-center justify-between">
+      <div class="flex h-full flex-col gap-2 items-center justify-between">
         <UCarousel
           v-slot="{ item }"
-          class="mx-auto"
+          :ui="{ item: 'basis-1/4', viewport: 'pb-4' }"
+          wheel-gestures
           :items="results">
-          <movie-poster
-            class="w-full"
+          <MoviePoster
             :data="item" />
         </UCarousel>
         <UButton
-          v-tippy="!isSmall ? { content: 'Copied to clipboard.', trigger: 'click' } : undefined"
           name="share"
-          class="w-64"
-          button-style="info"
+          class="w-64 justify-center uppercase font-bold"
+          color="info"
+          size="lg"
+          label="Share"
+          :icon="IconShare"
           :loading="isFetching"
-          @click="share">
-          <icon-share />
-          Share
-        </UButton>
+          @click="share" />
       </div>
     </UCard>
     <div class="flex basis-1/3 flex-col gap-4">
       <UCard title="Users">
-        <div class="relative mx-auto flex w-fit flex-col items-center gap-2">
-          <template v-if="room">
-            <div
-              v-for="user in room?.users"
-              :key="user"
-              class="flex w-full gap-2">
-              <letterboxd-avatar
-                class="size-6 grow-0"
-                :name="user" />
-              <span class="text-info">{{ user }}</span>
-            </div>
-          </template>
-          <template v-else>
-            <div
-              v-for="idx in 2"
-              :key="idx"
-              class="flex w-full gap-2">
-              <letterboxd-avatar class="size-6" />
-              <span class="bg-paper h-6 w-32 animate-pulse rounded-sm" />
-            </div>
-          </template>
-        </div>
-        <BlendUsersModal v-model:open="showEditUsers" :loading="isFetching" :users="room.users" @submitted="usersSubmitted" />
+        <template #title>
+          <div class="flex w-full justify-between">
+            <span class="font-heading font-bold text-xl mr-auto">Users</span>
+            <BlendUsersModal v-if="room" v-model:open="showEditUsers" v-model:users="usersValue" class="inline-flex" @submitted="usersSubmitted" />
+          </div>
+        </template>
+        <template #default>
+          <div class="relative mx-auto flex w-fit flex-col items-center gap-2">
+            <template v-if="room">
+              <div
+                v-for="user in room?.users"
+                :key="user"
+                class="flex w-full gap-2">
+                <LetterboxdAvatar
+                  class="size-6 grow-0"
+                  :name="user" />
+                <span class="text-info">{{ user }}</span>
+              </div>
+            </template>
+            <template v-else>
+              <div
+                v-for="idx in 2"
+                :key="idx"
+                class="flex w-full gap-2">
+                <LetterboxdAvatar class="size-6" />
+                <span class="bg-paper h-6 w-32 animate-pulse rounded-sm" />
+              </div>
+            </template>
+          </div>
+        </template>
       </UCard>
       <UCard
         :collapsable="isSmall"
         title="Settings">
-        <blend-settings
-          :submitted="settingsClicked"
-          :loading="isFetching"
-          :values="room?.settings"
+        <BlendSettings
+          v-model="settingsValue"
+          :presets="false"
           submit-button-text="Update"
-          :show-submit-button="true" />
+          @submitted="settingsClicked" />
       </UCard>
     </div>
-    <confirm-dialog
+    <ConfirmDialog
       v-model:open="showConfirmDialog"
       @confirm="settingsSubmitted">
-      <UAlert class="mx-auto mb-2" color="info" :icon="IconInfoCircle">
-        Updating the blend settings will re-compute the blend. This action is irreversible.
-      </UAlert>
+      <UAlert class="mx-auto mb-2" color="info" :icon="IconInfoCircle" variant="subtle" title="Updating the blend settings will re-compute the blend. This action is irreversible." />
       <div class="text-secondary mx-auto w-fit font-medium italic">
         Are you sure you want to update this blend?
       </div>
-    </confirm-dialog>
+    </ConfirmDialog>
   </div>
 </template>

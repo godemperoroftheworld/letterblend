@@ -10,7 +10,7 @@ export interface RoomSettings {
 export interface RoomUsers {
   users: string[];
 }
-export interface Room {
+export interface Room extends RoomUsers {
   code: string;
   owner: string;
   movies: Movie[];

@@ -26,7 +26,7 @@ export default defineAppConfig({
       slots: {
         root: 'rounded-3xl',
         body: 'relative',
-        header: 'pb-0!',
+        header: 'pb-0! border-b-0!',
         title: 'text-xl font-heading font-black',
       }
     },
