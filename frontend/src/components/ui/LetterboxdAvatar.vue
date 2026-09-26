@@ -12,13 +12,13 @@
   const { name, fallback = true, icon = AvatarIcon } = defineProps<Props>();
 
   const { user: storageName } = useUser();
-  const avatarName = computed(() => {
+  const avatarName = useDebounce(computed(() => {
     if (name) return name;
     if (fallback) {
       return storageName.value;
     }
     return '';
-  });
+  }), 250);
   const shouldFetchExists = computed(() => !!avatarName.value.length);
   const { data: nameExists, isFetching: isFetchingName } = useExists(avatarName, {
     enabled: shouldFetchExists,

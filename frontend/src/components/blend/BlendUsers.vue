@@ -70,7 +70,7 @@
 </script>
 
 <template>
-  <UForm class="flex flex-col gap-2" :validate="validateForm" :schema="schema" :on-submit="submit" :nested="nested">
+  <UForm class="flex flex-col gap-2" :validate="validateForm" :schema="schema" :on-submit="submit" :nested="nested" :validate-on="['blur', 'focus']">
     <UFormField v-for="(_, idx) in names" :key="idx" :error-pattern="RegExp(`^names.${idx}$`)">
       <NameField v-model="names[idx]" :items="friends" :show-add-button="md" @remove="removeName(idx)" @add="addName" />
     </UFormField>

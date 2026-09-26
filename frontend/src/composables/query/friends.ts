@@ -7,13 +7,11 @@ export default function useFriends(
   names: MaybeRefOrGetter<string[]>
 ) {
   const { user } = useUser();
-  return useDataQuery<FriendResult, DefaultError, string[]>(['friends', user, names], () => `user/friends`, {
+  const fullNames = useDebounce(computed(() => [user.value, ...toValue(names)].filter(Boolean)), 250);
+  return useDataQuery<FriendResult, DefaultError, string[]>(['friends', fullNames], () => `user/friends`, {
     config: {
       method: 'POST',
-      data: { names },
-    },
-    options: {
-      enabled: () => [user.value, ...toValue(names)].every((n) => !!n.length),
+      data: { names: fullNames },
     },
     transform: (data) => Object.keys(data ?? {}),
   })
