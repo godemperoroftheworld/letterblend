@@ -11,8 +11,7 @@ export default class LetterblendApi {
       baseURL: '/api/',
     });
     this.axiosInstance.interceptors.request.use((config) => {
-      // TODO FIX
-      // config.headers['X-Letterboxd-User'] = cookie.get('user');
+      config.headers['X-Letterboxd-User'] = localStorage.getItem('user') ?? '';
       return config;
     });
   }

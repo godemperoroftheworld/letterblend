@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import noop from 'lodash/noop';
-  import type { RoomSettings } from '@/types/room';
-  import z from 'zod';
+  import  { type RoomSettings, settingsSchema } from '@/types/room';
   import { DEFAULT_SETTINGS, ROOM_SETTINGS, ROOM_SETTINGS_MAP, type RoomSettingsKey } from '~/constants/room-settings.ts';
+  import { assign } from 'lodash';
 
   // Constant
   const GENRE_OPTIONS = [
@@ -32,27 +32,22 @@
     submitted?: (data: RoomSettings) => Promise<void> | void;
     nested?: boolean;
     submitButtonText?: string;
-    loading?: boolean;
   }
   const {
     submitted = noop,
     nested = false,
     submitButtonText = 'Submit',
   } = defineProps<Props>();
-  const settings = defineModel<RoomSettings>({ default: () => DEFAULT_SETTINGS });
-  const presetSetting = ref<RoomSettingsKey>('default');
-  const schema = z.object({
-    rules: z.number().min(1).max(30),
-    threshold: z.number().min(0).max(1),
-  });
+  const settings = defineModel<Partial<RoomSettings>>({ default: () => DEFAULT_SETTINGS });
 
+  const presetSetting = ref<RoomSettingsKey>('default');
   watch(presetSetting, (val) => {
-    settings.value = ROOM_SETTINGS_MAP[val];
-  })
+    assign(settings.value, ROOM_SETTINGS_MAP[val]);
+  });
 </script>
 
 <template>
-  <UForm :schema="schema" :on-submit="submitted">
+  <UForm :schema="settingsSchema" :state="nested ? undefined : settings" :nested="nested" @submit="submitted">
     <UFormField label="Presets">
       <USelect
         v-model="presetSetting"
@@ -65,19 +60,17 @@
     <span class="bg-paper h-0.5 w-full shrink-0 grow rounded-sm" />
     <UTooltip text="The number of films in the blend.">
       <UFormField name="top" label="Top">
-        <UInputNumber size="lg" v-model="settings.top" />
+        <UInputNumber v-model="settings.top" size="lg" />
       </UFormField>
     </UTooltip>
     <UTooltip text="How many users need the film in their watchlist">
       <UFormField name="threshold" label="Threshold">
-        <UInputNumber size="lg" v-model="settings.threshold" :step="0.01" :format-options="{ style: 'percent' }" :min="0" :max="1" />
+        <UInputNumber v-model="settings.threshold" size="lg" :step="0.01" :format-options="{ style: 'percent' }" :min="0" :max="1" />
       </UFormField>
     </UTooltip>
     <UFormField name="genre" label="Genre">
-      <USelect size="lg" v-model="settings.genre" class="w-full" :items="GENRE_OPTIONS" multiple />
+      <USelect v-model="settings.genre" size="lg" class="w-full" :items="GENRE_OPTIONS" multiple />
     </UFormField>
-    <UButton v-if="!nested">
-      {{ submitButtonText }}
-    </UButton>
+    <UButton v-if="!nested" type="submit" :label="submitButtonText" />
   </UForm>
 </template>

@@ -1,9 +1,5 @@
 const useUser = createSharedComposable(() => {
-  const user = useCookie<string>('user', {
-    watch: true,
-    sameSite: true,
-    default: () => '',
-  });
+  const user = useLocalStorage<string>('user', '');
   const exists = computed(() => !!user.value.length);
   return { user, exists };
 });

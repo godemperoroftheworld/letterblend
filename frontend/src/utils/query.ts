@@ -83,9 +83,8 @@ function buildOptions<T, E = DefaultError>(
 export async function fetchDataQuery<T, E = DefaultError, R = T>(
   key: MaybeDeepRef<Array<unknown>>,
   url: MaybeRefOrGetter<string>,
-  params: UseDataQueryParams<T, E, R>,
+  { config = {}, showLoader = false, options = {}, transform }: UseDataQueryParams<T, E, R>,
 ) {
-  const { config = {}, showLoader = false, options = {}, transform } = toRefs(params);
   const state = queryClient.getQueryState(key);
   if (state == null) {
     const queryFn = buildQueryFn<T>(url, config, showLoader);
@@ -99,7 +98,7 @@ export async function fetchDataQuery<T, E = DefaultError, R = T>(
   const result = queryClient.getQueryData<T>(key);
 
   if (result != null) {
-    return transform ? transform(result) : (result as unknown as R);
+    return transform ? unref(transform)!(result) : (result as unknown as R);
   }
   return undefined;
 }

@@ -65,5 +65,10 @@ export default defineAppConfig({
         }
       }
     },
+    formField: {
+      slots: {
+        error: 'mt-0! italic'
+      }
+    }
   }
 });

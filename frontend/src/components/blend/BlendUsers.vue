@@ -1,14 +1,12 @@
 <script setup lang="ts">
-  import z from 'zod';
-  import type { FormError } from '#ui/types';
+  import type { FormError, FormSubmitEvent } from '#ui/types';
   import { IconPlus } from '@tabler/icons-vue';
   import useFriends from '~/composables/query/friends.ts';
   import NameField from '~/components/ui/NameField.vue';
-  import { breakpointsTailwind } from '@vueuse/core';
-  import useUser from '~/composables/user.ts';
+  import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
+  import { type RoomUsers, usersSchema } from '~/types/room.ts';
 
   interface Props {
-    submitted: (data: string[]) => Promise<void> | void;
     nested?: boolean;
   }
   type Emits = {
@@ -16,74 +14,63 @@
   }
 
   const MAX_NAMES = 5;
-  const MIN_NAMES = 1;
+  const MIN_NAMES = 2;
 
   // Setup
   const { nested = false } = defineProps<Props>();
   const emits = defineEmits<Emits>();
-  const { user } = useUser();
-  const names = defineModel<string[]>({ default: () => [] })
-  const { data: friends } = useFriends(names);
   const { greaterOrEqual } = useBreakpoints(breakpointsTailwind);
   const md = greaterOrEqual('md');
 
   // Form data
-  interface Fields {
-    names: string[];
-  }
-  const schema = z.object({
-    names: z.array(z.string().nonempty()),
+  const state = defineModel<Partial<RoomUsers>>({
+    default: () => ({ users: [] }),
   });
+  const users = computed(() => state.value.users ?? [])
+  const { data: friends } = useFriends(users);
 
-  const canAdd = computed(() => names.value.length < MAX_NAMES);
-  const canRemove = computed(() => names.value.length > MIN_NAMES);
+  const canAdd = computed(() => users.value.length < MAX_NAMES);
+  const canRemove = computed(() => users.value.length > MIN_NAMES);
 
   // Helper
-  async function validateForm(state: Partial<Fields>): Promise<FormError[]> {
-    const schemaResult = schema.safeParse(state);
-    if (!schemaResult.success) {
-      return schemaResult.error.issues;
-    }
-
+  async function validateForm(state: Partial<RoomUsers>): Promise<FormError[]> {
     const errors: FormError[] = [];
-    const validity = await Promise.all(
-      state.names!.map((n) => validateLetterboxdName(n)),
-    );
-    state.names!.forEach((name, idx) => {
+
+    const validity = await Promise.all(state.users!.map((n) => validateLetterboxdName(n)));
+    state.users!.forEach((name, idx) => {
+      if (!name.length) return;
       if (!validity[idx]) {
         errors.push({
-          name: `names.${idx}`,
+          name: `users.${idx}`,
           message: 'User must be valid Letterboxd name.'
         })
       }
-      if (state.names!.indexOf(name) !== state.names!.lastIndexOf(name)) {
+      if (state.users!.indexOf(name) !== state.users!.lastIndexOf(name)) {
         errors.push({
-          name: `names.${idx}`,
+          name: `users.${idx}`,
           message: 'User must be unique.'
         })
       }
     });
+
     return errors;
+
   }
   function removeName(idx: number) {
-    names.value = [...names.value.slice(0, idx), ...names.value.slice(idx + 1)];
+    state.value.users!.splice(idx, 1);
   }
   function addName() {
-    names.value.push('');
+    state.value.users!.push('');
   }
-  function submit() {
-    emits('submitted', names.value);
+  function submit(event: FormSubmitEvent<RoomUsers>) {
+    emits('submitted', event.data.users);
   }
-
-  onBeforeMount(() => {
-    names.value = [user.value ?? ''];
-  })
 </script>
 
 <template>
-  <UForm name="users" class="flex flex-col gap-2" :validate="validateForm" :on-submit="submit">
-    <UFormField v-for="(_, idx) in names" :key="idx" :error-pattern="RegExp(`^names.${idx}$`)">
-      <NameField v-model="names[idx]" :items="friends" :disabled="idx === 0" :show-add-button="md" :can-add="canAdd" :can-remove="idx > 0 && canRemove" @remove="removeName(idx)" @add="addName" />
+  <UForm v-if="state.users" :nested="nested" :state="nested ? undefined : state" :schema="usersSchema" :validate="validateForm" :on-submit="submit" class="flex flex-col gap-2">
+    <UFormField v-for="(_, idx) in state.users" :key="idx" :name="`users.${idx}`" :error-pattern="RegExp(`^users\.^${idx}$`)">
+      <NameField v-model="state.users![idx]" :items="friends ?? []" :show-add-button="md && idx === state.users.length - 1" :can-add="canAdd" :can-remove="canRemove" @remove="removeName(idx)" @add="addName" />
     </UFormField>
     <UButton v-if="!md" :icon="IconPlus" :disabled="!canAdd" label="Add" class="justify-center font-bold" size="lg" @click="addName" />
     <UButton v-if="!nested">

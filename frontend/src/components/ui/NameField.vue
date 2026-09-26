@@ -29,6 +29,9 @@
       mode="autocomplete"
       size="lg"
       :disabled="disabled"
+      :ui="{
+        base: 'ml-1'
+      }"
       leading>
       <template #leading>
         <letterboxd-avatar class="size-6" :name="model" />
