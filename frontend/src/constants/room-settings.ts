@@ -23,23 +23,24 @@ export const DEFAULT_SETTINGS: RoomSettings = {
   top: 10,
   threshold: 0.6,
   genre: [],
+  decade: [],
+};
+
+export type RoomSettingsKey = 'default' | 'justpick' | 'wideopen' | 'comfort';
+
+export interface RoomSettingPreset {
+  label: string;
+  id: RoomSettingsKey;
+  settings: RoomSettings;
 }
 
-const ROOM_SETTINGS = [
-  { label: 'Default', id: 'default', value: DEFAULT_SETTINGS },
-  { label: 'Just Pick One', id: 'justpick', value: JUST_PICK_SETTINGS },
-  { label: 'Wide Open', id: 'wideopen', value: SOME_OPTIONS_SETTINGS },
-  { label: 'Family Adventure', id: 'comfort', value: SOMETHING_COMFORTING },
-] as const;
+export const ROOM_SETTINGS: RoomSettingPreset[] = [
+  { label: 'Default', id: 'default', settings: DEFAULT_SETTINGS },
+  { label: 'Just Pick One', id: 'justpick', settings: JUST_PICK_SETTINGS },
+  { label: 'Wide Open', id: 'wideopen', settings: SOME_OPTIONS_SETTINGS },
+  { label: 'Family Adventure', id: 'comfort', settings: SOMETHING_COMFORTING },
+];
 
-export type RoomSettingsKey = typeof ROOM_SETTINGS[number]['id'];
-
-const ROOM_SETTINGS_MAP = ROOM_SETTINGS.reduce((result, current) => {
-  result[current.id] = current.value;
-  return result;
-}, {} as Record<RoomSettingsKey, RoomSettings>);
-
-export {
-  ROOM_SETTINGS,
-  ROOM_SETTINGS_MAP
-}
+export const ROOM_SETTINGS_MAP: Record<RoomSettingsKey, RoomSettings> = Object.fromEntries(
+  ROOM_SETTINGS.map((preset) => [preset.id, preset.settings]),
+) as Record<RoomSettingsKey, RoomSettings>;

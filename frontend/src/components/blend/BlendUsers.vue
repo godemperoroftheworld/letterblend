@@ -4,7 +4,7 @@
   import useFriends from '~/composables/query/friends.ts';
   import NameField from '~/components/ui/NameField.vue';
   import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
-  import { type RoomUsers, usersSchema } from '~/types/room.ts';
+  import { type RoomUsers, usersSchema, MAX_USERS, MIN_USERS } from '~/types/room.ts';
 
   interface Props {
     nested?: boolean;
@@ -12,9 +12,6 @@
   type Emits = {
     submitted: [names: string[]]
   }
-
-  const MAX_NAMES = 5;
-  const MIN_NAMES = 2;
 
   // Setup
   const { nested = false } = defineProps<Props>();
@@ -29,8 +26,8 @@
   const users = computed(() => state.value.users ?? [])
   const { data: friends } = useFriends(users);
 
-  const canAdd = computed(() => users.value.length < MAX_NAMES);
-  const canRemove = computed(() => users.value.length > MIN_NAMES);
+  const canAdd = computed(() => users.value.length < MAX_USERS);
+  const canRemove = computed(() => users.value.length > MIN_USERS);
 
   // Helper
   async function validateForm(state: Partial<RoomUsers>): Promise<FormError[]> {

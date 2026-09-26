@@ -6,19 +6,12 @@
 
   interface Props {
     name?: string;
-    fallback?: boolean;
     icon?: string | Component;
   }
-  const { name = '', fallback = true, icon = AvatarIcon } = defineProps<Props>();
+  const { name = '', icon = AvatarIcon } = defineProps<Props>();
 
   const { user: storageName } = useUser();
-  const avatarName = useDebounce(computed(() => {
-    if (name.length) return name;
-    if (fallback) {
-      return storageName.value;
-    }
-    return '';
-  }), 250);
+  const avatarName = useDebounce(computed(() => name.length ? name : storageName.value), 250);
   const shouldFetchExists = computed(() => !!avatarName.value.length);
   const { data: nameExists, isFetching: isFetchingName } = useExists(avatarName, {
     enabled: shouldFetchExists,

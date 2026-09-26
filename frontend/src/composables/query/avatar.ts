@@ -8,19 +8,14 @@ interface AvatarResponse {
 }
 export default function useAvatar(
   user: MaybeRefOrGetter<string>,
-  options?: DataQueryOptions<AvatarResponse, unknown>,
+  options?: DataQueryOptions<AvatarResponse, Error, string | undefined>,
 ) {
-  return useDataQuery<AvatarResponse, unknown, string>(
-    ['avatar', user],
+  return useDataQuery<AvatarResponse, Error, string | undefined>(
+    () => ['avatar', toValue(user)],
     () => `user/${toValue(user)}/avatar`,
     {
       options,
-      transform(data) {
-        if (data?.exists && data?.url) {
-          return data.url;
-        }
-        return undefined;
-      },
+      select: (data) => (data.exists && data.url ? data.url : undefined),
     },
   );
 }

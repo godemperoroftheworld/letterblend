@@ -32,7 +32,6 @@
     nested?: boolean;
     submitButtonText?: string;
     presets?: boolean;
-    initialValue?: RoomSettings;
   }
   type Emits = {
     submitted: [settings: RoomSettings]

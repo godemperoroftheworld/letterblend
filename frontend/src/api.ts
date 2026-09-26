@@ -29,14 +29,6 @@ export default class LetterblendApi {
     });
   }
 
-  async get<T>(url: string, config: AxiosRequestConfig = {}): Promise<T> {
-    return this.request<T>({
-      method: 'GET',
-      url,
-      ...config,
-    });
-  }
-
   async post<T>(url: string, data: object, config: AxiosRequestConfig = {}): Promise<T> {
     return this.request<T>({
       method: 'POST',
@@ -51,14 +43,6 @@ export default class LetterblendApi {
       method: 'PUT',
       url,
       data: unrefDeep(data),
-      ...config,
-    });
-  }
-
-  async delete<T>(url: string, config: AxiosRequestConfig = {}) {
-    return this.request<T>({
-      method: 'DELETE',
-      url,
       ...config,
     });
   }

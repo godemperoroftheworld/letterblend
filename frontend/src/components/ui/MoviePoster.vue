@@ -9,20 +9,21 @@
 <template>
   <div class="relative">
     <template v-if="data">
-      <a
-        v-tippy="{ content: data.name, touch: 'hold' }"
-        :href="`https://letterboxd.com/tmdb/${data.id}`"
-        target="_blank"
-        class="aspect-2/3 w-full">
-        <nuxt-img
-          class="bg-paper aspect-2/3 w-full overflow-hidden rounded-sm"
-          :class="{ 'animate-pulse': !loaded }"
-          :src="`api/poster/${data.id}`"
-          provider="raw"
-          loading="lazy"
-          :alt="data.name"
-          @load="loaded = true" />
-      </a>
+      <UTooltip :text="data.name">
+        <a
+          :href="`https://letterboxd.com/tmdb/${data.id}`"
+          target="_blank"
+          class="aspect-2/3 w-full">
+          <nuxt-img
+            class="bg-paper aspect-2/3 w-full overflow-hidden rounded-sm"
+            :class="{ 'animate-pulse': !loaded }"
+            :src="`api/poster/${data.id}`"
+            provider="raw"
+            loading="lazy"
+            :alt="data.name"
+            @load="loaded = true" />
+        </a>
+      </UTooltip>
       <div class="mx-auto mt-1 flex h-6 w-fit gap-1">
         <letterboxd-avatar
           v-for="user in data.users"

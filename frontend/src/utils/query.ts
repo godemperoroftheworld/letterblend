@@ -1,139 +1,100 @@
-import type {
-  DefaultError,
-  QueryFunction,
-  QueryObserverOptions,
-  UseQueryOptions,
-  UseQueryReturnType,
-} from '@tanstack/vue-query';
+import type { DefaultError, QueryKey, QueryOptions, UseQueryReturnType } from '@tanstack/vue-query';
 import { useQuery } from '@tanstack/vue-query';
 import type { AxiosRequestConfig } from 'axios';
 import { AxiosError } from 'axios';
-import LetterblendAPI from '@/api';
-import type { MaybeRefOrGetter, Ref } from 'vue';
-import { computed, unref, watch } from 'vue';
-import type { MaybeDeepRef } from '@/utils/unref';
+import type { MaybeRefOrGetter } from 'vue';
+import { toValue, watch } from 'vue';
+import LetterblendApi from '@/api';
 import useLoader from '@/composables/load';
 import { queryClient } from '@/plugins/query';
+import { unrefDeep } from '@/utils/unref';
 import { until } from '@vueuse/core';
 
-export type DataQueryReturnType<T, E = DefaultError, R = T> = Omit<
-  UseQueryReturnType<T, E>,
-  'data'
-> & {
-  data: Ref<R | undefined>;
-  count: Ref<number | undefined>;
-};
+export type DataQueryReturnType<TData, TError = DefaultError> = UseQueryReturnType<TData, TError>;
 
-export type DataQueryOptions<T, E = DefaultError> = MaybeRef<{
-  [
-    Property in keyof Omit<QueryObserverOptions<T, E, T, T, Array<unknown>>, 'queryFn' | 'queryKey'>
-  ]: Property extends 'enabled'
-    ? MaybeRefOrGetter<QueryObserverOptions<T, E, T, T, Array<unknown>>[Property]>
-    : MaybeDeepRef<QueryObserverOptions<T, E, T, T, Array<unknown>>[Property]>;
-}>;
-export interface UseDataQueryParams<T, E = DefaultError, R = T> {
-  options?: DataQueryOptions<T, E>;
-  config?: MaybeDeepRef<Omit<AxiosRequestConfig<T>, 'url' | 'baseURL'>>;
-  transform?: (data: T | undefined) => R | undefined;
+export type DataQueryOptions<TQueryFnData, TError = DefaultError, TData = TQueryFnData> = Omit<
+  QueryOptions<TQueryFnData, TError, TData, TQueryFnData, QueryKey>,
+  'queryKey' | 'queryFn' | 'initialData' | 'placeholderData'
+>;
+
+type RequestConfig<TQueryFnData> = Omit<AxiosRequestConfig<TQueryFnData>, 'url' | 'baseURL'>;
+
+export interface UseDataQueryParams<TQueryFnData, TError = DefaultError, TData = TQueryFnData> {
+  options?: DataQueryOptions<TQueryFnData, TError, TData>;
+  config?: MaybeRefOrGetter<RequestConfig<TQueryFnData>>;
+  select?: (data: TQueryFnData) => TData;
   showLoader?: boolean;
 }
 
-function buildQueryFn<T>(
+function buildQueryFn<TQueryFnData>(
   url: MaybeRefOrGetter<string>,
-  config: MaybeDeepRef<AxiosRequestConfig<T>>,
-  showLoader?: boolean,
-): QueryFunction<T, Array<unknown>> {
-  return async () => {
-    if (showLoader) {
-      const scope = effectScope();
-      scope.run(() => {
-        const { emit } = useLoader();
-        emit(true);
-      });
-      scope.stop();
-    }
-    const result = await LetterblendAPI.instance.request<T>({
-      ...unrefDeep(config),
-      url: toValue(url),
-    });
-    if (showLoader) {
-      const scope = effectScope();
-      scope.run(() => {
-        const { emit } = useLoader();
-        emit(false);
-      });
-      scope.stop();
-    }
-    return result;
-  };
-}
-
-function buildOptions<T, E = DefaultError>(
-  key: MaybeDeepRef<Array<unknown>>,
-  queryFn: QueryFunction<T, Array<unknown>>,
-  options: DataQueryOptions<T, E>,
-): UseQueryOptions<T, E, T, T> {
-  return {
-    ...unref(options),
-    queryKey: [...unref(key)],
-    queryFn,
-  };
-}
-
-export async function fetchDataQuery<T, E = DefaultError, R = T>(
-  key: MaybeDeepRef<Array<unknown>>,
-  url: MaybeRefOrGetter<string>,
-  { config = {}, showLoader = false, options = {}, transform }: UseDataQueryParams<T, E, R>,
+  config: MaybeRefOrGetter<RequestConfig<TQueryFnData>>,
+  showLoader: boolean,
 ) {
-  const state = queryClient.getQueryState(key);
-  if (state == null) {
-    const queryFn = buildQueryFn<T>(url, config, showLoader);
-    await queryClient.query(buildOptions(key, queryFn, options ?? {}));
-  } else if (state.status !== 'success') {
-    await until(() => {
-      const state = queryClient.getQueryState(key);
-      return state?.status === 'success';
-    }).toBeTruthy();
-  }
-  const result = queryClient.getQueryData<T>(key);
-
-  if (result != null) {
-    return transform ? unref(transform)!(result) : (result as unknown as R);
-  }
-  return undefined;
+  return async () => {
+    const { emit } = useLoader();
+    if (showLoader) emit(true);
+    try {
+      return await LetterblendApi.instance.request<TQueryFnData>({
+        ...unrefDeep(toValue(config)),
+        url: toValue(url),
+      });
+    } finally {
+      if (showLoader) emit(false);
+    }
+  };
 }
 
-export type UseDataQueryType<T, E = DefaultError, R = T> = (
-  key: MaybeDeepRef<Array<unknown>>,
+export function useDataQuery<TQueryFnData, TError = DefaultError, TData = TQueryFnData>(
+  key: MaybeRefOrGetter<QueryKey>,
   url: MaybeRefOrGetter<string>,
-  params: UseDataQueryParams<T, E, R>,
-) => DataQueryReturnType<T, E, R>;
-export function useDataQuery<T, E = DefaultError, R = T>(
-  key: MaybeDeepRef<Array<unknown>>,
-  url: MaybeRefOrGetter<string>,
-  { options, config, transform, showLoader }: UseDataQueryParams<T, E, R>,
-): DataQueryReturnType<T, E, R> {
-  const queryFn = buildQueryFn(url, config, showLoader);
+  {
+    options,
+    config,
+    select,
+    showLoader = false,
+  }: UseDataQueryParams<TQueryFnData, TError, TData> = {},
+): DataQueryReturnType<TData, TError> {
   const { error: showError } = useNotify();
+  const selectData = select && ((data: TQueryFnData) => select(data));
 
-  const queryOptions = computed(() => buildOptions(key, queryFn, options));
-
-  const { data, error, ...rest } = useQuery(queryOptions.value, queryClient);
-  const newData = computed(() => {
-    if (data.value) {
-      return transform ? transform(data.value) : (data.value as unknown as R);
-    }
-    return undefined;
-  });
+  const query = useQuery<TQueryFnData, TError, TData, QueryKey>(
+    () => ({
+      queryKey: toValue(key),
+      queryFn: buildQueryFn<TQueryFnData>(url, config ?? {}, showLoader),
+      select: selectData,
+      ...options,
+    }),
+    queryClient,
+  );
+  const { error } = query;
 
   watch(error, (val) => {
     if (val instanceof AxiosError) {
       showError({ title: val.name, message: val.message });
     }
   });
-  return {
-    data: newData,
-    error,
-    ...rest,
-  } as unknown as DataQueryReturnType<T, E, R>;
+
+  return query;
+}
+
+export async function fetchDataQuery<TQueryFnData>(
+  key: MaybeRefOrGetter<QueryKey>,
+  url: MaybeRefOrGetter<string>,
+  config: MaybeRefOrGetter<RequestConfig<TQueryFnData>> = {},
+): Promise<TQueryFnData | undefined> {
+  const queryKey = toValue(key);
+  const options = {
+    queryKey,
+    queryFn: buildQueryFn<TQueryFnData>(url, config, false),
+  } satisfies QueryOptions<TQueryFnData, DefaultError, TQueryFnData, TQueryFnData, QueryKey>;
+
+  const state = queryClient.getQueryState(queryKey);
+  if (state == null) {
+    await queryClient.query(options);
+  } else if (state.status !== 'success') {
+    await until(() => queryClient.getQueryState(queryKey)?.status === 'success').toBeTruthy();
+  }
+
+  return queryClient.getQueryData<TQueryFnData>(queryKey);
 }

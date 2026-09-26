@@ -7,16 +7,14 @@ export interface ExistsResponse {
 }
 export default function useExists(
   user: MaybeRefOrGetter<string>,
-  options?: DataQueryOptions<ExistsResponse, unknown>,
+  options?: DataQueryOptions<ExistsResponse, Error, boolean>,
 ) {
-  return useDataQuery<ExistsResponse, unknown, boolean>(
-    ['exists', user],
+  return useDataQuery<ExistsResponse, Error, boolean>(
+    () => ['exists', toValue(user)],
     () => `user/${toValue(user)}/exists`,
     {
       options,
-      transform(data) {
-        return data !== undefined ? data.exists : data;
-      },
+      select: (data) => data.exists,
     },
   );
 }

@@ -1,41 +1,16 @@
 import { isRef, unref } from 'vue';
 
-type MaybeDeepRefObject<T extends object> = {
-  [Property in keyof T]: MaybeDeepRef<T[Property]>;
-};
-type MaybeDeepRefArray<T extends Array<unknown>> = Array<MaybeDeepRef<T[number]>>;
-export type MaybeDeepRef<T> = MaybeRefOrGetter<
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  T extends Function
-    ? T
-    : T extends object
-      ? MaybeDeepRefObject<T>
-      : T extends Array<unknown>
-        ? MaybeDeepRefArray<T>
-        : T
->;
-export function unrefDeep<T>(obj: MaybeDeepRef<T>): T {
-  if (isRef(obj)) {
-    return unrefDeep(unref(obj));
-  } else if (Array.isArray(obj)) {
-    return unrefArray(obj) as T;
-  } else if (typeof obj === 'object') {
-    return unrefObject(obj as object) as T;
-  } else {
-    return obj as T;
+export function unrefDeep<T>(value: T): T {
+  if (isRef(value)) {
+    return unrefDeep(unref(value) as T);
   }
-}
-
-function unrefArray<T extends Array<unknown>>(array: Array<MaybeDeepRef<T[number]>>): T {
-  return array.map((x) => unrefDeep(x)) as T;
-}
-
-function unrefObject<T extends object>(obj: {
-  [Property in keyof T]: MaybeDeepRef<T[Property]>;
-}): T {
-  const deepUnref = {} as T;
-  Object.entries(obj).forEach(([key, value]) => {
-    deepUnref[key as keyof T] = (value == null ? undefined : unrefDeep(value)) as T[keyof T];
-  });
-  return deepUnref;
+  if (Array.isArray(value)) {
+    return value.map((entry) => unrefDeep(entry)) as T;
+  }
+  if (typeof value === 'object' && value !== null) {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, entry]) => [key, unrefDeep(entry)]),
+    ) as T;
+  }
+  return value;
 }

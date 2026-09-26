@@ -1,7 +1,5 @@
 import type { DehydratedState, VueQueryPluginOptions } from '@tanstack/vue-query';
 import { VueQueryPlugin, QueryClient, hydrate, dehydrate } from '@tanstack/vue-query';
-// Nuxt 3 app aliases
-import type { NuxtApp } from 'nuxt/app';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,7 +13,7 @@ export const queryClient = new QueryClient({
   },
 });
 
-export default defineNuxtPlugin((nuxt: NuxtApp) => {
+export default defineNuxtPlugin((nuxt) => {
   const vueQueryState = useState<DehydratedState | null>('vue-query');
 
   const options: VueQueryPluginOptions = { queryClient };
@@ -29,7 +27,9 @@ export default defineNuxtPlugin((nuxt: NuxtApp) => {
 
   if (import.meta.client) {
     nuxt.hooks.hook('app:created', () => {
-      hydrate(queryClient, vueQueryState.value);
+      if (vueQueryState.value) {
+        hydrate(queryClient, vueQueryState.value);
+      }
     });
   }
 });

@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import LetterboxdAvatar from '~/components/ui/LetterboxdAvatar.vue';
-  import VueBarcode from '@chenfengyuan/vue-barcode';
   import useUser from '~/composables/user.ts';
   import useExists from '~/composables/query/exists.ts';
   import { IconBlender, IconLoader, IconQuestionMark, IconUserEdit, IconUsersGroup } from '@tabler/icons-vue';

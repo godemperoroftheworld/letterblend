@@ -51,8 +51,8 @@
   // Users update
   const usersValue = ref<string[]>([]);
   const { mutateAsync: updateUsers } = useUpdateUsers();
-  async function usersSubmitted(data: { name: string[] }) {
-    await updateUsers({ id: room.value!.code, users: data.name });
+  async function usersSubmitted(names: string[]) {
+    await updateUsers({ id: room.value!.code, users: names });
     showEditUsers.value = false;
     success({
       title: 'Updated Room',

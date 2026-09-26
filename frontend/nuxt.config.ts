@@ -1,6 +1,5 @@
 import tailwindcss from '@tailwindcss/vite';
-import svgLoader from 'vite-svg-loader';
-import vueDevTools from 'vite-plugin-vue-devtools'
+import vueDevTools from 'vite-plugin-vue-devtools';
 export default defineNuxtConfig({
   compatibilityDate: '2026-06-17',
   devtools: { enabled: true },
@@ -19,7 +18,7 @@ export default defineNuxtConfig({
       Montserrat: [400, 500, 600, 700, 800],
       'IBM Plex Mono': [300, 400, 500, 600],
       Geist: [100, 200, 300, 400, 500],
-    }
+    },
   },
   image: {
     providers: {
@@ -30,7 +29,7 @@ export default defineNuxtConfig({
     },
   },
   vite: {
-    plugins: [tailwindcss(), svgLoader(), vueDevTools()],
+    plugins: [tailwindcss(), vueDevTools()],
   },
   nitro: {
     routeRules: {

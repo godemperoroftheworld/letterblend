@@ -1,16 +1,8 @@
 import type { ExistsResponse } from '@/composables/query/exists';
 import { fetchDataQuery } from '@/utils/query';
-import type { DefaultError } from '@tanstack/vue-query';
 
-export const validateLetterboxdName = async (value: string): Promise<boolean> => {
-  if (!value.length) return false;
-  return (
-    (await fetchDataQuery<ExistsResponse, DefaultError, boolean>(
-      ['exists', value],
-      `user/${value}/exists`,
-      {
-        transform: (result) => !!result?.exists,
-      },
-    )) ?? false
-  );
+export async function validateLetterboxdName(name: string): Promise<boolean> {
+  if (!name.length) return false;
+  const result = await fetchDataQuery<ExistsResponse>(['exists', name], `user/${name}/exists`);
+  return result?.exists ?? false;
 }
