@@ -87,26 +87,18 @@
   --color-content: var(--color-slate-800);
   --color-background: var(--color-slate-700);
   --color-paper: var(--color-slate-600);
+  --color-ticket: #e1d48f;
 
   --inset-shadow-md: inset 0 2px 3px rgba(0, 0, 0, 0.25);
+
+  --ui-container: 72rem;
 }
 
-html {
+#__nuxt {
   width: 100dvw;
   height: 100dvh;
-  font-family: var(--font-body) sans-serif;
-}
-body {
-  width: 100%;
-  height: 100%;
-  color: white;
-  overflow: hidden;
-}
-#__nuxt {
-  width: 100%;
-  height: 100%;
-  overflow-y: scroll;
   background-image: linear-gradient(to top, var(--color-dark), var(--color-background));
+  font-family: var(--font-body) sans-serif;
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -139,4 +131,8 @@ button:disabled:hover {
 
 @utility drop-shadow-round-lg {
   filter: drop-shadow(0 0 6px var(--tw-drop-shadow-color));
+}
+
+@utility writing-* {
+  writing-mode: --value('horizontal-tb', 'vertical-lr', 'vertical-rl', 'sideways-lr', 'sideways-rl');
 }

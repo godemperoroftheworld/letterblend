@@ -39,7 +39,7 @@
 
 <template>
   <UForm
-    class="mt-8 flex flex-col items-center gap-4"
+    class="flex flex-col items-center gap-4"
     :schema="schema"
     :state="state"
     @submit="submitted">
@@ -76,7 +76,7 @@
     <UButton
       type="submit"
       label="Submit"
-      class="justify-center font-bold uppercase max-sm:w-full sm:w-64"
+      class="justify-center font-bold max-sm:w-full sm:w-64"
       size="xl" />
   </UForm>
 </template>

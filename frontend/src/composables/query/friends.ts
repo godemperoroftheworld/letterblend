@@ -8,12 +8,9 @@ export default function useFriends(
   names: MaybeRefOrGetter<string[]>,
   options?: DataQueryOptions<FriendsResponse, Error, string[]>,
 ) {
-  const fullNames = useDebounce(
-    computed(() => [...toValue(names)].filter(Boolean)),
-    250,
-  );
+  const fullNames = computed(() => [...toValue(names)].filter(Boolean));
   return useDataQuery<FriendsResponse, Error, string[]>(
-    () => ['friends', fullNames.value],
+    () => ['friends', fullNames],
     'user/friends',
     {
       options,

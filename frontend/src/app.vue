@@ -23,6 +23,6 @@
       <NuxtPage />
     </NuxtLayout>
   </UApp>
-  <Loader />
   <ParticlesBackground />
+  <Loader />
 </template>

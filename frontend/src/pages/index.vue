@@ -2,26 +2,46 @@
   import LetterboxdAvatar from '~/components/ui/LetterboxdAvatar.vue';
   import useUser from '~/composables/user.ts';
   import useExists from '~/composables/query/exists.ts';
-  import { IconBlender, IconLoader, IconQuestionMark, IconUserEdit, IconUsersGroup } from '@tabler/icons-vue';
+  import {
+    IconBlender,
+    IconLoader,
+    IconQuestionMark,
+    IconUserEdit,
+    IconUsersGroup,
+  } from '@tabler/icons-vue';
   import { useRoomCount } from '~/composables/query/room.ts';
   import { ref } from 'vue';
   import { QrcodeSvg } from 'qrcode.vue';
+  import { breakpointsTailwind } from '@vueuse/core';
 
   const FALLBACK_BARCODE = 'godemperofearth';
   const CURRENT_DATE_STRING = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
+  });
+
+  definePageMeta({
+    layout: {
+      name: 'default',
+      props: {
+        cardSize: 'md',
+      },
+    },
   });
 
   const router = useRouter();
   const { user: storedName } = useUser();
   const { data: count } = useRoomCount();
   const content = useCssVar('--color-background');
+  const { greaterOrEqual } = useBreakpoints(breakpointsTailwind);
 
   const name = ref(storedName.value ?? '');
-  const { data: exists, isFetching } = useExists(() => name.value, { enabled: () => !!name.value.length });
+  const { data: exists, isFetching } = useExists(useDebounce(name, 250), {
+    enabled: () => !!name.value.length,
+  });
 
+  const isXLarge = greaterOrEqual('xl');
   const error = computed<boolean | string>(() => {
     if (!isFetching.value && name.value.length && !exists.value) {
       return `Unkown username ${name.value}`;
@@ -37,72 +57,102 @@
 </script>
 
 <template>
-  <MovieTicket class="h-56 mx-auto -rotate-5 mb-16">
-    <template #left>
-      <div class="h-full flex flex-col items-center justify-between text-background">
-        <LetterboxdAvatar class="size-12" :name="name" :icon="IconQuestionMark" />
-        <div class="font-mono rotate-270 font-bold text-sm">
-          Admit One
+  <div class="mt flex items-center justify-around gap-4 max-md:mt-8 lg:gap-6 xl:flex-col">
+    <MovieTicket
+      class="max-xl:w-72 xl:h-64"
+      :orientation="isXLarge ? 'horizontal' : 'vertical'">
+      <template #left>
+        <div
+          class="text-background flex h-full items-center justify-center gap-6 max-xl:w-full xl:flex-col xl:justify-between xl:gap-3">
+          <LetterboxdAvatar
+            class="size-12"
+            :name="name"
+            :icon="IconQuestionMark" />
+          <div class="xl:writing-vertical-lr font-mono text-sm font-bold text-nowrap">
+            Admit One
+          </div>
+          <QrcodeSvg
+            class="size-10"
+            :value="url"
+            background="transparent"
+            :foreground="content" />
         </div>
-        <QrcodeSvg class="size-10" :value="url" background="transparent" :foreground="content" />
-      </div>
-    </template>
-    <template #right>
-      <UForm class="size-full flex flex-col pr-2 pb-2" @submit="submitted">
-        <UFormField label="Enter your Letterboxd Username" :ui="{ label: 'text-background uppercase font-mono', error: 'select-none italic text-xs mt-0! font-light' }" name="name" :error="error">
-          <input v-model="name" class="border-b-2 border-dotted outline-0 ring-0 focus:border-dashed" :class="{ 'text-error border-b-black': !!error, 'pl-6': isFetching }" />
-          <IconLoader v-if="isFetching" class="size-4 absolute top-0 animate-spin" />
-        </UFormField>
-        <div class="text-sm italic mt-2 text-slate-700 mb-auto">
-          Don't have an account? That's ok, make one
-          <ULink
-            class="font-bold underline text-slate-700"
-            href="https://letterboxd.com/?register=true"
-            target="_blank">
-            here
-          </ULink>
+      </template>
+      <template #right>
+        <div class="flex h-full flex-col justify-between pb-3">
+          <UForm
+            class="flex grow flex-col"
+            @submit="submitted">
+            <UFormField
+              label="Enter your Letterboxd Username"
+              :ui="{
+                label: 'text-background uppercase font-mono',
+                error: 'select-none italic text-xs mt-0! font-light',
+              }"
+              name="name"
+              :error="error">
+              <input
+                v-model="name"
+                class="border-b-2 border-dotted text-black ring-0 outline-0 focus:border-dashed max-lg:w-full"
+                :class="{ 'text-error border-b-black': !!error, 'pl-6': isFetching }" />
+              <IconLoader
+                v-if="isFetching"
+                class="absolute top-0 size-4 animate-spin" />
+            </UFormField>
+            <div class="mt-2 mb-auto text-sm text-slate-700 italic">
+              Don't have an account? That's ok, make one
+              <ULink
+                class="font-bold text-slate-700 underline"
+                href="https://letterboxd.com/?register=true"
+                target="_blank">
+                here
+              </ULink>
+            </div>
+            <div class="flex items-center gap-2 max-lg:flex-col">
+              <UButton
+                type="submit"
+                color="neutral"
+                class="px-6 font-mono text-xl tracking-tighter uppercase"
+                :disabled="!name || !!error">
+                Start my Blend
+              </UButton>
+              <span class="text-background font-mono text-sm uppercase"> Next — Add Friends </span>
+            </div>
+          </UForm>
+          <div>
+            <div class="border-b-background my-2 w-full border-b-3 border-dotted" />
+            <div
+              class="text-background flex items-end justify-between font-mono text-xs font-semibold lg:text-sm">
+              <span>No. {{ (count ?? 0) + 1 }}</span>
+              <span>
+                {{ CURRENT_DATE_STRING }}
+              </span>
+            </div>
+          </div>
         </div>
-        <div>
-          <UButton
-            type="submit"
-            color="neutral"
-            class="px-6 uppercase text-xl font-mono tracking-tighter"
-            :disabled="!name || !!error">
-            Start my Blend
-          </UButton>
-          <span class="font-mono uppercase text-sm">
-            Next — Add Friends
-          </span>
-        </div>
-      </UForm>
-      <div class="w-full border-b-3 border-b-background border-dotted mt-auto mb-2" />
-      <div class="flex items-end justify-between font-mono text-sm font-semibold text-background">
-        <span>No. {{ (count ?? 0) + 1 }}</span>
-        <span>
-          {{ CURRENT_DATE_STRING }}
-        </span>
-      </div>
-    </template>
-  </MovieTicket>
-  <div class="flex flex-col justify-center">
-    <h2 class="font-mono! uppercase font-bold text-center text-2xl mb-4 text-white">Coming Attractions</h2>
+      </template>
+    </MovieTicket>
     <FilmReel
+      class="max-sm:hidden"
       :cells="[
-    {
-      title: 'Enter your username',
-      icon: IconUserEdit,
-      content: 'Enter your Letterboxd username to get started. We pull your ratings straight from Letterboxd. There is nothing to connect or authorize!'
-    },
-    {
-      title: 'Add your friends',
-      icon: IconUsersGroup,
-      content: 'Enter your friends usernames. You can bring in up to four friends! Sadly, we cannot provide those for you— Strict BYOF policy.'
-    },
-    {
-      title: 'Make your blend',
-      icon: IconBlender,
-      content: 'Set your parameters, and make your blend! It\'s never been easier to get started on movie night!'
-    }
-  ]" />
+        {
+          title: 'Enter your username',
+          icon: IconUserEdit,
+          content:
+            'Enter your Letterboxd username to get started. There is nothing to connect or authorize!',
+        },
+        {
+          title: 'Add your friends',
+          icon: IconUsersGroup,
+          content:
+            'Enter your friends usernames. Sadly, we cannot provide those for you— Strict BYOF policy.',
+        },
+        {
+          title: 'Make your blend',
+          icon: IconBlender,
+          content:
+            'Set your parameters, and make your blend! It\'s never been easier to get started on movie night!',
+        },
+      ]" />
   </div>
 </template>

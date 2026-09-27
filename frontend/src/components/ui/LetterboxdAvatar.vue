@@ -20,6 +20,8 @@
   const { data: avatar, isFetching } = useAvatar(avatarName, { enabled: shouldFetchAvatar });
 
   const isLoading = computed(() => isFetching.value || isFetchingName.value);
+
+  watch(avatarName, (val) => console.log(val));
 </script>
 
 <template>

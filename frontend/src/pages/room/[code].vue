@@ -4,27 +4,24 @@
   import { useRoom } from '@/composables/query/room';
   import { useUpdateSettings, useUpdateUsers } from '@/composables/mutation/room';
   import type { RoomSettings } from '@/types/room';
-  import { IconInfoCircle, IconShare } from '@tabler/icons-vue';
+  import { IconInfoCircle } from '@tabler/icons-vue';
   import useUser from '@/composables/user';
   import LetterboxdAvatar from '@/components/ui/LetterboxdAvatar.vue';
   import ConfirmDialog from '@/components/ui/ConfirmDialog.vue';
   import BlendUsersModal from '@/components/blend/BlendUsersModal.vue';
+  import ShareButton from '~/components/ShareButton.vue';
 
   // Room info
   const route = useRoute();
   const router = useRouter();
   const { exists: hasName } = useUser();
   const code = computed(() => route.params.code as string);
-  const {
-    data: room,
-    isFetching,
-    error,
-  } = useRoom(code, {
+  const { data: room, error } = useRoom(code, {
     enabled: hasName,
     retry: false,
   });
-  const { success, normal, error: showError } = useNotify();
-  
+  const { success, error: showError } = useNotify();
+
   const results = computed(() => room.value?.movies);
 
   // State
@@ -60,23 +57,6 @@
     });
   }
 
-  // Share
-  function share() {
-    const data: ShareData = {
-      title: 'Check out my Letterblend!',
-      url: window.location.href,
-    };
-    if ('canShare' in navigator && navigator.canShare(data)) {
-      navigator.share(data);
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-      normal({
-        title: 'Copied to clipboard',
-        message: 'Room code copied to clipboard.',
-      });
-    }
-  }
-
   // Error
   watch(error, (val) => {
     if (val) {
@@ -90,40 +70,37 @@
   whenever(room, (roomValue) => {
     settingsValue.value = { ...roomValue.settings };
     usersValue.value = [...roomValue.users];
-  })
+  });
 </script>
 
 <template>
-  <div class="relative flex items-stretch gap-4 max-md:flex-col mt-8">
+  <div class="flex items-stretch gap-4 max-md:flex-col">
     <UCard
-      class="basis-2/3"
+      class="md:basis-2/3"
       title="Results">
-      <div class="flex h-full flex-col gap-2 items-center justify-between">
+      <div class="flex h-full flex-col items-center justify-between gap-2 overflow-hidden">
         <UCarousel
           v-slot="{ item }"
           :ui="{ item: 'basis-1/4', viewport: 'pb-4' }"
           wheel-gestures
+          :contain-scroll="false"
           :items="results">
-          <MoviePoster
-            :data="item" />
+          <MoviePoster :data="item" />
         </UCarousel>
-        <UButton
-          name="share"
-          class="w-64 justify-center uppercase font-bold"
-          color="info"
-          size="lg"
-          label="Share"
-          :icon="IconShare"
-          :loading="isFetching"
-          @click="share" />
+        <ShareButton class="top-1 right-4 max-md:absolute max-md:-translate-y-full" />
       </div>
     </UCard>
-    <div class="flex basis-1/3 flex-col gap-4">
+    <div class="flex flex-col gap-4 md:basis-1/3">
       <UCard title="Users">
         <template #title>
           <div class="flex w-full justify-between">
-            <span class="font-heading font-bold text-xl mr-auto">Users</span>
-            <BlendUsersModal v-if="room" v-model:open="showEditUsers" v-model:users="usersValue" class="inline-flex" @submitted="usersSubmitted" />
+            <span class="font-heading mr-auto text-xl font-bold">Users</span>
+            <BlendUsersModal
+              v-if="room"
+              v-model:open="showEditUsers"
+              v-model:users="usersValue"
+              class="inline-flex"
+              @submitted="usersSubmitted" />
           </div>
         </template>
         <template #default>
@@ -164,8 +141,13 @@
     <ConfirmDialog
       v-model:open="showConfirmDialog"
       @confirm="settingsSubmitted">
-      <UAlert class="mx-auto mb-2" color="info" :icon="IconInfoCircle" variant="subtle" title="Updating the blend settings will re-compute the blend. This action is irreversible." />
-      <div class="text-secondary mx-auto w-fit font-medium italic">
+      <UAlert
+        class="mx-auto mb-2"
+        color="info"
+        :icon="IconInfoCircle"
+        variant="subtle"
+        title="Updating the blend settings will re-compute the blend. This action is irreversible." />
+      <div class="text-secondary mx-auto w-fit italic">
         Are you sure you want to update this blend?
       </div>
     </ConfirmDialog>

@@ -32,7 +32,8 @@
       :ui="{
         base: 'ml-1'
       }"
-      leading>
+      leading
+      v-bind="$attrs">
       <template #leading>
         <letterboxd-avatar class="size-6" :name="model" />
       </template>
