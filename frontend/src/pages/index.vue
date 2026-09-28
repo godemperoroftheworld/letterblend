@@ -57,7 +57,7 @@
 </script>
 
 <template>
-  <div class="mt flex items-center justify-around gap-4 max-md:mt-8 lg:gap-6 xl:flex-col">
+  <div class="flex items-center justify-around gap-4 sm:max-md:mt-8 lg:gap-6 xl:flex-col">
     <MovieTicket class="max-xl:w-72 xl:h-64">
       <template #left>
         <div
@@ -77,7 +77,7 @@
         </div>
       </template>
       <template #right>
-        <div class="flex h-full flex-col justify-between pb-3">
+        <div class="flex h-full flex-col justify-between">
           <UForm
             class="flex grow flex-col"
             @submit="submitted">

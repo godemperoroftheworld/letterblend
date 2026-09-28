@@ -33,7 +33,7 @@
           :unchecked-icon="NoSparklesIcon" />
       </template>
     </NowPlayingHeader>
-    <UContainer class="flex grow flex-col py-2 sm:py-4 lg:py-6">
+    <UContainer class="flex grow flex-col sm:py-2 lg:py-4">
       <UCard
         :ui="{
           root: 'max-lg:bg-transparent! shadow-none! border-0! inset-shadow-none!',
@@ -46,8 +46,8 @@
       </UCard>
       <UFooter
         class="mt-auto"
-        :ui="{ center: 'flex-col gap-2 font-mono' }">
-        <div class="text-center text-sm text-slate-300">
+        :ui="{ center: 'flex-col gap-1 font-mono' }">
+        <div class="text-center text-xs text-slate-300">
           Letterblend is independent, not affiliated with
           <a
             class="underline"
@@ -60,9 +60,10 @@
           as="div"
           variant="link"
           target="_blank"
-          href="https://ko-fi.com/t2pellet"
-          >Support me on Ko-Fi.</UButton
-        >
+          size="sm"
+          href="https://ko-fi.com/t2pellet">
+          Support me on Ko-Fi.
+        </UButton>
       </UFooter>
     </UContainer>
   </div>

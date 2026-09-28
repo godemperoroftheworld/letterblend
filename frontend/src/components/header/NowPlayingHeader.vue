@@ -5,12 +5,12 @@
 
 <template>
   <div
-    class="bg-dark drop-shadow-dark/50 sticky top-0 z-2 flex h-56 w-full flex-col py-2 drop-shadow sm:max-md:h-40">
-    <BulbRow class="mb-4" />
+    class="bg-dark drop-shadow-dark/50 flex h-56 w-full flex-col py-2 drop-shadow sm:max-md:h-40">
+    <BulbRow class="mb-2" />
     <div
-      class="from-paper/25 via-dark to-dark flex grow flex-col items-center justify-between bg-linear-to-b from-[1px] via-[1px] bg-size-[100%_20px]">
+      class="from-paper/25 via-dark to-dark flex grow flex-col items-center justify-around gap-1 bg-linear-to-b from-[1px] via-[1px] bg-size-[100%_20px] select-none">
       <span
-        class="text-bulb drop-shadow-round drop-shadow-bulb/50 font-extra -mt-0.75 text-lg font-medium uppercase">
+        class="text-bulb drop-shadow-round-lg drop-shadow-bulb/50 -mt-0.75 font-mono font-medium uppercase">
         Now Screening
       </span>
       <ULink
@@ -25,7 +25,9 @@
           Letterblend
         </h1>
       </ULink>
-      <span class="mb-4.5 sm:hidden"> Blend together your Letterboxd watchlists! </span>
+      <span class="text-default text-sm sm:hidden">
+        Blend together your Letterboxd watchlists!
+      </span>
     </div>
     <div class="absolute top-10 left-4">
       <slot name="left" />

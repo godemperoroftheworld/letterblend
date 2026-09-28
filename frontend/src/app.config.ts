@@ -9,6 +9,11 @@ export default defineAppConfig({
       error: 'danger',
       neutral: 'slate',
     },
+    footer: {
+      slots: {
+        container: 'py-4',
+      },
+    },
     card: {
       variants: {
         variant: {
