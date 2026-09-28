@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from letterboxdpy import user
-from watchlist_fetch import fetch_watchlist
+from .watchlist_fetch import fetch_watchlist
 
 users = Blueprint('user', __name__)
 
