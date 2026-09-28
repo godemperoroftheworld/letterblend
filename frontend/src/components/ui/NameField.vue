@@ -39,6 +39,6 @@
       </template>
     </UInputMenu>
     <UButton v-if="showRemoveButton" color="error" :disabled="!canRemove" :icon="IconTrash" @click="emits('remove')" />
-    <UButton v-if="showAddButton" color="primary" :disabled="!canAdd" :icon="IconPlus" @click="emits('add')" />
+    <UButton v-if="showAddButton" color="primary" class="max-md:hidden" :disabled="!canAdd" :icon="IconPlus" @click="emits('add')" />
   </div>
 </template>

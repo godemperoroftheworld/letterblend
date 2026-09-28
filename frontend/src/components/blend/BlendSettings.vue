@@ -6,7 +6,6 @@
     ROOM_SETTINGS_MAP,
     type RoomSettingsKey,
   } from '~/constants/room-settings.ts';
-  import { assign } from 'lodash';
   import type { FormSubmitEvent } from '#ui/types';
 
   // Constant
@@ -51,7 +50,7 @@
 
   const presetSetting = ref<RoomSettingsKey>('default');
   watch(presetSetting, (val) => {
-    assign(settings.value, ROOM_SETTINGS_MAP[val]);
+    Object.assign(settings.value, ROOM_SETTINGS_MAP[val]);
   });
 </script>
 

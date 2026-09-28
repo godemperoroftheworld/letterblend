@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import MoviePoster from '@/components/ui/MoviePoster.vue';
-  import { breakpointsTailwind } from '@vueuse/core';
   import { useRoom } from '@/composables/query/room';
   import { useUpdateSettings, useUpdateUsers } from '@/composables/mutation/room';
   import type { RoomSettings } from '@/types/room';
@@ -10,6 +9,7 @@
   import ConfirmDialog from '@/components/ui/ConfirmDialog.vue';
   import BlendUsersModal from '@/components/blend/BlendUsersModal.vue';
   import ShareButton from '~/components/ShareButton.vue';
+  import cloneDeep from 'lodash/cloneDeep';
 
   // Room info
   const route = useRoute();
@@ -25,8 +25,6 @@
   const results = computed(() => room.value?.movies);
 
   // State
-  const breakpoints = useBreakpoints(breakpointsTailwind);
-  const isSmall = breakpoints.smaller('md');
   const showEditUsers = ref(false);
   const showConfirmDialog = ref(false);
 
@@ -68,7 +66,7 @@
     }
   });
   whenever(room, (roomValue) => {
-    settingsValue.value = { ...roomValue.settings };
+    settingsValue.value = cloneDeep(roomValue.settings);
     usersValue.value = [...roomValue.users];
   });
 </script>
@@ -83,7 +81,7 @@
           v-slot="{ item }"
           :ui="{ item: 'basis-1/4', viewport: 'pb-4' }"
           wheel-gestures
-          :contain-scroll="false"
+          skipSnaps
           :items="results">
           <MoviePoster :data="item" />
         </UCarousel>
@@ -128,9 +126,7 @@
           </div>
         </template>
       </UCard>
-      <UCard
-        :collapsable="isSmall"
-        title="Settings">
+      <UCard title="Settings">
         <BlendSettings
           v-model="settingsValue"
           :presets="false"

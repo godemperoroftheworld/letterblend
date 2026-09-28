@@ -4,7 +4,6 @@
   import { IconInfoCircle } from '@tabler/icons-vue';
   import type { FormSubmitEvent } from '#ui/types';
   import { settingsSchema, usersSchema } from '~/types/room.ts';
-  import useUser from '~/composables/user.ts';
   import { DEFAULT_SETTINGS } from '~/constants/room-settings.ts';
   import z from 'zod';
 
@@ -17,10 +16,9 @@
   // Setup
   const router = useRouter();
   const { success } = useNotify();
-  const { user } = useUser();
 
   const state = reactive<Schema>({
-    users: [user.value, ''],
+    users: ['', ''],
     ...DEFAULT_SETTINGS,
   });
 

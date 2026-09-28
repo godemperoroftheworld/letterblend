@@ -3,8 +3,8 @@
   import { IconPlus } from '@tabler/icons-vue';
   import useFriends from '~/composables/query/friends.ts';
   import NameField from '~/components/ui/NameField.vue';
-  import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
   import { type RoomUsers, usersSchema, MAX_USERS, MIN_USERS } from '~/types/room.ts';
+  import useUser from '~/composables/user.ts';
 
   interface Props {
     nested?: boolean;
@@ -16,19 +16,20 @@
   // Setup
   const { nested = false } = defineProps<Props>();
   const emits = defineEmits<Emits>();
-  const { greaterOrEqual } = useBreakpoints(breakpointsTailwind);
-  const md = greaterOrEqual('md');
+  const { user } = useUser();
 
   // Form data
   const state = defineModel<Partial<RoomUsers>>({
-    default: () => ({ users: [] }),
+    default: () => ({ users: ['', ''] }),
   });
+
   const users = computed<string[]>(() => state.value.users ?? []);
-  const hasUsersChanged = ref(true);
   const { data: friends, refetch } = useFriends(users, { enabled: false });
 
   const canAdd = computed(() => users.value.length < MAX_USERS);
   const canRemove = computed(() => users.value.length > MIN_USERS);
+
+  const hasUsersChanged = ref(true);
 
   // Helper
   async function validateForm(state: Partial<RoomUsers>): Promise<FormError[]> {
@@ -69,7 +70,10 @@
     emits('submitted', event.data.users);
   }
 
-  onMounted(loadFriends);
+  onMounted(async () => {
+    users.value[0] = user.value;
+    await loadFriends();
+  });
   watch(users, () => (hasUsersChanged.value = true), { deep: 1 });
 </script>
 
@@ -90,7 +94,7 @@
       <NameField
         v-model="state.users![idx]"
         :items="friends ?? []"
-        :show-add-button="md && idx === state.users.length - 1"
+        :show-add-button="idx === state.users.length - 1"
         :can-add="canAdd"
         :can-remove="canRemove"
         @remove="removeName(idx)"
@@ -98,11 +102,10 @@
         @blur="loadFriends" />
     </UFormField>
     <UButton
-      v-if="!md"
       :icon="IconPlus"
       :disabled="!canAdd"
       label="Add"
-      class="justify-center font-bold"
+      class="justify-center font-bold max-md:inline-flex md:hidden"
       size="lg"
       @click="addName" />
     <UButton

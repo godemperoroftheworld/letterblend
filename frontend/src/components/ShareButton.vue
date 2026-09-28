@@ -1,11 +1,7 @@
 <script setup lang="ts">
   import { IconShare } from '@tabler/icons-vue';
-  import { breakpointsTailwind } from '@vueuse/core';
 
   const { normal } = useNotify();
-  const { greaterOrEqual } = useBreakpoints(breakpointsTailwind);
-
-  const isMedium = greaterOrEqual('md');
 
   function share() {
     const data: ShareData = {
@@ -27,9 +23,9 @@
 <template>
   <UButton
     name="share"
-    class="justify-center md:w-64"
+    class="justify-center md:w-64 md:gap-2 md:px-3 md:py-2"
     color="info"
-    :size="isMedium ? 'lg' : 'md'"
+    size="md"
     label="Share"
     :icon="IconShare"
     @click="share" />
