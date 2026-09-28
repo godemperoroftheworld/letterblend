@@ -28,14 +28,12 @@ router.post(
 router.get("/count", roomHandlers.getRoomCountHandler);
 router.get(
   "/:id",
-  header("X-Letterboxd-User").isString().notEmpty(),
   param("id").isString().isLength({ min: TOKEN_LENGTH, max: TOKEN_LENGTH }),
   validate,
   roomHandlers.getRoomHandler,
 );
 router.put(
   "/:id/settings",
-  header("X-Letterboxd-User").isString().notEmpty(),
   param("id").isString().isLength({ min: TOKEN_LENGTH, max: TOKEN_LENGTH }),
   body("top").default(10).isInt({ min: 1, max: 30 }),
   body("threshold").default(0.5).isFloat({ min: 0, max: 1 }),
@@ -52,7 +50,6 @@ router.put(
 );
 router.put(
   "/:id/users",
-  header("X-Letterboxd-User").isString().notEmpty(),
   param("id").isString().isLength({ min: TOKEN_LENGTH, max: TOKEN_LENGTH }),
   body("users").isArray({ min: 1, max: 5 }),
   validate,

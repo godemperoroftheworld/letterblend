@@ -74,15 +74,13 @@ interface UserParams extends RoomParams {
 }
 const updateUsersHandler: RequestHandler = async (req, res) => {
   const { id, users } = getData<UserParams>(req);
-  const headerUser = req.header("X-Letterboxd-User") as string;
   const room = await RoomsService.instance.getRoom(id);
   if (!room)
     throw new RouteError(HttpStatusCodes.BAD_REQUEST, "No room with id: " + id);
-  const newUsers = uniq([headerUser, ...users]);
-  const newMovies = await getBlendedList({ names: newUsers, ...room.settings });
+  const newMovies = await getBlendedList({ names: users, ...room.settings });
   const newRoom = await RoomsService.instance.updateRoom({
     code: id,
-    users: newUsers,
+    users: users,
     movies: newMovies,
   });
   res.status(HttpStatusCode.Ok).send(newRoom);
