@@ -12,6 +12,9 @@ export default defineAppConfig({
     footer: {
       slots: {
         container: 'py-4',
+        center: 'mt-0!',
+        right: 'mt-0!',
+        left: 'mt-0!',
       },
     },
     card: {
@@ -24,7 +27,7 @@ export default defineAppConfig({
         },
       },
       slots: {
-        root: 'rounded-3xl',
+        root: 'lg:rounded-3xl',
         body: 'relative p-4!',
         header: 'pb-0! border-b-0!',
         title: 'text-xl font-heading font-black',
@@ -41,7 +44,7 @@ export default defineAppConfig({
         },
         color: {
           dark: {
-            base: 'bg-slate-800 data-[state=checked]:bg-dark outline outline-2 outline-white/25 hover:bg-slate-750!',
+            base: 'bg-slate-800 data-[state=checked]:bg-dark outline outline-white/25 hover:bg-slate-750!',
             icon: 'text-slate-700! group-data-[state=checked]:text-dark!',
             thumb: 'bg-slate-100 group-data[state=checked]:bg-white',
           },

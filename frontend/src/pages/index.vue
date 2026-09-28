@@ -17,7 +17,8 @@
     layout: {
       name: 'default',
       props: {
-        cardSize: 'md',
+        stickyHeader: true,
+        showBackButton: false,
       },
     },
   });
@@ -57,8 +58,8 @@
 </script>
 
 <template>
-  <div class="flex items-center justify-around gap-4 sm:max-md:mt-8 lg:gap-6 xl:flex-col">
-    <MovieTicket class="max-xl:w-72 xl:h-64">
+  <div class="flex items-center justify-around gap-6 sm:max-md:mt-8 xl:flex-col">
+    <MovieTicket class="max-xl:w-64 xl:h-64">
       <template #left>
         <div
           class="text-background flex h-full items-center justify-center gap-6 max-xl:w-full xl:flex-col xl:justify-between xl:gap-3">

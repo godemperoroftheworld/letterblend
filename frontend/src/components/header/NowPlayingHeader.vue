@@ -1,27 +1,43 @@
 <script setup lang="ts">
   import BulbRow from '~/components/header/BulbRow.vue';
   import LetterboxdIcon from '~/components/ui/icons/LetterboxdIcon.vue';
+
+  const COLLAPSE_HEIGHT = 60;
+
+  const { y } = useWindowScroll();
+
+  const { height } = useWindowSize();
+  const scrollHeight = computedWithControl(
+    height,
+    () => document.scrollingElement?.scrollHeight ?? 0,
+  );
+
+  const canCollapse = computed(() => scrollHeight.value - height.value > COLLAPSE_HEIGHT);
+  const shouldCollapse = computed(() => !!y.value && canCollapse.value);
 </script>
 
 <template>
-  <div
-    class="bg-dark drop-shadow-dark/50 flex h-56 w-full flex-col py-2 drop-shadow sm:max-md:h-40">
+  <div class="bg-dark drop-shadow-dark/50 flex w-full flex-col py-2 drop-shadow md:h-56">
     <BulbRow class="mb-2" />
     <div
-      class="from-paper/25 via-dark to-dark flex grow flex-col items-center justify-around gap-1 bg-linear-to-b from-[1px] via-[1px] bg-size-[100%_20px] select-none">
+      class="from-paper/25 via-dark to-dark flex grow flex-col items-center justify-around bg-linear-to-b from-[1px] via-[1px] bg-size-[100%_20px] select-none max-md:gap-3">
       <span
-        class="text-bulb drop-shadow-round-lg drop-shadow-bulb/50 -mt-0.75 font-mono font-medium uppercase">
+        ref="screeningText"
+        :class="{ hidden: shouldCollapse }"
+        class="text-bulb drop-shadow-round-lg drop-shadow-bulb/50 font-mono font-medium uppercase">
         Now Screening
       </span>
       <ULink
         to="/"
         as="div"
-        class="flex grow flex-col items-center justify-center">
+        :class="{ 'flex-col': !shouldCollapse, 'gap-2': shouldCollapse }"
+        class="flex grow items-center justify-center">
         <LetterboxdIcon
+          ref="icon"
           class="h-6 md:h-10"
           shadow />
         <h1
-          class="drop-shadow-round-lg text-3xl font-bold text-white drop-shadow-white/50 md:text-4xl">
+          class="drop-shadow-round-lg text-3xl leading-none font-bold text-white drop-shadow-white/50 md:text-4xl">
           Letterblend
         </h1>
       </ULink>
@@ -29,10 +45,10 @@
         Blend together your Letterboxd watchlists!
       </span>
     </div>
-    <div class="absolute top-10 left-4">
+    <div class="absolute top-8 left-4">
       <slot name="left" />
     </div>
-    <div class="absolute top-10 right-4">
+    <div class="absolute top-8 right-4">
       <slot name="right" />
     </div>
     <BulbRow class="mt-2" />

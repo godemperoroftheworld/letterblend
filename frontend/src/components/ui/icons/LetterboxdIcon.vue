@@ -7,8 +7,14 @@
 
 <template>
   <div class="relative aspect-[2]">
-    <span class="absolute left-0 h-6/7 aspect-square rounded-full bg-secondary" :class="{ 'drop-shadow-round-lg drop-shadow-secondary/50': shadow }" />
-    <span class="absolute z-1 left-1/2 -translate-x-1/2 h-6/7 aspect-square rounded-full bg-primary" :class="{ 'drop-shadow-round-lg drop-shadow-primary/50': shadow }" />
-    <span class="absolute right-0 h-6/7 aspect-square rounded-full bg-info" :class="{ 'drop-shadow-round-lg drop-shadow-info/50': shadow }" />
+    <span
+      class="bg-secondary absolute top-1/2 left-0 aspect-square h-6/7 -translate-y-1/2 rounded-full"
+      :class="{ 'drop-shadow-round-lg drop-shadow-secondary/50': shadow }" />
+    <span
+      class="bg-primary absolute top-1/2 left-1/2 z-1 aspect-square h-6/7 -translate-x-1/2 -translate-y-1/2 rounded-full"
+      :class="{ 'drop-shadow-round-lg drop-shadow-primary/50': shadow }" />
+    <span
+      class="bg-info absolute top-1/2 right-0 aspect-square h-6/7 -translate-y-1/2 rounded-full"
+      :class="{ 'drop-shadow-round-lg drop-shadow-info/50': shadow }" />
   </div>
 </template>
