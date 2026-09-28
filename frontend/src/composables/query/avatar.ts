@@ -11,7 +11,7 @@ export default function useAvatar(
   options?: DataQueryOptions<AvatarResponse, Error, string | undefined>,
 ) {
   return useDataQuery<AvatarResponse, Error, string | undefined>(
-    () => ['avatar', toValue(user)],
+    ['avatar', user],
     () => `user/${toValue(user)}/avatar`,
     {
       options,

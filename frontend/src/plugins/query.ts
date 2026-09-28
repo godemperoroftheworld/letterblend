@@ -9,8 +9,6 @@ export const queryClient = new QueryClient({
       refetchOnMount: false,
       refetchOnReconnect: false,
       retry: 2,
-      // @ts-expect-error any here makes sense
-      placeholderData: (previousData) => previousData,
     },
   },
 });
