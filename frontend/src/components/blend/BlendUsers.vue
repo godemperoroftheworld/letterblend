@@ -95,7 +95,7 @@
         :can-remove="canRemove"
         @remove="removeName(idx)"
         @add="addName"
-        @blur="console.log('blur')" />
+        @blur="loadFriends" />
     </UFormField>
     <UButton
       v-if="!md"
