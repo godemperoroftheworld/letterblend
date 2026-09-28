@@ -14,7 +14,7 @@
   const { height } = useWindowSize();
   const scrollHeight = computedWithControl(
     height,
-    () => document.scrollingElement?.scrollHeight ?? 0,
+    () => document?.scrollingElement?.scrollHeight ?? 0,
   );
 
   const shouldCollapse = computed(() => {
@@ -23,7 +23,7 @@
     if (scrollHeight.value - height.value <= COLLAPSE_HEIGHT) {
       return false;
     }
-    return !!y.value;
+    return y.value > COLLAPSE_HEIGHT;
   });
 </script>
 
