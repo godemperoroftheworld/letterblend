@@ -81,7 +81,7 @@
           v-slot="{ item }"
           :ui="{ item: 'basis-1/4', viewport: 'pb-4' }"
           wheel-gestures
-          skipSnaps
+          skip-snaps
           :items="results">
           <MoviePoster :data="item" />
         </UCarousel>

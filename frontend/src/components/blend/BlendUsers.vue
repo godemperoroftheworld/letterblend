@@ -5,6 +5,7 @@
   import NameField from '~/components/ui/NameField.vue';
   import { type RoomUsers, usersSchema, MAX_USERS, MIN_USERS } from '~/types/room.ts';
   import useUser from '~/composables/user.ts';
+  import { keepPreviousData } from '@tanstack/vue-query';
 
   interface Props {
     nested?: boolean;
@@ -24,7 +25,10 @@
   });
 
   const users = computed<string[]>(() => state.value.users ?? []);
-  const { data: friends, refetch } = useFriends(users, { enabled: false });
+  const { data: friends, refetch } = useFriends(users, {
+    enabled: false,
+    placeholderData: keepPreviousData,
+  });
 
   const canAdd = computed(() => users.value.length < MAX_USERS);
   const canRemove = computed(() => users.value.length > MIN_USERS);

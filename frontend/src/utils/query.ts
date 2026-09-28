@@ -1,8 +1,14 @@
-import type { DefaultError, QueryKey, QueryOptions, UseQueryReturnType } from '@tanstack/vue-query';
+import type {
+  DefaultError,
+  QueryKey,
+  QueryOptions,
+  UseQueryOptions,
+  UseQueryReturnType,
+} from '@tanstack/vue-query';
 import { useQuery } from '@tanstack/vue-query';
 import type { AxiosRequestConfig } from 'axios';
 import { AxiosError } from 'axios';
-import type { MaybeRefOrGetter } from 'vue';
+import type { MaybeRefOrGetter, Ref } from 'vue';
 import { toValue, watch } from 'vue';
 import LetterblendApi from '@/api';
 import useLoader from '@/composables/load';
@@ -12,9 +18,11 @@ import { until } from '@vueuse/core';
 
 export type DataQueryReturnType<TData, TError = DefaultError> = UseQueryReturnType<TData, TError>;
 
+type UnwrapMaybeRef<T> = T extends Ref<infer U> ? U : T;
+
 export type DataQueryOptions<TQueryFnData, TError = DefaultError, TData = TQueryFnData> = Omit<
-  QueryOptions<TQueryFnData, TError, TData, TQueryFnData, QueryKey>,
-  'queryKey' | 'queryFn' | 'initialData' | 'placeholderData'
+  UnwrapMaybeRef<UseQueryOptions<TQueryFnData, TError, TData, TQueryFnData, QueryKey>>,
+  'queryKey' | 'queryFn' | 'initialData'
 >;
 
 type RequestConfig<TQueryFnData> = Omit<AxiosRequestConfig<TQueryFnData>, 'url' | 'baseURL'>;
@@ -46,7 +54,7 @@ function buildQueryFn<TQueryFnData>(
 }
 
 export function useDataQuery<TQueryFnData, TError = DefaultError, TData = TQueryFnData>(
-  key: MaybeRefOrGetter<QueryKey>,
+  queryKey: MaybeRefOrGetter<QueryKey>,
   url: MaybeRefOrGetter<string>,
   {
     options,
@@ -60,7 +68,7 @@ export function useDataQuery<TQueryFnData, TError = DefaultError, TData = TQuery
 
   const query = useQuery<TQueryFnData, TError, TData, QueryKey>(
     () => ({
-      queryKey: toValue(key),
+      queryKey,
       queryFn: buildQueryFn<TQueryFnData>(url, config ?? {}, showLoader),
       select: selectData,
       enabled: () => import.meta.client && !!toValue(options?.enabled ?? true),

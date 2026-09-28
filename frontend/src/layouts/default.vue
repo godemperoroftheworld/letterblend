@@ -3,11 +3,6 @@
   import NoSparklesIcon from '@/components/ui/icons/NoSparklesIcon.vue';
   import NowPlayingHeader from '~/components/header/NowPlayingHeader.vue';
 
-  interface Props {
-    cardSize?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-  }
-  const { cardSize } = defineProps<Props>();
-
   const route = useRoute();
   const router = useRouter();
   const particlesEnabled = useLocalStorage('particles', true, { initOnMounted: true });
