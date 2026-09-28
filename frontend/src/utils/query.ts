@@ -63,6 +63,7 @@ export function useDataQuery<TQueryFnData, TError = DefaultError, TData = TQuery
       queryKey: toValue(key),
       queryFn: buildQueryFn<TQueryFnData>(url, config ?? {}, showLoader),
       select: selectData,
+      enabled: () => import.meta.client && !!toValue(options?.enabled ?? true),
       ...options,
     }),
     queryClient,
@@ -87,6 +88,7 @@ export async function fetchDataQuery<TQueryFnData>(
   const options = {
     queryKey,
     queryFn: buildQueryFn<TQueryFnData>(url, config, false),
+    enabled: () => import.meta.client,
   } satisfies QueryOptions<TQueryFnData, DefaultError, TQueryFnData, TQueryFnData, QueryKey>;
 
   const state = queryClient.getQueryState(queryKey);

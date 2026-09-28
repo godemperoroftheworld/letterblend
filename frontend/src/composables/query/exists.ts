@@ -10,7 +10,7 @@ export default function useExists(
   options?: DataQueryOptions<ExistsResponse, Error, boolean>,
 ) {
   return useDataQuery<ExistsResponse, Error, boolean>(
-    () => ['exists', toValue(user)],
+    ['exists', user],
     () => `user/${toValue(user)}/exists`,
     {
       options,
