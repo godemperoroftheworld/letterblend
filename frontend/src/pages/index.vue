@@ -28,12 +28,14 @@
 
   const name = ref(storedName.value ?? '');
   const currentDate = ref<string>('');
-  const { data: exists, isFetching } = useExists(useDebounce(name, 250), {
-    enabled: () => !!name.value.length,
+  const debouncedName = useDebounce(name, 250);
+  const { data: exists, isFetching } = useExists(debouncedName, {
+    enabled: () => !!debouncedName.value.length,
   });
 
+  const settling = computed(() => debouncedName.value !== name.value || isFetching.value);
   const error = computed<boolean | string>(() => {
-    if (!isFetching.value && name.value.length && !exists.value) {
+    if (!settling.value && name.value.length && exists.value === false) {
       return `Unkown username ${name.value}`;
     }
     return false;
@@ -109,7 +111,7 @@
                 type="submit"
                 color="neutral"
                 class="px-6 font-mono text-xl tracking-tighter uppercase"
-                :disabled="!name || !!error">
+                :disabled="!name || !!error || settling">
                 Start my Blend
               </UButton>
               <span class="text-background font-mono text-sm uppercase"> Next — Add Friends </span>

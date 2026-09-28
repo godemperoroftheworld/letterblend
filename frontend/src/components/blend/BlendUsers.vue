@@ -88,6 +88,7 @@
     :state="nested ? undefined : state"
     :schema="usersSchema"
     :validate="validateForm"
+    :validate-on="['blur', 'input']"
     :on-submit="submit"
     class="mx-auto flex w-fit flex-col gap-2">
     <UFormField

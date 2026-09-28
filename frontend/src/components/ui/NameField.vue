@@ -13,9 +13,15 @@
   type Emits = {
     remove: [];
     add: [];
-  }
+  };
 
-  const { showAddButton = false, showRemoveButton = true, canAdd = true, canRemove = true, items } = defineProps<Props>();
+  const {
+    showAddButton = false,
+    showRemoveButton = true,
+    canAdd = true,
+    canRemove = true,
+    items,
+  } = defineProps<Props>();
   const model = defineModel<string>({ default: '' });
   const emits = defineEmits<Emits>();
 </script>
@@ -30,15 +36,28 @@
       size="lg"
       :disabled="disabled"
       :ui="{
-        base: 'ml-1'
+        base: 'ml-1',
       }"
       leading
       v-bind="$attrs">
       <template #leading>
-        <letterboxd-avatar class="size-6" :name="model" />
+        <LetterboxdAvatar
+          class="size-6"
+          :name="model" />
       </template>
     </UInputMenu>
-    <UButton v-if="showRemoveButton" color="error" :disabled="!canRemove" :icon="IconTrash" @click="emits('remove')" />
-    <UButton v-if="showAddButton" color="primary" class="max-md:hidden" :disabled="!canAdd" :icon="IconPlus" @click="emits('add')" />
+    <UButton
+      v-if="showRemoveButton"
+      color="error"
+      :disabled="!canRemove"
+      :icon="IconTrash"
+      @click="emits('remove')" />
+    <UButton
+      v-if="showAddButton"
+      color="primary"
+      class="max-md:hidden"
+      :disabled="!canAdd"
+      :icon="IconPlus"
+      @click="emits('add')" />
   </div>
 </template>

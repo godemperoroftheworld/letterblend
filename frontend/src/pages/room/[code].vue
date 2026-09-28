@@ -65,10 +65,14 @@
       router.replace('/');
     }
   });
-  whenever(room, (roomValue) => {
-    settingsValue.value = cloneDeep(roomValue.settings);
-    usersValue.value = [...roomValue.users];
-  });
+  whenever(
+    room,
+    (roomValue) => {
+      settingsValue.value = cloneDeep(roomValue.settings);
+      usersValue.value = [...roomValue.users];
+    },
+    { immediate: true },
+  );
 </script>
 
 <template>
