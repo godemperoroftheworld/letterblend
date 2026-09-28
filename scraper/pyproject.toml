@@ -6,10 +6,9 @@ authors = ["Tenzin Pelletier <pelletier@tenzin.live>"]
 
 [tool.poetry.dependencies]
 python = "3.12.10"
-flask = "^3.1.0"
+flask = { version = "^3.1.0", extras = ["async"] }
 flask-cors = "^5.0.0"
-gunicorn = "^23.0.0"
-eventlet = "^0.38.0"
+hypercorn = "^0.17.3"
 lxml = "^5.1.0"
 letterboxdpy = "^6.5.7"
 

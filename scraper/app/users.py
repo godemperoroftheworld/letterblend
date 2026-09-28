@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from letterboxdpy import user
-import re
+from watchlist_fetch import fetch_watchlist
 
 users = Blueprint('user', __name__)
 
@@ -20,10 +20,9 @@ def get_profile(name):
 
 
 @users.post("/<name>/watchlist")
-def get_watchlist(name):
+async def get_watchlist(name):
     filters = request.json
-    user_watchlist = user.user_watchlist.UserWatchlist(name)
-    watchlist = user_watchlist.get_watchlist(filters)
+    watchlist = await fetch_watchlist(name, filters)
     return watchlist['data']
 
 @users.route("/<name>/followers")
