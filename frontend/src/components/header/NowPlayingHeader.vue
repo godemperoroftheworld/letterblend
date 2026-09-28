@@ -2,6 +2,11 @@
   import BulbRow from '~/components/header/BulbRow.vue';
   import LetterboxdIcon from '~/components/ui/icons/LetterboxdIcon.vue';
 
+  interface Props {
+    canCollapse?: boolean;
+  }
+  const { canCollapse = false } = defineProps<Props>();
+
   const COLLAPSE_HEIGHT = 60;
 
   const { y } = useWindowScroll();
@@ -12,8 +17,14 @@
     () => document.scrollingElement?.scrollHeight ?? 0,
   );
 
-  const canCollapse = computed(() => scrollHeight.value - height.value > COLLAPSE_HEIGHT);
-  const shouldCollapse = computed(() => !!y.value && canCollapse.value);
+  const shouldCollapse = computed(() => {
+    if (!canCollapse) return false;
+    // If collapsing will lower us below scroll height, don't (prevents weird jiggly thing)
+    if (scrollHeight.value - height.value <= COLLAPSE_HEIGHT) {
+      return false;
+    }
+    return !!y.value;
+  });
 </script>
 
 <template>

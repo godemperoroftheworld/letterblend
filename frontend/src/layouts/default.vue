@@ -15,7 +15,9 @@
 
 <template>
   <div class="flex h-full flex-col">
-    <NowPlayingHeader :class="{ 'sticky top-0 z-2': stickyHeader }">
+    <NowPlayingHeader
+      :can-collapse="stickyHeader"
+      :class="{ 'sticky top-0 z-2': stickyHeader }">
       <template #left>
         <UButton
           v-if="showBackButton"
