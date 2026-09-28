@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import useAvatar from '@/composables/query/avatar';
   import useExists from '@/composables/query/exists';
-  import useUser from '@/composables/user';
   import AvatarIcon from '~/components/ui/icons/AvatarIcon.vue';
 
   interface Props {
@@ -10,9 +9,8 @@
   }
   const { name = '', icon = AvatarIcon } = defineProps<Props>();
 
-  const { user: storageName } = useUser();
   const avatarName = useDebounce(
-    computed(() => (name.length ? name : storageName.value)),
+    computed(() => name),
     250,
   );
   const shouldFetchExists = computed(() => !!avatarName.value.length);

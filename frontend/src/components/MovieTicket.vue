@@ -1,38 +1,11 @@
-<script setup lang="ts">
-  interface Props {
-    orientation?: 'horizontal' | 'vertical';
-  }
-  const { orientation = 'horizontal' } = defineProps<Props>();
-</script>
-
 <template>
-  <div
-    :class="{
-      'aspect-70/26': orientation === 'horizontal',
-      'aspect-26/40': orientation === 'vertical',
-    }"
-    class="drop-shadow-ticket/25 relative drop-shadow-lg">
+  <div class="drop-shadow-ticket/25 relative aspect-26/40 drop-shadow-lg xl:aspect-70/26">
     <div
-      :class="{
-        'grid-flow-col grid-cols-4 mask-[url(/img/ticket.svg)]': orientation === 'horizontal',
-        'grid-flow-row grid-rows-4 mask-[url(/img/ticket-vertical.svg)]':
-          orientation === 'vertical',
-      }"
-      class="light bg-ticket grid size-full mask-contain mask-no-repeat">
-      <div
-        :class="{
-          'row-span-1': orientation === 'vertical',
-          'col-span-1': orientation === 'horizontal',
-        }"
-        class="relative p-4 px-5">
+      class="light bg-ticket grid size-full grid-flow-row grid-cols-none grid-rows-4 mask-[url(/img/ticket-vertical.svg)] mask-contain mask-no-repeat xl:grid-flow-col xl:grid-cols-4 xl:grid-rows-none xl:mask-[url(/img/ticket.svg)]">
+      <div class="relative col-span-1 row-span-1 p-4 px-5">
         <slot name="left" />
       </div>
-      <div
-        :class="{
-          'row-span-3': orientation === 'vertical',
-          'col-span-3': orientation === 'horizontal',
-        }"
-        class="relative p-4 px-5">
+      <div class="relative col-span-1 row-span-3 p-4 px-5 xl:col-span-3 xl:row-span-1">
         <slot name="right" />
       </div>
     </div>

@@ -12,14 +12,6 @@
   import { useRoomCount } from '~/composables/query/room.ts';
   import { ref } from 'vue';
   import { QrcodeSvg } from 'qrcode.vue';
-  import { breakpointsTailwind } from '@vueuse/core';
-
-  const FALLBACK_BARCODE = 'godemperofearth';
-  const CURRENT_DATE_STRING = new Date().toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
-  });
 
   definePageMeta({
     layout: {
@@ -33,22 +25,28 @@
   const router = useRouter();
   const { user: storedName } = useUser();
   const { data: count } = useRoomCount();
-  const content = useCssVar('--color-background');
-  const { greaterOrEqual } = useBreakpoints(breakpointsTailwind);
 
   const name = ref(storedName.value ?? '');
+  const currentDate = ref<string>('');
   const { data: exists, isFetching } = useExists(useDebounce(name, 250), {
     enabled: () => !!name.value.length,
   });
 
-  const isXLarge = greaterOrEqual('xl');
   const error = computed<boolean | string>(() => {
     if (!isFetching.value && name.value.length && !exists.value) {
       return `Unkown username ${name.value}`;
     }
     return false;
   });
-  const url = computed(() => `https://letterboxd.com/${name.value ?? FALLBACK_BARCODE}`);
+  const url = computed(() => `https://letterboxd.com/${name.value}`);
+
+  onMounted(() => {
+    currentDate.value = new Date().toLocaleDateString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+    });
+  });
 
   async function submitted() {
     storedName.value = name.value;
@@ -58,9 +56,7 @@
 
 <template>
   <div class="mt flex items-center justify-around gap-4 max-md:mt-8 lg:gap-6 xl:flex-col">
-    <MovieTicket
-      class="max-xl:w-72 xl:h-64"
-      :orientation="isXLarge ? 'horizontal' : 'vertical'">
+    <MovieTicket class="max-xl:w-72 xl:h-64">
       <template #left>
         <div
           class="text-background flex h-full items-center justify-center gap-6 max-xl:w-full xl:flex-col xl:justify-between xl:gap-3">
@@ -72,10 +68,10 @@
             Admit One
           </div>
           <QrcodeSvg
-            class="size-10"
+            class="text-background size-10"
             :value="url"
             background="transparent"
-            :foreground="content" />
+            foreground="currentColor" />
         </div>
       </template>
       <template #right>
@@ -125,7 +121,7 @@
               class="text-background flex items-end justify-between font-mono text-xs font-semibold lg:text-sm">
               <span>No. {{ (count ?? 0) + 1 }}</span>
               <span>
-                {{ CURRENT_DATE_STRING }}
+                {{ currentDate }}
               </span>
             </div>
           </div>

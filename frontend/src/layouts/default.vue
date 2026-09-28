@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import { IconArrowBack, IconSparkles } from '@tabler/icons-vue';
-  import { breakpointsTailwind, useLocalStorage } from '@vueuse/core';
   import NoSparklesIcon from '@/components/ui/icons/NoSparklesIcon.vue';
   import NowPlayingHeader from '~/components/header/NowPlayingHeader.vue';
 
@@ -11,17 +10,9 @@
 
   const route = useRoute();
   const router = useRouter();
-  const { current } = useBreakpoints(breakpointsTailwind);
   const particlesEnabled = useLocalStorage('particles', true, { initOnMounted: true });
 
-  const sizes = current();
   const isHome = computed(() => route.path === '/');
-  const isCardSize = computed(() => {
-    if (cardSize) {
-      return sizes.value.includes(cardSize);
-    }
-    return true;
-  });
 </script>
 
 <template>
@@ -49,22 +40,34 @@
     </NowPlayingHeader>
     <UContainer class="flex grow flex-col py-2 sm:py-4 lg:py-6">
       <UCard
-        v-if="isCardSize"
+        :ui="{
+          root: 'max-lg:bg-transparent! shadow-none! border-0! inset-shadow-none!',
+        }"
         class="mx-auto max-w-full"
         variant="solid">
         <main class="flex flex-col">
           <slot />
         </main>
       </UCard>
-      <main
-        v-else
-        class="relative flex h-full flex-col">
-        <slot />
-      </main>
-      <UFooter class="mt-auto">
-        <span class="font-mono text-slate-300">
-          Letterblend is independent, not affiliated with Letterboxd
-        </span>
+      <UFooter
+        class="mt-auto"
+        :ui="{ center: 'flex-col gap-2 font-mono' }">
+        <div class="text-center text-sm text-slate-300">
+          Letterblend is independent, not affiliated with
+          <a
+            class="underline"
+            href="https://letterboxd.com"
+            target="_blank"
+            >Letterboxd</a
+          >.
+        </div>
+        <UButton
+          as="div"
+          variant="link"
+          target="_blank"
+          href="https://ko-fi.com/t2pellet"
+          >Support me on Ko-Fi.</UButton
+        >
       </UFooter>
     </UContainer>
   </div>

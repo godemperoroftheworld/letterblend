@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import type { ParticlesOptions } from '@tsparticles/engine';
-  import { useLocalStorage } from '@vueuse/core';
+  import useParticles from '~/composables/particles.ts';
 
-  const particles = useLocalStorage('particles', true);
+  const { enabled: particles } = useParticles();
   const options: Partial<ParticlesOptions> = {
     fullScreen: {
       enable: true,
