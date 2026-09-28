@@ -11,7 +11,7 @@
       'aspect-70/26': orientation === 'horizontal',
       'aspect-26/40': orientation === 'vertical',
     }"
-    class="drop-shadow-ticket/50 relative drop-shadow-lg">
+    class="drop-shadow-ticket/25 relative drop-shadow-lg">
     <div
       :class="{
         'grid-flow-col grid-cols-4 mask-[url(/img/ticket.svg)]': orientation === 'horizontal',

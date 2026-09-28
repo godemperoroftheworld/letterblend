@@ -61,6 +61,11 @@
         class="relative flex h-full flex-col">
         <slot />
       </main>
+      <UFooter class="mt-auto">
+        <span class="font-mono text-slate-300">
+          Letterblend is independent, not affiliated with Letterboxd
+        </span>
+      </UFooter>
     </UContainer>
   </div>
 </template>
