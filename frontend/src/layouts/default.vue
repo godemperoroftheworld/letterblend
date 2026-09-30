@@ -41,7 +41,7 @@
     <UContainer class="flex grow flex-col pt-4 xl:pt-6">
       <UCard
         :ui="{
-          root: 'max-lg:bg-transparent! shadow-none! border-0! inset-shadow-none!',
+          root: 'max-lg:bg-transparent! max-lg:shadow-none! max-lg:border-0! max-lg:inset-shadow-none!',
           body: 'max-lg:p-0!',
         }"
         class="mx-auto max-w-full"
