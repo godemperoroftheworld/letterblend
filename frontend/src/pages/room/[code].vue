@@ -24,6 +24,13 @@
 
   const results = computed(() => room.value?.movies);
 
+  const posterBasis = computed(() => {
+    const count = results.value?.length ?? 0;
+    if (count <= 2) return 'basis-1/2';
+    if (count === 3) return 'basis-1/3';
+    return 'basis-1/4';
+  });
+
   // State
   const showEditUsers = ref(false);
   const showConfirmDialog = ref(false);
@@ -83,7 +90,8 @@
       <div class="flex h-full flex-col items-center justify-between gap-2 overflow-hidden">
         <UCarousel
           v-slot="{ item }"
-          :ui="{ item: 'basis-1/4', viewport: 'pb-4' }"
+          class="w-full"
+          :ui="{ item: posterBasis, viewport: 'pb-4' }"
           wheel-gestures
           skip-snaps
           :items="results">
