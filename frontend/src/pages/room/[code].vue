@@ -11,6 +11,8 @@
   import ShareButton from '~/components/ShareButton.vue';
   import cloneDeep from 'lodash/cloneDeep';
 
+  const SKELETONS = Array.from({ length: 6 }).map(() => null);
+
   // Room info
   const route = useRoute();
   const router = useRouter();
@@ -24,13 +26,6 @@
 
   const results = computed(() => room.value?.movies);
   const count = computed(() => results.value?.length ?? 0);
-
-  const posterBasis = computed(() => {
-    const count = results.value?.length ?? 0;
-    if (count <= 2) return 'basis-1/2 md:basis-1/3';
-    if (count === 3) return 'basis-1/3';
-    return 'basis-1/4 max-md:basis-1/3';
-  });
 
   // State
   const showEditUsers = ref(false);
@@ -95,10 +90,14 @@
         <UCarousel
           v-slot="{ item }"
           class="w-full"
-          :ui="{ item: posterBasis, viewport: 'pb-4', container: count ? 'justify-center' : null }"
+          :ui="{
+            item: 'basis-1/3 md:basis-1/4 min-w-40',
+            viewport: 'pb-4',
+            container: count ? 'justify-center' : null,
+          }"
           wheel-gestures
           skip-snaps
-          :items="results">
+          :items="results ?? SKELETONS">
           <MoviePoster :data="item" />
         </UCarousel>
         <ShareButton class="top-1 right-4 max-md:absolute max-md:-translate-y-full" />

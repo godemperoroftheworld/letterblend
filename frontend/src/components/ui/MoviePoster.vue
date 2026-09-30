@@ -1,45 +1,39 @@
 <script setup lang="ts">
   import type { Movie } from '@/types/movie';
   import LetterboxdAvatar from '@/components/ui/LetterboxdAvatar.vue';
-  defineProps<{ data?: Movie }>();
+  defineProps<{ data?: Movie | null }>();
 
   const loaded = ref(false);
 </script>
 
 <template>
-  <div class="relative">
-    <template v-if="data">
-      <UTooltip :text="data.name">
-        <a
-          :href="`https://letterboxd.com/tmdb/${data.id}`"
-          target="_blank"
-          class="aspect-2/3 w-full">
-          <nuxt-img
-            class="bg-paper aspect-2/3 w-full overflow-hidden rounded-sm"
-            :class="{ 'animate-pulse': !loaded }"
-            :src="`api/poster/${data.id}`"
-            provider="raw"
-            loading="lazy"
-            :alt="data.name"
-            @load="loaded = true" />
-        </a>
-      </UTooltip>
-      <div class="mx-auto mt-1 flex h-6 w-fit gap-1">
-        <letterboxd-avatar
-          v-for="user in data.users"
-          :key="user"
-          class="transition-default size-6 hover:scale-125"
-          :name="user" />
-      </div>
-    </template>
-    <template v-else>
-      <div class="bg-paper aspect-2/3 w-full animate-pulse rounded-sm" />
-      <div class="mx-auto mt-1 flex h-6 w-fit gap-1">
-        <letterboxd-avatar
-          v-for="idx in 2"
-          :key="idx"
-          class="transition-default size-6 hover:scale-125" />
-      </div>
-    </template>
+  <div class="relative pb-8">
+    <UTooltip
+      v-if="data"
+      :text="data.name">
+      <a
+        class="bg-paper block overflow-hidden rounded-sm"
+        :class="{ 'aspect-2/3 animate-pulse': !loaded }"
+        :href="`https://letterboxd.com/tmdb/${data.id}`"
+        target="_blank">
+        <NuxtImg
+          class="aspect-2/3"
+          :src="`api/poster/${data.id}`"
+          provider="raw"
+          loading="lazy"
+          :alt="loaded ? data.name : null"
+          @load="loaded = true" />
+      </a>
+    </UTooltip>
+    <div
+      v-else
+      class="bg-paper aspect-2/3 w-full animate-pulse rounded-sm" />
+    <div class="absolute bottom-1 flex w-full items-center justify-center gap-1">
+      <LetterboxdAvatar
+        v-for="idx in data?.users?.length ?? 2"
+        :key="idx"
+        :name="data?.users?.[idx - 1]"
+        class="transition-default size-6 hover:scale-125" />
+    </div>
   </div>
 </template>
