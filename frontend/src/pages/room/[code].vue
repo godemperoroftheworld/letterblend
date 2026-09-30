@@ -3,7 +3,7 @@
   import { useRoom } from '@/composables/query/room';
   import { useUpdateSettings, useUpdateUsers } from '@/composables/mutation/room';
   import type { RoomSettings } from '@/types/room';
-  import { IconInfoCircle } from '@tabler/icons-vue';
+  import { IconInfoCircle, IconTicketOff } from '@tabler/icons-vue';
   import useUser from '@/composables/user';
   import LetterboxdAvatar from '@/components/ui/LetterboxdAvatar.vue';
   import ConfirmDialog from '@/components/ui/ConfirmDialog.vue';
@@ -18,7 +18,11 @@
   const router = useRouter();
   const { exists: hasName } = useUser();
   const code = computed(() => route.params.code as string);
-  const { data: room, error } = useRoom(code, {
+  const {
+    data: room,
+    error,
+    isFetched,
+  } = useRoom(code, {
     enabled: hasName,
     retry: false,
   });
@@ -26,6 +30,11 @@
 
   const results = computed(() => room.value?.movies);
   const count = computed(() => results.value?.length ?? 0);
+  const genre = computed(() => room.value?.settings.genre ?? []);
+  const noResultsDetails = computed(
+    () =>
+      'Try ' + (genre.value.length ? 'picking less genres or ' : '') + 'lowering your threshold!',
+  );
 
   // State
   const showEditUsers = ref(false);
@@ -86,7 +95,9 @@
     <UCard
       class="md:basis-2/3"
       title="Results">
-      <div class="flex h-full flex-col items-center justify-between gap-2 overflow-hidden">
+      <div
+        v-if="!isFetched || count"
+        class="flex h-full flex-col items-center justify-around gap-2 overflow-hidden">
         <UCarousel
           v-slot="{ item }"
           class="w-full"
@@ -101,6 +112,20 @@
           <MoviePoster :data="item" />
         </UCarousel>
         <ShareButton class="top-1 right-4 max-md:absolute max-md:-translate-y-full" />
+      </div>
+      <div
+        v-else
+        class="mt-24 mb-8 flex flex-col items-center justify-center gap-2">
+        <IconTicketOff class="size-24 text-white" />
+        <div class="font-heading my-auto mb-4 text-center text-lg font-medium text-slate-300">
+          <span>
+            {{ 'No results for your blend ( . ‸ .)' }}
+          </span>
+          <br />
+          <span>
+            {{ noResultsDetails }}
+          </span>
+        </div>
       </div>
     </UCard>
     <div class="flex flex-col gap-4 md:basis-1/3">
