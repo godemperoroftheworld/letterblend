@@ -75,7 +75,10 @@
   whenever(
     room,
     (roomValue) => {
-      settingsValue.value = cloneDeep(roomValue.settings);
+      settingsValue.value = {
+        ...cloneDeep(roomValue.settings),
+        genre: roomValue.settings.genre ?? [],
+      };
       usersValue.value = [...roomValue.users];
     },
     { immediate: true },
