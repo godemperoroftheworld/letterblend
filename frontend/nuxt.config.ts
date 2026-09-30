@@ -36,4 +36,7 @@ export default defineNuxtConfig({
       '/api/**': { proxy: `${process.env.NUXT_BFF_URL}/api/**` },
     },
   },
+  routeRules: {
+    '/room/**': { ssr: false },
+  },
 });

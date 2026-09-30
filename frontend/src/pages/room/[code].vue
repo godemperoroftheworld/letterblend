@@ -23,12 +23,13 @@
   const { success, error: showError } = useNotify();
 
   const results = computed(() => room.value?.movies);
+  const count = computed(() => results.value?.length ?? 0);
 
   const posterBasis = computed(() => {
     const count = results.value?.length ?? 0;
-    if (count <= 2) return 'basis-1/2';
+    if (count <= 2) return 'basis-1/2 md:basis-1/3';
     if (count === 3) return 'basis-1/3';
-    return 'basis-1/4';
+    return 'basis-1/4 max-md:basis-1/3';
   });
 
   // State
@@ -94,7 +95,7 @@
         <UCarousel
           v-slot="{ item }"
           class="w-full"
-          :ui="{ item: posterBasis, viewport: 'pb-4' }"
+          :ui="{ item: posterBasis, viewport: 'pb-4', container: count ? 'justify-center' : null }"
           wheel-gestures
           skip-snaps
           :items="results">
