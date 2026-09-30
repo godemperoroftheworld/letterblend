@@ -75,7 +75,9 @@
   }
 
   onMounted(async () => {
-    users.value[0] = user.value;
+    if (!users.value[0]) {
+      users.value[0] = user.value;
+    }
     await loadFriends();
   });
   watch(users, () => (hasUsersChanged.value = true), { deep: 1 });
@@ -115,6 +117,7 @@
       @click="addName" />
     <UButton
       v-if="!nested"
+      type="submit"
       class="justify-center"
       size="xl">
       Submit

@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import MoviePoster from '@/components/ui/MoviePoster.vue';
   import { useRoom } from '@/composables/query/room';
-  import { useUpdateSettings, useUpdateUsers } from '@/composables/mutation/room';
   import type { RoomSettings } from '@/types/room';
   import { IconInfoCircle, IconTicketOff } from '@tabler/icons-vue';
   import useUser from '@/composables/user';
@@ -10,6 +9,7 @@
   import BlendUsersModal from '@/components/blend/BlendUsersModal.vue';
   import ShareButton from '~/components/ShareButton.vue';
   import cloneDeep from 'lodash/cloneDeep';
+  import { useUpdateRoom } from '~/composables/mutation/room.ts';
 
   const SKELETONS = Array.from({ length: 6 }).map(() => null);
 
@@ -42,29 +42,31 @@
 
   // Settings Update
   const settingsValue = ref<RoomSettings>();
-  const { mutateAsync: updateSettings } = useUpdateSettings();
+  const usersValue = ref<string[]>([]);
+  const { mutateAsync: updateRoom } = useUpdateRoom();
   function settingsClicked(settings: RoomSettings) {
     settingsValue.value = settings;
     showConfirmDialog.value = true;
   }
-  async function settingsSubmitted() {
-    await updateSettings({ id: room.value!.code, settings: settingsValue.value! });
-    success({
-      title: 'Updated Room',
-      message: 'Room settings updated successfully.',
-    });
-  }
-
-  // Users update
-  const usersValue = ref<string[]>([]);
-  const { mutateAsync: updateUsers } = useUpdateUsers();
-  async function usersSubmitted(names: string[]) {
-    await updateUsers({ id: room.value!.code, users: names });
-    showEditUsers.value = false;
-    success({
-      title: 'Updated Room',
-      message: 'Room users updated successfully.',
-    });
+  async function updateSubmitted() {
+    try {
+      await updateRoom({
+        id: room.value!.code,
+        settings: settingsValue.value!,
+        users: usersValue.value,
+      });
+      success({
+        title: 'Updated Room',
+        message: 'Room updated successfully.',
+      });
+    } catch {
+      showError({
+        title: 'Error Updating Room',
+        message: 'Failed to update room.',
+      });
+    } finally {
+      showEditUsers.value = false;
+    }
   }
 
   // Error
@@ -80,10 +82,7 @@
   whenever(
     room,
     (roomValue) => {
-      settingsValue.value = {
-        ...cloneDeep(roomValue.settings),
-        genre: roomValue.settings.genre ?? [],
-      };
+      settingsValue.value = cloneDeep(roomValue.settings);
       usersValue.value = [...roomValue.users];
     },
     { immediate: true },
@@ -138,7 +137,7 @@
               v-model:open="showEditUsers"
               v-model:users="usersValue"
               class="inline-flex"
-              @submitted="usersSubmitted" />
+              @submitted="updateSubmitted" />
           </div>
         </template>
         <template #default>
@@ -176,7 +175,7 @@
     </div>
     <ConfirmDialog
       v-model:open="showConfirmDialog"
-      @confirm="settingsSubmitted">
+      @confirm="updateSubmitted">
       <UAlert
         class="mx-auto mb-2"
         color="info"

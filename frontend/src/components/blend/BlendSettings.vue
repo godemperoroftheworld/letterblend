@@ -43,6 +43,10 @@
   const { nested = false, submitButtonText = 'Submit', presets = true } = defineProps<Props>();
   const emits = defineEmits<Emits>();
   const settings = defineModel<Partial<RoomSettings>>({ default: () => DEFAULT_SETTINGS });
+  const genre = computed({
+    get: () => settings.value.genre ?? [],
+    set: (value) => (settings.value.genre = value),
+  });
 
   function submitted(event: FormSubmitEvent<RoomSettings>) {
     emits('submitted', event.data);
@@ -110,7 +114,7 @@
       label="Genre"
       description="What genres you'd like to watch. Movies must match all entered">
       <USelect
-        v-model="settings.genre"
+        v-model="genre"
         size="lg"
         class="w-full"
         :items="GENRE_OPTIONS"

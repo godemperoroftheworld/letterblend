@@ -4,9 +4,11 @@ import RoomsService from "@/services/rooms";
 import getBlendedList from "@/utils/blend";
 import { Settings } from "@/types/room";
 import { HttpStatusCode } from "axios";
-import { uniq } from "lodash";
+import { isNil, isEmpty, omitBy, uniq } from "lodash";
 import { RouteError } from "@/types";
 import { HttpStatusCodes } from "@/constants/http";
+import { debug } from "node:util";
+import merge from "lodash/merge";
 
 type RoomParams = { id: string };
 interface CreateRoomParams extends Settings {
@@ -49,48 +51,33 @@ const deleteRoomHandler: RequestHandler = async (req, res) => {
 
 interface SettingsParams extends RoomParams {
   settings: Settings;
+  users?: string[];
 }
-const updateSettingsHandler: RequestHandler = async (req, res) => {
-  const { id, ...settings } = getData<SettingsParams>(req);
+const updateRoomHandler: RequestHandler = async (req, res) => {
+  const { id, users, settings } = getData<SettingsParams>(req);
   const room = await RoomsService.instance.getRoom(id);
-  if (!room)
+  if (!room) {
     throw new RouteError(HttpStatusCodes.BAD_REQUEST, "No room with id: " + id);
-  const newSettings = { ...room.settings, ...settings };
+  }
+  const newUsers = users ? users : room.users.map((u) => u.user);
+  const mergedSettings: Settings = merge(room.settings, settings);
   const newMovies = await getBlendedList({
-    names: room.users.flatMap((u) => u.user),
-    ...newSettings,
+    names: newUsers,
+    ...mergedSettings,
   });
   await RoomsService.instance.updateRoom({
     code: id,
-    settings: newSettings,
+    settings,
     movies: newMovies,
+    users: newUsers,
   });
   const newRoom = await RoomsService.instance.getRoomStripped(id);
   res.status(HttpStatusCode.Ok).send(newRoom);
 };
-
-interface UserParams extends RoomParams {
-  users: string[];
-}
-const updateUsersHandler: RequestHandler = async (req, res) => {
-  const { id, users } = getData<UserParams>(req);
-  const room = await RoomsService.instance.getRoom(id);
-  if (!room)
-    throw new RouteError(HttpStatusCodes.BAD_REQUEST, "No room with id: " + id);
-  const newMovies = await getBlendedList({ names: users, ...room.settings });
-  const newRoom = await RoomsService.instance.updateRoom({
-    code: id,
-    users: users,
-    movies: newMovies,
-  });
-  res.status(HttpStatusCode.Ok).send(newRoom);
-};
-
 export default {
   createRoomHandler,
   getRoomHandler,
   getRoomCountHandler,
   deleteRoomHandler,
-  updateSettingsHandler,
-  updateUsersHandler,
+  updateRoomHandler,
 };

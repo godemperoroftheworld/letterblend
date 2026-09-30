@@ -6,7 +6,7 @@ export interface Movie {
 export interface Settings {
   top: number;
   threshold: number;
-  decade?: string | string[];
-  genre?: string | string[];
+  decade?: string[];
+  genre?: string[];
 }
-export type Filters = Omit<Settings, 'top' | 'threshold'>;
+export type Filters = Omit<Settings, "top" | "threshold">;
