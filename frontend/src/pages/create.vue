@@ -6,6 +6,7 @@
   import { settingsSchema, usersSchema } from '~/types/room.ts';
   import { DEFAULT_SETTINGS } from '~/constants/room-settings.ts';
   import z from 'zod';
+  import useUser from '~/composables/user.ts';
 
   const schema = z.object({
     ...usersSchema.shape,
@@ -16,6 +17,7 @@
   // Setup
   const router = useRouter();
   const { success } = useNotify();
+  const { user } = useUser();
 
   const state = reactive<Schema>({
     users: ['', ''],
@@ -33,6 +35,10 @@
       message: 'Successfully created blend',
     });
   }
+
+  onMounted(() => {
+    state.users = [user.value, ''];
+  });
 </script>
 
 <template>

@@ -27,7 +27,7 @@
   const { user: storedName } = useUser();
   const { data: count } = useRoomCount();
 
-  const name = ref(storedName.value ?? '');
+  const name = ref('');
   const currentDate = ref<string>('');
   const debouncedName = useDebounce(name, 250);
   const { data: exists, isFetching } = useExists(debouncedName, {
@@ -55,6 +55,10 @@
     storedName.value = name.value;
     await router.push({ name: 'create' });
   }
+
+  onMounted(() => {
+    name.value = storedName.value;
+  });
 </script>
 
 <template>
