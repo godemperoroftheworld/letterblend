@@ -35,14 +35,11 @@ async def get_watchlist(name):
 
 @users.route("/<name>/followers")
 def get_followers(name):
-    user_instance = user.User(name)
-    followers = user_instance.get_followers()
+    followers = user.user_network.extract_network(name, "followers")
     return followers
 
 
 @users.route("/<name>/following")
 def get_following(name):
-    user.user_instance.pages.network.get_following()
-    user_instance = user.User(name)
-    following = user_instance.get_following()
+    following = user.user_network.extract_network(name, "following")
     return following
