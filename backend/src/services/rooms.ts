@@ -71,17 +71,13 @@ export default class RoomsService {
     return null;
   }
 
-  async updateRoom(
-    partial: Partial<
-      Pick<RoomStripped, "code" | "settings" | "movies" | "users">
-    >,
-  ) {
+  async updateRoom(partial: Partial<Omit<Room, "owner">>) {
     const { code, ...values } = partial;
     await this.rooms.updateOne(
       { code },
       {
         $set: Object.entries(values)
-          .filter(([key, val]) => !!val)
+          .filter(([, val]) => !!val)
           .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {}),
       },
     );

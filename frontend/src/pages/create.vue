@@ -4,7 +4,7 @@
   import { IconInfoCircle } from '@tabler/icons-vue';
   import type { FormSubmitEvent } from '#ui/types';
   import { settingsSchema, usersSchema } from '~/types/room.ts';
-  import { DEFAULT_SETTINGS } from '~/constants/room-settings.ts';
+  import { DEFAULT_SETTINGS } from '~/constants/settings.ts';
   import z from 'zod';
   import useUser from '~/composables/user.ts';
 

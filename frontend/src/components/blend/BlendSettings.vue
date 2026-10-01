@@ -5,31 +5,10 @@
     ROOM_SETTINGS,
     ROOM_SETTINGS_MAP,
     type RoomSettingsKey,
-  } from '~/constants/room-settings.ts';
+  } from '~/constants/settings.ts';
   import type { FormSubmitEvent } from '#ui/types';
-
-  // Constant
-  const GENRE_OPTIONS = [
-    'action',
-    'adventure',
-    'animation',
-    'comedy',
-    'crime',
-    'documentary',
-    'drama',
-    'family',
-    'fantasy',
-    'history',
-    'horror',
-    'music',
-    'mystery',
-    'romance',
-    'science-fiction',
-    'thriller',
-    'tv-movie',
-    'war',
-    'western',
-  ];
+  import genres from '~/constants/genres.ts';
+  import decades from '~/constants/decades.ts';
 
   // Setup
   interface Props {
@@ -113,12 +92,23 @@
       name="genre"
       label="Genre"
       description="What genres you'd like to watch. Movies must match all entered">
-      <USelect
+      <USelectMenu
         v-model="genre"
         size="lg"
         class="w-full"
-        :items="GENRE_OPTIONS"
+        :items="genres"
         multiple />
+    </UFormField>
+    <UFormField
+      name="decade"
+      label="Decade"
+      description="What decade of movies you're interested in">
+      <USelectMenu
+        v-model="settings.decade"
+        size="lg"
+        class="w-full"
+        :items="decades"
+        :multiple="false" />
     </UFormField>
     <UButton
       v-if="!nested"

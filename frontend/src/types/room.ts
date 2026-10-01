@@ -5,7 +5,7 @@ export interface RoomSettings {
   top: number;
   threshold: number;
   genre?: string[];
-  decade?: string[];
+  decade?: string;
 }
 export interface RoomUsers {
   users: string[];
@@ -26,6 +26,7 @@ export const settingsSchema = z.object({
   top: z.number().min(1).max(30),
   threshold: z.number().min(0).max(100),
   genre: z.array(z.string()).optional(),
+  decade: z.string().optional(),
 });
 export const usersSchema = z.object({
   users: z

@@ -2,6 +2,7 @@ import type { MaybeRefOrGetter } from 'vue';
 import type { Room } from '@/types/room';
 import type { DataQueryOptions } from '@/utils/query';
 import { useDataQuery } from '@/utils/query';
+import genres from '~/constants/genres.ts';
 
 export function useRoom(
   code: MaybeRefOrGetter<string>,
@@ -12,6 +13,13 @@ export function useRoom(
     () => `room/${toValue(code)}`,
     {
       options,
+      select: (data) => {
+        data.settings = {
+          ...data.settings,
+          genre: data.settings.genre ?? [],
+        };
+        return data;
+      },
     },
   );
 }

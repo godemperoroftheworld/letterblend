@@ -49,25 +49,24 @@ const deleteRoomHandler: RequestHandler = async (req, res) => {
   res.sendStatus(HttpStatusCode.NoContent);
 };
 
-interface SettingsParams extends RoomParams {
-  settings: Settings;
+interface SettingsParams extends RoomParams, Settings {
   users?: string[];
 }
 const updateRoomHandler: RequestHandler = async (req, res) => {
-  const { id, users, settings } = getData<SettingsParams>(req);
+  const { id, users, ...settings } = getData<SettingsParams>(req);
   const room = await RoomsService.instance.getRoom(id);
   if (!room) {
     throw new RouteError(HttpStatusCodes.BAD_REQUEST, "No room with id: " + id);
   }
-  const newUsers = users ? users : room.users.map((u) => u.user);
+  const newUsers = users ? users.map((user) => ({ user })) : room.users;
   const mergedSettings: Settings = merge(room.settings, settings);
   const newMovies = await getBlendedList({
-    names: newUsers,
+    names: newUsers.map((u) => u.user),
     ...mergedSettings,
   });
   await RoomsService.instance.updateRoom({
     code: id,
-    settings,
+    settings: mergedSettings,
     movies: newMovies,
     users: newUsers,
   });

@@ -14,14 +14,8 @@ router.post(
   body("users").isArray({ min: 2, max: 5 }),
   body("top").default(10).isInt({ min: 1, max: 30 }),
   body("threshold").default(0.5).isFloat({ min: 0, max: 1 }),
-  oneOf([
-    body("genre").optional().isString().notEmpty(),
-    body("genre").optional().isArray().customSanitizer(noEmptyArray),
-  ]),
-  oneOf([
-    body("decade").optional().isString().notEmpty(),
-    body("decade").optional().isArray().customSanitizer(noEmptyArray),
-  ]),
+  body("genre").optional().isArray().customSanitizer(noEmptyArray),
+  body("decade").optional().isString().notEmpty(),
   validate,
   roomHandlers.createRoomHandler,
 );
@@ -39,7 +33,7 @@ router.put(
   body("top").default(10).isInt({ min: 1, max: 30 }),
   body("threshold").default(0.6).isFloat({ min: 0, max: 1 }),
   body("genre").optional().isArray().customSanitizer(noEmptyArray),
-  body("decade").optional().isArray().customSanitizer(noEmptyArray),
+  body("decade").optional().isString(),
   validate,
   roomHandlers.updateRoomHandler,
 );
