@@ -50,9 +50,10 @@ const deleteRoomHandler: RequestHandler = async (req, res) => {
 
 interface SettingsParams extends RoomParams, Settings {
   users?: string[];
+  locked?: number[];
 }
 const updateRoomHandler: RequestHandler = async (req, res) => {
-  const { id, users, ...settings } = getData<SettingsParams>(req);
+  const { id, users, locked, ...settings } = getData<SettingsParams>(req);
   const room = await RoomsService.instance.getRoom(id);
   if (!room) {
     throw new RouteError(HttpStatusCodes.BAD_REQUEST, "No room with id: " + id);
@@ -61,6 +62,7 @@ const updateRoomHandler: RequestHandler = async (req, res) => {
   const mergedSettings: Settings = merge(room.settings, settings);
   const newMovies = await getBlendedList({
     names: newUsers.map((u) => u.user),
+    locked,
     ...mergedSettings,
   });
   await RoomsService.instance.updateRoom({

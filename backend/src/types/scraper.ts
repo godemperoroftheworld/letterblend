@@ -3,7 +3,7 @@ export type Users = Record<string, { display_name: string }>;
 export interface ListEntry {
   name: string;
   slug: string;
-  url: string;
+  user: string;
   year: number;
 }
 

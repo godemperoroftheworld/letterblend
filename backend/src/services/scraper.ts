@@ -1,6 +1,6 @@
 import axios, { Axios } from "axios";
 import env from "@/constants/env";
-import List, { Users } from "@/types/scraper";
+import List, { ListEntry, Users } from "@/types/scraper";
 import intersection from "lodash/intersection";
 import { Filters } from "@/types/room";
 
@@ -49,5 +49,13 @@ export default class Scraper {
     const followers = await this.followers(user);
     const following = await this.following(user);
     return intersection(Object.keys(following), Object.keys(followers));
+  }
+
+  async slug(id: number): Promise<string> {
+    return this.service.get(`/movies/${id}/slug`).then((r) => r.data);
+  }
+
+  async movie(id: number): Promise<ListEntry> {
+    return this.service.get(`/movies/${id}`).then((r) => r.data);
   }
 }

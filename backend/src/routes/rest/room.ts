@@ -32,6 +32,7 @@ router.put(
   body("threshold").default(0.6).isFloat({ min: 0, max: 1 }),
   body("genre").optional().isArray(),
   body("decade").optional().isString(),
+  body("locked").optional().isArray(),
   validate,
   roomHandlers.updateRoomHandler,
 );

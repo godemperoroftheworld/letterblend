@@ -4,7 +4,6 @@ import type { Room, RoomSettings } from '@/types/room';
 import LetterblendApi from '@/api';
 import useLoader from '@/composables/load';
 import { queryClient } from '@/plugins/query';
-import { isNil, omitBy } from 'lodash';
 
 function useRoomMutation<TVariables>(
   mutationKey: string[],
@@ -40,9 +39,14 @@ interface UpdateRoomVars {
   id: string;
   users: string[];
   settings: RoomSettings;
+  locked?: number[];
 }
 export function useUpdateRoom() {
-  return useRoomMutation<UpdateRoomVars>(['room', 'update'], ({ id, users, settings }) =>
-    LetterblendApi.instance.put<Room>(`/room/${id}`, { users, ...settings }),
+  return useRoomMutation<UpdateRoomVars>(['room', 'update'], ({ id, users, settings, locked }) =>
+    LetterblendApi.instance.put<Room>(`/room/${id}`, {
+      users,
+      locked,
+      ...settings,
+    }),
   );
 }

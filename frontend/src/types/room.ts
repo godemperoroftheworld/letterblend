@@ -15,8 +15,6 @@ export interface Room extends RoomUsers {
   owner: string;
   movies: Movie[];
   settings: RoomSettings;
-  started: boolean;
-  match?: number;
 }
 
 export const MIN_USERS = 2;

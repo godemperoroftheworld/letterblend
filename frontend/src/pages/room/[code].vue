@@ -2,7 +2,7 @@
   import MoviePoster from '@/components/ui/MoviePoster.vue';
   import { useRoom } from '@/composables/query/room';
   import type { RoomSettings } from '@/types/room';
-  import { IconInfoCircle, IconTicketOff } from '@tabler/icons-vue';
+  import { IconInfoCircle } from '@tabler/icons-vue';
   import useUser from '@/composables/user';
   import LetterboxdAvatar from '@/components/ui/LetterboxdAvatar.vue';
   import ConfirmDialog from '@/components/ui/ConfirmDialog.vue';
@@ -11,6 +11,7 @@
   import cloneDeep from 'lodash/cloneDeep';
   import { useUpdateRoom } from '~/composables/mutation/room.ts';
   import EmptyState from '~/components/room/EmptyState.vue';
+  import { DEFAULT_SETTINGS } from '~/constants/settings.ts';
 
   const SKELETONS = Array.from({ length: 6 }).map(() => null);
 
@@ -31,15 +32,15 @@
 
   const results = computed(() => room.value?.movies);
   const count = computed(() => results.value?.length ?? 0);
-  const genre = computed(() => room.value?.settings.genre ?? []);
 
   // State
   const showEditUsers = ref(false);
   const showConfirmDialog = ref(false);
+  const settingsValue = ref<RoomSettings>(DEFAULT_SETTINGS);
+  const usersValue = ref<string[]>([]);
+  const lockedMovies = reactive<Set<number>>(new Set());
 
   // Settings Update
-  const settingsValue = ref<RoomSettings>({});
-  const usersValue = ref<string[]>([]);
   const { mutateAsync: updateRoom } = useUpdateRoom();
   function settingsClicked(settings: RoomSettings) {
     settingsValue.value = settings;
@@ -51,6 +52,7 @@
         id: room.value!.code,
         settings: settingsValue.value,
         users: usersValue.value,
+        locked: Array.from(lockedMovies.values()),
       });
       success({
         title: 'Updated Room',
@@ -104,7 +106,15 @@
           wheel-gestures
           skip-snaps
           :items="results ?? SKELETONS">
-          <MoviePoster :data="item" />
+          <MoviePoster
+            :data="item"
+            :locked="!!item && lockedMovies.has(item.id)"
+            @locked="
+              (l) => {
+                if (l) lockedMovies.add(item!.id);
+                else lockedMovies.delete(item!.id);
+              }
+            " />
         </UCarousel>
         <ShareButton class="top-1 right-4 max-md:absolute max-md:-translate-y-full" />
       </div>
