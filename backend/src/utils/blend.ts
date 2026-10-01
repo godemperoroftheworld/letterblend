@@ -1,7 +1,7 @@
 import Scraper from "@/services/scraper";
 import TMDB from "@/services/tmdb";
 import { Movie, Settings } from "@/types/room";
-import { fromPairs, groupBy, shuffle, uniq } from "lodash";
+import { fromPairs, groupBy, isEmpty, shuffle, uniq } from "lodash";
 
 export type BlendParams = Settings & {
   names: string[];
@@ -34,7 +34,7 @@ async function getBlendedList({
     getList(name, {
       top,
       threshold,
-      genre: genre ?? undefined,
+      genre: isEmpty(genre) ? undefined : genre,
       decade: decade ?? undefined,
     }),
   );

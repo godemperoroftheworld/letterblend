@@ -4,10 +4,9 @@ import RoomsService from "@/services/rooms";
 import getBlendedList from "@/utils/blend";
 import { Settings } from "@/types/room";
 import { HttpStatusCode } from "axios";
-import { isNil, isEmpty, omitBy, uniq } from "lodash";
+import { uniq } from "lodash";
 import { RouteError } from "@/types";
 import { HttpStatusCodes } from "@/constants/http";
-import { debug } from "node:util";
 import merge from "lodash/merge";
 
 type RoomParams = { id: string };

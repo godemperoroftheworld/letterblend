@@ -43,6 +43,6 @@ interface UpdateRoomVars {
 }
 export function useUpdateRoom() {
   return useRoomMutation<UpdateRoomVars>(['room', 'update'], ({ id, users, settings }) =>
-    LetterblendApi.instance.put<Room>(`/room/${id}`, omitBy({ users, ...settings }, isNil)),
+    LetterblendApi.instance.put<Room>(`/room/${id}`, { users, ...settings }),
   );
 }

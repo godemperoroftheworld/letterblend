@@ -22,13 +22,12 @@ export default defineAppConfig({
         variant: {
           solid: {
             root: 'bg-content shadow-paper/50 inset-shadow-paper/50 border-dark/50 border-3 inset-shadow-md shadow-sm drop-shadow-dark drop-shadow-lg',
-            body: 'h-full',
           },
         },
       },
       slots: {
-        root: 'lg:rounded-3xl',
-        body: 'relative p-4!',
+        root: 'lg:rounded-3xl flex flex-col',
+        body: 'relative grow p-4!',
         header: 'pb-0! border-b-0!',
         title: 'text-xl font-heading font-black',
       },

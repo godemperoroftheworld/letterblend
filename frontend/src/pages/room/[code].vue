@@ -99,7 +99,6 @@
           class="w-full"
           :ui="{
             item: 'basis-1/3 md:basis-1/4 min-w-40',
-            viewport: 'pb-4',
             container: count < 2 ? 'justify-center' : null,
           }"
           wheel-gestures

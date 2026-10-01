@@ -25,7 +25,7 @@
     <UButton
       color="secondary"
       :icon="IconEdit"
-      size="lg"
+      size="md"
       label="Edit"
       @click="open = true" />
     <template #body>
