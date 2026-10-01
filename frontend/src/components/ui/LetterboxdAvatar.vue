@@ -27,17 +27,14 @@
   <UTooltip
     :text="avatarName"
     as="div">
-    <div
-      class="relative aspect-square"
-      :class="{ 'animate-pulse': isLoading }">
-      <UAvatar
-        :alt="avatarName"
-        :src="name ? avatar : undefined"
-        class="size-full overflow-clip bg-slate-700"
-        loading="lazy"
-        size="unbound"
-        :icon="icon"
-        :ui="{ icon: 'text-white!' }" />
-    </div>
+    <UAvatar
+      :alt="avatarName"
+      :src="name ? avatar : undefined"
+      :class="{ 'animate-pulse': isLoading }"
+      class="aspect-square overflow-clip bg-slate-700"
+      loading="lazy"
+      size="unbound"
+      :icon="icon"
+      :ui="{ icon: 'text-white!' }" />
   </UTooltip>
 </template>

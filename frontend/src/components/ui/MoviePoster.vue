@@ -28,12 +28,12 @@
     <div
       v-else
       class="bg-paper aspect-2/3 w-full animate-pulse rounded-sm" />
-    <div class="absolute bottom-1 flex w-full items-center justify-center gap-1">
+    <UAvatarGroup class="absolute bottom-1 flex w-full justify-center">
       <LetterboxdAvatar
         v-for="idx in data?.users?.length ?? 2"
         :key="idx"
         :name="data?.users?.[idx - 1]"
         class="transition-default size-6 hover:scale-125" />
-    </div>
+    </UAvatarGroup>
   </div>
 </template>
