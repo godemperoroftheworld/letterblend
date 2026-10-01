@@ -35,7 +35,7 @@ export function useAddRoom() {
   );
 }
 
-interface UpdateRoomVars {
+export interface UpdateRoomVars {
   id: string;
   users: string[];
   settings: RoomSettings;

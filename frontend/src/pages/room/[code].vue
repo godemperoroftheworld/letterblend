@@ -9,7 +9,7 @@
   import BlendUsersModal from '@/components/blend/BlendUsersModal.vue';
   import ShareButton from '~/components/ShareButton.vue';
   import cloneDeep from 'lodash/cloneDeep';
-  import { useUpdateRoom } from '~/composables/mutation/room.ts';
+  import { type UpdateRoomVars, useUpdateRoom } from '~/composables/mutation/room.ts';
   import EmptyState from '~/components/room/EmptyState.vue';
   import { DEFAULT_SETTINGS } from '~/constants/settings.ts';
 
@@ -46,13 +46,19 @@
     settingsValue.value = settings;
     showConfirmDialog.value = true;
   }
-  async function updateSubmitted() {
+  async function updateSubmitted({
+    users,
+    settings,
+  }: {
+    users?: string[];
+    settings?: RoomSettings;
+  }) {
     try {
       await updateRoom({
         id: room.value!.code,
-        settings: settingsValue.value,
-        users: usersValue.value,
         locked: Array.from(lockedMovies.values()),
+        users: users ?? room.value!.users,
+        settings: settings ?? room.value!.settings,
       });
       success({
         title: 'Updated Room',
@@ -134,7 +140,7 @@
               v-model:open="showEditUsers"
               v-model:users="usersValue"
               class="inline-flex"
-              @submitted="updateSubmitted" />
+              @submitted="updateSubmitted({ users: usersValue })" />
           </div>
         </template>
         <template #default>
@@ -172,7 +178,7 @@
     </div>
     <ConfirmDialog
       v-model:open="showConfirmDialog"
-      @confirm="updateSubmitted">
+      @confirm="updateSubmitted({ settings: settingsValue })">
       <UAlert
         class="mx-auto mb-2"
         color="info"
