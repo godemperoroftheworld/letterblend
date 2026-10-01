@@ -97,6 +97,7 @@
         size="lg"
         class="w-full"
         :items="genres"
+        clear
         multiple />
     </UFormField>
     <UFormField
@@ -104,11 +105,13 @@
       label="Decade"
       description="What decade of movies you're interested in">
       <USelectMenu
-        v-model="settings.decade"
+        :model-value="settings.decade"
         size="lg"
         class="w-full"
         :items="decades"
-        :multiple="false" />
+        clear
+        :multiple="false"
+        @update:model-value="(value) => (settings.decade = value ?? undefined)" />
     </UFormField>
     <UButton
       v-if="!nested"

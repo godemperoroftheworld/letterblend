@@ -10,6 +10,7 @@
   import ShareButton from '~/components/ShareButton.vue';
   import cloneDeep from 'lodash/cloneDeep';
   import { useUpdateRoom } from '~/composables/mutation/room.ts';
+  import EmptyState from '~/components/room/EmptyState.vue';
 
   const SKELETONS = Array.from({ length: 6 }).map(() => null);
 
@@ -31,17 +32,13 @@
   const results = computed(() => room.value?.movies);
   const count = computed(() => results.value?.length ?? 0);
   const genre = computed(() => room.value?.settings.genre ?? []);
-  const noResultsDetails = computed(
-    () =>
-      'Try ' + (genre.value.length ? 'picking less genres or ' : '') + 'lowering your threshold!',
-  );
 
   // State
   const showEditUsers = ref(false);
   const showConfirmDialog = ref(false);
 
   // Settings Update
-  const settingsValue = ref<RoomSettings>();
+  const settingsValue = ref<RoomSettings>({});
   const usersValue = ref<string[]>([]);
   const { mutateAsync: updateRoom } = useUpdateRoom();
   function settingsClicked(settings: RoomSettings) {
@@ -52,7 +49,7 @@
     try {
       await updateRoom({
         id: room.value!.code,
-        settings: settingsValue.value!,
+        settings: settingsValue.value,
         users: usersValue.value,
       });
       success({
@@ -112,20 +109,11 @@
         </UCarousel>
         <ShareButton class="top-1 right-4 max-md:absolute max-md:-translate-y-full" />
       </div>
-      <div
+      <EmptyState
         v-else
-        class="mt-24 mb-8 flex flex-col items-center justify-center gap-2">
-        <IconTicketOff class="size-24 text-white" />
-        <div class="font-heading my-auto mb-4 text-center text-lg font-medium text-slate-300">
-          <span>
-            {{ 'No results for your blend ( . ‸ .)' }}
-          </span>
-          <br />
-          <span>
-            {{ noResultsDetails }}
-          </span>
-        </div>
-      </div>
+        :with-decade="!!settingsValue.decade"
+        :with-genre="!!settingsValue.genre?.length"
+        :zero-threshold="(settingsValue.threshold ?? 1) < 1 / usersValue.length" />
     </UCard>
     <div class="flex flex-col gap-4 md:basis-1/3">
       <UCard title="Users">
