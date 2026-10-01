@@ -9,7 +9,7 @@ const TOKEN_LENGTH = 8;
 router.post(
   "/",
   header("X-Letterboxd-User").isString().notEmpty(),
-  body("users").isArray({ min: 2, max: 5 }),
+  body("users").isArray({ min: 2, max: 8 }),
   body("top").default(10).isInt({ min: 1, max: 30 }),
   body("threshold").default(0.5).isFloat({ min: 0, max: 1 }),
   body("genre").optional().isArray(),
@@ -27,7 +27,7 @@ router.get(
 router.put(
   "/:id",
   param("id").isString().isLength({ min: TOKEN_LENGTH, max: TOKEN_LENGTH }),
-  body("users").isArray({ min: 2, max: 5 }),
+  body("users").isArray({ min: 2, max: 8 }),
   body("top").default(10).isInt({ min: 1, max: 30 }),
   body("threshold").default(0.6).isFloat({ min: 0, max: 1 }),
   body("genre").optional().isArray(),

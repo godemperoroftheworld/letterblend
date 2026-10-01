@@ -25,7 +25,7 @@ router.get(
 );
 router.post(
   "/friends",
-  body("names").isArray({ min: 1, max: 5 }),
+  body("names").isArray({ min: 1, max: 8 }),
   validate,
   userHandlers.getFriendsHandler,
 );

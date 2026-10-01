@@ -20,7 +20,7 @@ export interface Room extends RoomUsers {
 }
 
 export const MIN_USERS = 2;
-export const MAX_USERS = 5;
+export const MAX_USERS = 8;
 
 export const settingsSchema = z.object({
   top: z.number().min(1).max(30),
