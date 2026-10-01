@@ -58,8 +58,8 @@
       <IconTicketOff class="size-24 text-slate-200" />
     </template>
     <template #title>
-      <div class="text-slate-50">
-        No results for your blend <span class="text-lg font-black">( . ‸ .)</span>
+      <div class="font-heading font-semibold text-slate-50">
+        No results for your blend <span class="text-lg">( . ‸ .)</span>
       </div>
     </template>
     <template #description>
