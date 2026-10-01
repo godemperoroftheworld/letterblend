@@ -45,7 +45,7 @@
 
   onMounted(() => {
     currentDate.value = new Date().toLocaleDateString('en-US', {
-      weekday: 'long',
+      weekday: 'short',
       month: 'long',
       day: 'numeric',
     });
@@ -111,11 +111,11 @@
                 here
               </ULink>
             </div>
-            <div class="flex items-center gap-2 max-lg:flex-col">
+            <div class="flex flex-wrap items-center gap-2 max-xl:justify-center max-lg:flex-col">
               <UButton
                 type="submit"
                 color="neutral"
-                class="px-6 font-mono text-xl tracking-tighter uppercase"
+                class="px-6 font-mono text-xl tracking-tighter text-nowrap uppercase"
                 :disabled="!name || !!error || settling">
                 Start my Blend
               </UButton>
@@ -125,7 +125,7 @@
           <div>
             <div class="border-b-background my-2 w-full border-b-3 border-dotted" />
             <div
-              class="text-background flex items-end justify-between font-mono text-xs font-semibold lg:text-sm">
+              class="text-background flex items-end justify-between font-mono text-xs font-semibold">
               <span>No. {{ (count ?? 0) + 1 }}</span>
               <span>
                 {{ currentDate }}
