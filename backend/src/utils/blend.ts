@@ -69,20 +69,27 @@ async function getBlendedList({
   const promises: Promise<Movie>[] = Object.values(pickedEntries).map(
     async (entries) => {
       const [entry] = entries;
-      return await TMDB.search
-        .movies({
-          query: {
-            query: entry.name,
-            year: entry.year,
-          },
-        })
-        .then((r) => {
-          return {
-            id: r.data.results[0]?.id,
-            name: entry.name,
-            users: uniq(entries.map((e) => e.user)).filter(Boolean),
-          };
-        });
+      const query = {
+        query: entry.name,
+        year: entry.year,
+      };
+      let result;
+      const {
+        data: { results: movieResult },
+      } = await TMDB.search.movies({ query });
+      if (movieResult.length) {
+        result = movieResult[0];
+      } else {
+        const {
+          data: { results: tvResult },
+        } = await TMDB.search.TVShows({ query });
+        result = tvResult[0];
+      }
+      return {
+        id: result?.id,
+        name: entry.name,
+        users: uniq(entries.map((e) => e.user)).filter(Boolean),
+      };
     },
   );
   return await Promise.all(promises);

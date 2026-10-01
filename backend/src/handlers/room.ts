@@ -61,7 +61,7 @@ const updateRoomHandler: RequestHandler = async (req, res) => {
   const mergedSettings: Settings = mergeWith(
     settings,
     room.settings,
-    (src, obj) => {
+    (src: never, obj: never) => {
       if (!isNil(src)) {
         return src;
       }
