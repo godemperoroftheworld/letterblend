@@ -1,9 +1,8 @@
 import axios, { Axios } from "axios";
 import env from "@/constants/env";
-import List, {Users} from "@/types/scraper";
-import intersection from 'lodash/intersection';
-import {Filters, Settings} from "@/types/room";
-
+import List, { Users } from "@/types/scraper";
+import intersection from "lodash/intersection";
+import { Filters } from "@/types/room";
 
 export default class Scraper {
   private static instance: Scraper;
@@ -28,36 +27,27 @@ export default class Scraper {
     return this.service.get(`/users/${user}/avatar`).then((r) => r.data);
   }
 
-  async watchlist(user: string, filters: Filters = {}) {
+  async watchlist(user: string, filters: Filters = {}): Promise<List> {
     return this.service
       .post<List>(`/users/${user}/watchlist`, filters)
       .then((r) => r.data);
   }
 
-  async followers(user: string) {
-    return this.service.get(`/users/${user}/followers`).then((r) => r.data as Users);
+  async followers(user: string): Promise<Users> {
+    return this.service
+      .get(`/users/${user}/followers`)
+      .then((r) => r.data as Users);
   }
 
-  async following(user: string) {
-    return this.service.get(`/users/${user}/following`).then((r) => r.data as Users);
+  async following(user: string): Promise<Users> {
+    return this.service
+      .get(`/users/${user}/following`)
+      .then((r) => r.data as Users);
   }
 
-  async friends(user: string) {
+  async friends(user: string): Promise<string[]> {
     const followers = await this.followers(user);
     const following = await this.following(user);
-    const friendKeys = intersection(Object.keys(following), Object.keys(followers));
-    const result: Users = {};
-    friendKeys.forEach((k) => {
-      if (followers[k]) {
-        result[k] = followers[k];
-      } else {
-        result[k] = following[k];
-      }
-    });
-    return result;
-  }
-
-  async id(slug: string) {
-    return this.service.get(`movies/${slug}/id`).then(((r) => r.data as number));
+    return intersection(Object.keys(following), Object.keys(followers));
   }
 }

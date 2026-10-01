@@ -2,9 +2,7 @@ import { RequestHandler } from "express";
 import getData from "@/utils/data";
 import Scraper from "@/services/scraper";
 import { HttpStatusCodes } from "@/constants/http";
-import merge from 'lodash/merge';
-import {Users} from "@/types/scraper";
-import {omit} from "lodash";
+import { uniq, without } from "lodash";
 
 type UserParams = { name: string };
 const getUserHandler: RequestHandler = async (req, res) => {
@@ -37,7 +35,6 @@ const getAvatarHandler: RequestHandler = async (req, res) => {
 
 const checkUserHandler: RequestHandler = async (req, res) => {
   const { name } = getData<UserParams>(req);
-  console.log('check')
   const { data } = await Scraper.getInstance().exists(name);
   res.status(HttpStatusCodes.OK).send(data);
 };
@@ -48,18 +45,18 @@ interface FollowerParams {
 const getFriendsHandler: RequestHandler = async (req, res) => {
   const { names } = getData<FollowerParams>(req);
 
-  // Filter to existing
-  const existingNames = await Promise.all(names.map((name) => {
-    return new Promise<{ name: string, exists: boolean }>((resolve) => {
-      Scraper.getInstance().exists(name).then(({ data: { exists } }) => {
-        resolve({ name, exists });
-      });
-    });
-  })).then((r) => r.filter((v) => v.exists).map((v) => v.name));
   // Friends
-  const friends = await Promise.all(existingNames.map((name) => Scraper.getInstance().friends(name)));
-  const friendsFixed: Users = omit(merge({}, ...friends), names); // merge into one object, excluded original names
-  res.status(HttpStatusCodes.OK).send(friendsFixed);
+  const responses = await Promise.all(
+    names.map(async (name) => {
+      try {
+        return Scraper.getInstance().friends(name);
+      } catch (e) {
+        return [];
+      }
+    }),
+  );
+  const result = without(uniq(responses.flat()), ...names);
+  res.status(HttpStatusCodes.OK).send(result);
 };
 
 export default {

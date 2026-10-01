@@ -9,13 +9,8 @@ export default function useFriends(
   options?: DataQueryOptions<FriendsResponse, Error, string[]>,
 ) {
   const fullNames = computed(() => [...toValue(names)].filter(Boolean));
-  return useDataQuery<FriendsResponse, Error, string[]>(
-    () => ['friends', fullNames],
-    'user/friends',
-    {
-      options,
-      config: { method: 'POST', data: { names: fullNames } },
-      select: (data) => Object.keys(data),
-    },
-  );
+  return useDataQuery<FriendsResponse, Error, string[]>(['friends', fullNames], 'user/friends', {
+    options,
+    config: { method: 'POST', data: { names: fullNames } },
+  });
 }

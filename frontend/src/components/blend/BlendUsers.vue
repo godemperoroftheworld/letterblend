@@ -25,15 +25,15 @@
   });
 
   const users = computed<string[]>(() => state.value.users ?? []);
-  const { data: friends, refetch } = useFriends(users, {
-    enabled: false,
+  const isEditing = ref(false);
+  const { data: friends } = useFriends(users, {
+    enabled: () => !isEditing.value,
     placeholderData: keepPreviousData,
+    refetchOnMount: false,
   });
 
   const canAdd = computed(() => users.value.length < MAX_USERS);
   const canRemove = computed(() => users.value.length > MIN_USERS);
-
-  const hasUsersChanged = ref(true);
 
   // Helper
   async function validateForm(state: Partial<RoomUsers>): Promise<FormError[]> {
@@ -58,12 +58,6 @@
 
     return errors;
   }
-  async function loadFriends() {
-    if (hasUsersChanged.value) {
-      await refetch({ throwOnError: false });
-    }
-    hasUsersChanged.value = false;
-  }
   function removeName(idx: number) {
     state.value.users!.splice(idx, 1);
   }
@@ -78,9 +72,7 @@
     if (!users.value[0]) {
       users.value[0] = user.value;
     }
-    await loadFriends();
   });
-  watch(users, () => (hasUsersChanged.value = true), { deep: 1 });
 </script>
 
 <template>
@@ -106,7 +98,8 @@
         :can-remove="canRemove"
         @remove="removeName(idx)"
         @add="addName"
-        @blur="loadFriends" />
+        @focus="isEditing = true"
+        @blur="isEditing = false" />
     </UFormField>
     <UButton
       :icon="IconPlus"
