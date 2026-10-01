@@ -87,10 +87,10 @@
   --color-content: var(--color-slate-800);
   --color-background: var(--color-slate-700);
   --color-paper: var(--color-slate-600);
+  --color-success: var(--color-primary);
   --color-ticket: #e1d48f;
 
   --inset-shadow-md: inset 0 2px 3px rgba(0, 0, 0, 0.25);
-
   --ui-container: 72rem;
 }
 

@@ -9,7 +9,7 @@
   import BlendUsersModal from '@/components/blend/BlendUsersModal.vue';
   import ShareButton from '~/components/ShareButton.vue';
   import cloneDeep from 'lodash/cloneDeep';
-  import { type UpdateRoomVars, useUpdateRoom } from '~/composables/mutation/room.ts';
+  import { useUpdateRoom } from '~/composables/mutation/room.ts';
   import EmptyState from '~/components/room/EmptyState.vue';
   import { DEFAULT_SETTINGS } from '~/constants/settings.ts';
 
