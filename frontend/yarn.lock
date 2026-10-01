@@ -8725,7 +8725,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.15, lodash@npm:^4.18.1":
+"lodash-es@npm:^4.18.1":
+  version: 4.18.1
+  resolution: "lodash-es@npm:4.18.1"
+  checksum: 10c0/35d4dcf87ef07f8d090f409447575800108057e360b445f590d0d25d09e3d1e33a163d2fc100d4d072b0f901d5e2fc533cd7c4bfd8eeb38a06abec693823c8b8
+  languageName: node
+  linkType: hard
+
+"lodash@npm:^4.17.15":
   version: 4.18.1
   resolution: "lodash@npm:4.18.1"
   checksum: 10c0/757228fc68805c59789e82185135cf85f05d0b2d3d54631d680ca79ec21944ec8314d4533639a14b8bcfbd97a517e78960933041a5af17ecb693ec6eecb99a27
@@ -9345,7 +9352,7 @@ __metadata:
     eslint: "npm:^10.11.0"
     eslint-config-prettier: "npm:^10.1.8"
     eslint-plugin-better-tailwindcss: "npm:^4.7.0"
-    lodash: "npm:^4.18.1"
+    lodash-es: "npm:^4.18.1"
     nuxt: "npm:^4.5.2"
     prettier: "npm:^3.9.8"
     prettier-plugin-tailwindcss: "npm:^0.8.1"

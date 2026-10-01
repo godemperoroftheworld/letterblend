@@ -30,6 +30,11 @@ export default defineNuxtConfig({
   },
   vite: {
     plugins: [tailwindcss(), vueDevTools()],
+    resolve: {
+      alias: {
+        lodash: 'lodash-es',
+      },
+    },
   },
   nitro: {
     routeRules: {
