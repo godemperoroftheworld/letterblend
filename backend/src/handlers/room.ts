@@ -4,10 +4,9 @@ import RoomsService from "@/services/rooms";
 import getBlendedList from "@/utils/blend";
 import { Settings } from "@/types/room";
 import { HttpStatusCode } from "axios";
-import { uniq } from "lodash";
+import { isNil, mergeWith, uniq } from "lodash";
 import { RouteError } from "@/types";
 import { HttpStatusCodes } from "@/constants/http";
-import merge from "lodash/merge";
 
 type RoomParams = { id: string };
 interface CreateRoomParams extends Settings {
@@ -59,7 +58,16 @@ const updateRoomHandler: RequestHandler = async (req, res) => {
     throw new RouteError(HttpStatusCodes.BAD_REQUEST, "No room with id: " + id);
   }
   const newUsers = users ? users.map((user) => ({ user })) : room.users;
-  const mergedSettings: Settings = merge(room.settings, settings);
+  const mergedSettings: Settings = mergeWith(
+    settings,
+    room.settings,
+    (src, obj) => {
+      if (!isNil(src)) {
+        return src;
+      }
+      return obj;
+    },
+  );
   const newMovies = await getBlendedList({
     names: newUsers.map((u) => u.user),
     locked,
