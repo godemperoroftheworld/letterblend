@@ -1,5 +1,7 @@
 from flask import Blueprint, jsonify, request
 from letterboxdpy import user
+from letterboxdpy.constants.project import DOMAIN
+from letterboxdpy.core.scraper import Scraper
 from .watchlist_fetch import fetch_watchlist
 
 users = Blueprint('user', __name__)
@@ -7,10 +9,16 @@ users = Blueprint('user', __name__)
 @users.route('/<name>/exists')
 def get_exists(name):
     try:
-        user.user_profile.UserProfile(name)
-        return jsonify({'exists': True})
+        response = Scraper.instance().head(
+            f"{DOMAIN}/{name}",
+            headers=Scraper.headers,
+            timeout=Scraper.timeout,
+            impersonate='chrome',
+            allow_redirects=True,
+        )
     except Exception:
         return jsonify({'exists': False})
+    return jsonify({'exists': response.status_code == 200})
 
 
 @users.route("/<name>/avatar")
@@ -34,6 +42,7 @@ def get_followers(name):
 
 @users.route("/<name>/following")
 def get_following(name):
+    user.user_instance.pages.network.get_following()
     user_instance = user.User(name)
     following = user_instance.get_following()
     return following
